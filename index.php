@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,20 +21,31 @@
             padding: 0;
             overflow-x: hidden; /* Prevent horizontal scroll */
         }
-
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            /* background-color: rgba(0, 0, 0, 0.5); */
+            background-color: transparent; 
+            transition: background-color 0.4s ease-in-out;
             backdrop-filter: blur(1px); 
             z-index: 1000; 
             padding: 0.5rem 1rem; 
         }
-
+        .navbar.scrolled {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .navbar .nav-link,
+        .navbar .navbar-brand {
+            color: white;
+            transition: color 0.4s ease-in-out; 
+        }
+        .navbar .nav-link:hover {
+            color: #0056b3;
+        }
         .hero-section {
-            background-image: url('assets/fencing.jpg'); /* Hero image URL */
+            background-image: url('assets/page_img/gradient.jpg'); /* Hero image URL */
             background-size: cover;
             background-position: center;
             height: 100vh; /* Full viewport height */
@@ -103,9 +119,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="views/login.php">Login</a>
-                </li>
+                <?php if (isset($_SESSION['username'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link"href="views/<?php echo htmlspecialchars($_SESSION['role']); ?>/dashboard.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="views/login.php">Login</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
@@ -143,6 +165,20 @@
     <footer class="bg-dark text-white text-center py-3">
         <p>&copy; 2024 Archery Statistics. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Show nav background during scrolling
+        document.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            
+            // Add a background color when scrolled 50px from the top
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

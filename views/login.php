@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// Redirect to the appropriate page if user already log in
+if (isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
 require_once __DIR__ . '/../includes/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -18,16 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Redirect based on role
         switch ($user['role']) {
             case 'admin':
-                header('Location: dashboard_admin.php');
+                header('Location: admin/dashboard.php');
                 break;
             case 'coach':
-                header('Location: dashboard_coach.php');
+                header('Location: coach/dashboard.php');
                 break;
             default:
-                header('Location: login.php'); // Fallback in case of unknown role
+                header('Location: login.php');
                 break;
         }
-        exit(); // Make sure to call exit() after header() to stop script execution
+        exit();
     } else {
         $error = 'Invalid credentials';
     }
