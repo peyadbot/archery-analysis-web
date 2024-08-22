@@ -67,7 +67,7 @@
                 </li>
             <?php else: ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="../views/login.php">Login</a>
+                    <a class="nav-link" href="views/auth/login.php">Login</a>
                 </li>
             <?php endif; ?>
         </ul>
@@ -75,15 +75,15 @@
 </nav>
 
 <script>
-        // Show nav background during scrolling
-        document.addEventListener('scroll', function () {
-            const navbar = document.querySelector('.navbar');
-            
-            // Add a background color when scrolled 50px from the top
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    </script>
+    // Show nav background during scrolling
+    document.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar');
+        
+        // Add a background color when scrolled 50px from the top
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+</script>

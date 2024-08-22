@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+.hero-section {
+    background-image: url('public/images/page_img/gradient.jpg'); /* Hero image URL */
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Full viewport height */
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero-title {
+    font-size: 2.5rem; /* Adjust font size for better responsiveness */
+    font-weight: bold;
+}
+.hero-subtitle {
+    font-size: 1.25rem; /* Adjust font size for better responsiveness */
+}
+.feature-icon {
+    font-size: 2rem;
+    color: #007bff;
+}
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem; /* Adjust font size for smaller screens */
+    }
+    .hero-subtitle {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+}
+.features-section {
+    padding: 60px 0; /* Adjust top and bottom padding for extra space */
+    min-height: 600px; /* Ensure the section has a minimum height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
