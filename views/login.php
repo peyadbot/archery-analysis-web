@@ -7,7 +7,8 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once __DIR__ . '/../includes/db_connection.php';
+// require_once __DIR__ . '/../includes/db_connection.php';
+require_once __DIR__ . '/../config/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
