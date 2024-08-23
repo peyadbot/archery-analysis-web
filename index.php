@@ -31,17 +31,17 @@ session_start();
     <!-- Features Section -->
     <section class="features-section container my-5">
         <div class="row text-center">
-            <a class="hover-pointer rounded-5 col-md-4" href="comprehensive-stats.html">
+            <a class="hover-pointer rounded-5 col-md-4 p-4" href="comprehensive-stats.html">
                 <i class="feature-icon bi bi-graph-up"></i>
                 <h3>Statistics</h3>
                 <p>Get detailed statistics on your performance, including scores, accuracy, and more.</p>
             </a>
-            <a class="hover-pointer rounded-5 col-md-4" href="competition-results.html">
+            <a class="hover-pointer rounded-5 col-md-4 p-4" href="competition-results.html">
                 <i class="feature-icon bi bi-calendar"></i>
                 <h3>Competition</h3>
                 <p>View results from various competitions and compare your performance with others.</p>
             </a>
-            <a class="hover-pointer rounded-5 col-md-4" href="personalized-training.html">
+            <a class="hover-pointer rounded-5 col-md-4 p-4" href="personalized-training.html">
                 <i class="feature-icon bi bi-person"></i>
                 <h3>Athlete</h3>
                 <p>Access training programs and track your progress to improve your skills.</p>

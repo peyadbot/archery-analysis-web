@@ -75,7 +75,7 @@ require_once __DIR__ . '/../../controllers/register.php';
                 <select class="form-select" id="role" name="role" required>
                     <option value="admin">Admin</option>
                     <option value="coach">Coach</option>
-                    <option value="coach">Athlete</option>
+                    <option value="athlete">Athlete</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>

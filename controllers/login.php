@@ -30,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'coach':
                 header('Location: /archery-analysis-web/views/coach/dashboard.php');
                 break;
+            case 'athlete':
+                header('Location: /archery-analysis-web/views/athlete/dashboard.php');
+                break;
             default:
                 header('Location: login.php');
                 break;

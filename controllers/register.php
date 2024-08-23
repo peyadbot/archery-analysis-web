@@ -29,13 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$username, $hashed_password, $role]);
 
             // // Redirect to login page after successful registration
-            $success = 'Registration successful! Redirecting to login page...';
+            $success = 'Registration successful...';
 
             // Redirect to login page after 3 seconds
             echo "<script>
                     setTimeout(function() {
                         window.location.href = 'login.php';
-                    }, 3000);
+                    }, 2000);
                 </script>";
         }
     }

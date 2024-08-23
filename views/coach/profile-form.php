@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+require_once __DIR__ . '/../../controllers/logout.php';
+require_once __DIR__ . '/../../config/config.php';
+
+// Ensure user is logged in and is a coach
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
+    header('Location: login.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
