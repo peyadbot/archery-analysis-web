@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/../../controllers/logout.php';
+require_once __DIR__ . '/../auth/logout.php';
 require_once __DIR__ . '/../../config/config.php';
 
 // Ensure user is logged in and is a coach

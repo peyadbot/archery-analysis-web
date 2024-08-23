@@ -47,13 +47,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="<?php echo BASE_URL . 'index.php'; ?>">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Statistics</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Competitions</a>
+                <a class="nav-link" href="/archery-analysis-web/views/competition/index.php">Competitions</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Training</a>
@@ -63,11 +63,13 @@
             </li>
             <?php if (isset($_SESSION['username'])): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="views/<?php echo htmlspecialchars($_SESSION['role']); ?>/dashboard.php"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
+                    <a class="nav-link" href="<?php echo BASE_URL . 'views/' . htmlspecialchars($_SESSION['role']) . '/dashboard.php'; ?>">
+                        <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    </a>
                 </li>
             <?php else: ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="views/auth/login.php">Login</a>
+                    <a class="nav-link" href="<?php echo BASE_URL . 'views/auth/login.php'; ?>">Login</a>
                 </li>
             <?php endif; ?>
         </ul>

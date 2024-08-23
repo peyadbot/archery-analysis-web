@@ -18,3 +18,6 @@ try {
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
+
+// Base URL to avoid hardcoding file path 
+define('BASE_URL', 'http://localhost/archery-analysis-web/');
