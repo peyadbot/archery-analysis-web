@@ -1,6 +1,8 @@
 <?php
-session_start();
-session_unset();
-session_destroy();
-header('Location: ../views/login.php');
-exit();
+// Handle logout
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: /archery-analysis-web/index.php');
+    exit();
+}

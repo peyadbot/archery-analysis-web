@@ -1,38 +1,5 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../config/config.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
-    $role = $_POST['role']; // Assuming you want to allow role selection
-
-    // Check if passwords match
-    if ($password !== $confirm_password) {
-        $error = 'Passwords do not match';
-    } elseif (strlen($password) < 8) {
-        $error = 'Password must be at least 8 characters long';
-    } else {
-        // Check if username already exists
-        $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ?');
-        $stmt->execute([$username]);
-        $user = $stmt->fetch();
-
-        if ($user) {
-            $error = 'Username already exists';
-        } else {
-            // Insert new user into the database
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)');
-            $stmt->execute([$username, $hashed_password, $role]);
-
-            // Redirect to login page after successful registration
-            header('Location: login.php');
-            exit();
-        }
-    }
-}
+require_once __DIR__ . '/../../controllers/register.php';
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2 class="text-center">Register</h2>
         <?php if (isset($error)) : ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+        <?php elseif (isset($success)) : ?>
+            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
         <form method="POST" action="" id="registrationForm">
             <div class="mb-3">
@@ -106,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select class="form-select" id="role" name="role" required>
                     <option value="admin">Admin</option>
                     <option value="coach">Coach</option>
+                    <option value="coach">Athlete</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
