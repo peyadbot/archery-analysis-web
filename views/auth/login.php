@@ -25,13 +25,13 @@
             // Redirect based on role
             switch ($user['role']) {
                 case 'admin':
-                    header('Location: /archery-analysis-web/views/admin/dashboard.php');
+                    header('Location: '. BASE_URL . 'views/users/admin/dashboard.php');
                     break;
                 case 'coach':
-                    header('Location: /archery-analysis-web/views/coach/dashboard.php');
+                    header('Location: '. BASE_URL . 'views/users/coach/dashboard.php');
                     break;
                 case 'athlete':
-                    header('Location: /archery-analysis-web/views/athlete/dashboard.php');
+                    header('Location: '. BASE_URL . 'views/users/athlete/dashboard.php');
                     break;
                 default:
                     header('Location: login.php');

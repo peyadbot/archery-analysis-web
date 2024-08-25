@@ -16,6 +16,15 @@
         z-index: 1000; 
         padding: 0.5rem 1rem; 
     }
+    /* Transparent Header */
+    .transparent-header {
+        background-color: transparent;
+    }
+
+    /* Colored Header */
+    .colored-header {
+        background-color: #343a40; /* or any color of your choice */
+    }
     .navbar.scrolled {
         background-color: rgba(0, 0, 0, 0.4);
     }
@@ -53,17 +62,17 @@
                 <a class="nav-link" href="#">Statistics</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/archery-analysis-web/views/competition/index.php">Competitions</a>
+                <a class="nav-link" href="<?php echo BASE_URL . 'views/competition/index.php'?>">Competitions</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Training</a>
+                <a class="nav-link" href="<?php echo BASE_URL . 'views/training/index.php'?>">Training</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
             </li>
             <?php if (isset($_SESSION['username'])): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo BASE_URL . 'views/' . htmlspecialchars($_SESSION['role']) . '/dashboard.php'; ?>">
+                    <a class="nav-link" href="<?php echo BASE_URL . 'views/users' . htmlspecialchars($_SESSION['role']) . '/dashboard.php'; ?>">
                         <?php echo htmlspecialchars($_SESSION['username']); ?>
                     </a>
                 </li>

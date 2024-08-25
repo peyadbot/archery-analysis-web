@@ -37,7 +37,7 @@ require_once __DIR__ . '/config/config.php';
                 <h3>Statistics</h3>
                 <p>Get detailed statistics on your performance, including scores, accuracy, and more.</p>
             </a>
-            <a class="hover-pointer rounded-5 col-md-4 p-4" href="competition-results.html">
+            <a class="hover-pointer rounded-5 col-md-4 p-4" href="<?php echo BASE_URL . 'views/competition/index.php'?>">
                 <i class="feature-icon bi bi-calendar"></i>
                 <h3>Competition</h3>
                 <p>View results from various competitions and compare your performance with others.</p>
