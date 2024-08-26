@@ -1,4 +1,4 @@
-
+<!-- Main header tamplate -->
 <style>
     body {
         margin: 0;
@@ -30,7 +30,7 @@
     }
     .navbar .nav-link,
     .navbar .navbar-brand {
-        color: white;
+        color: blue;
         transition: color 0.4s ease-in-out; 
     }
     .navbar .nav-link:hover {
@@ -72,7 +72,7 @@
             </li>
             <?php if (isset($_SESSION['username'])): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo BASE_URL . 'views/users' . htmlspecialchars($_SESSION['role']) . '/dashboard.php'; ?>">
+                    <a class="nav-link" href="<?php echo BASE_URL . 'views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>">
                         <?php echo htmlspecialchars($_SESSION['username']); ?>
                     </a>
                 </li>

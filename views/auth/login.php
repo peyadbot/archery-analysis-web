@@ -28,10 +28,10 @@
                     header('Location: '. BASE_URL . 'views/users/admin/dashboard.php');
                     break;
                 case 'coach':
-                    header('Location: '. BASE_URL . 'views/users/coach/dashboard.php');
+                    header('Location: '. BASE_URL . 'views/users/coach/index.php');
                     break;
                 case 'athlete':
-                    header('Location: '. BASE_URL . 'views/users/athlete/dashboard.php');
+                    header('Location: '. BASE_URL . 'views/users/athlete/index.php');
                     break;
                 default:
                     header('Location: login.php');
