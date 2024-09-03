@@ -1,8 +1,10 @@
 <?php
+require_once __DIR__ . '/../../config/config.php';
+
 // Handle logout
 if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
-    header('Location: /archery-analysis-web/index.php');
+    header('Location: ' . BASE_URL . 'public/home.php');
     exit();
 }

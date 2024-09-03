@@ -1,39 +1,17 @@
 <?php
-session_start();
-
-require_once __DIR__ . '/../../auth/logout.php';
-require_once __DIR__ . '/../../../config/config.php';
-
-// Ensure user is logged in and is a coach
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
-    header('Location: login.php');
-    exit();
-}
-
-$user_id = $_SESSION['user_id'];
-
-// Fetch user profile data from the database
-$stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
-$stmt->execute([$user_id]);
-$profile = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$profile_incomplete = empty($profile['first_name']) || empty($profile['last_name']) || empty($profile['email']) || empty($profile['phone_number']);
+require_once __DIR__ . '/../../../handlers/ProfileHandler.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coach Dashboard - Archery Stats</title>
+    <title>Athlete Dashboard - Archery Stats</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL . 'public/css/userDashboard.css'; ?>">
 </head>
-<style>
-
-</style>
 <body>
     <div id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 text-white bg-dark">
         <button class="btn btn-dark position-fixed" id="sidebarToggle" >
@@ -87,11 +65,11 @@ $profile_incomplete = empty($profile['first_name']) || empty($profile['last_name
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                 <li><a class="dropdown-item" href="#">New stats...</a></li>
                 <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="profile_form.php">Profile</a></li>
+                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'index.php'; ?>">Home</a></li>
+                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'public/home.php'; ?>">Home</a></li>
                 <li>
                     <form method="POST" action="">
                         <button type="submit" name="logout" class="dropdown-item">
@@ -105,7 +83,7 @@ $profile_incomplete = empty($profile['first_name']) || empty($profile['last_name
 
     <div>
         <div class="dashboard-header py-2 ps-5 bg-dark text-white">
-            <p>Coach Dashboard</p>
+            <p>Athlete Dashboard</p>
         </div>
     </div>
 
@@ -128,7 +106,7 @@ $profile_incomplete = empty($profile['first_name']) || empty($profile['last_name
                     <h2>User Profile</h2>
                     <?php if ($profile_incomplete): ?>
                         <p class="text-warning">Your profile is incomplete. Please complete your profile.</p>
-                        <a href="profile_form.php" class="btn btn-primary">Complete Profile</a>
+                        <a href="profile-form.php" class="btn btn-primary">Complete Profile</a>
                     <?php else: ?>
                         <p>Update your profile information and preferences.</p>
                         <div class="profile-info">
@@ -181,8 +159,6 @@ $profile_incomplete = empty($profile['first_name']) || empty($profile['last_name
                 sidebar.style.width = '0';
             }
         });
-
     </script>
-
 </body>
 </html>
