@@ -1,3 +1,5 @@
+<!-- Use in edit and update profile -->
+
 <?php
 session_start();
 require_once __DIR__ . '/../../config/config.php';

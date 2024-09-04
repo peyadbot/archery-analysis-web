@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../handlers/ProfileHandler.php';
+require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
 ?>
 
 <!DOCTYPE html>

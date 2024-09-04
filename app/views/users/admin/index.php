@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../handlers/ProfileHandler.php';
+require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
 ?>
 
 <!DOCTYPE html>
@@ -8,8 +8,10 @@ require_once __DIR__ . '/../../../handlers/ProfileHandler.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Archery Stats</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo BASE_URL . 'public/css/userDashboard.css'; ?>">
 </head>
 <body>
@@ -26,38 +28,26 @@ require_once __DIR__ . '/../../../handlers/ProfileHandler.php';
         <hr>
         <ul class="nav nav-pills flex-column mb-auto p-3">
             <li class="nav-item">
-                <a href="#" class="nav-link" aria-current="page">
+                <a href="#" class="nav-link text-white" aria-current="page">
                     <i class="bi bi-person-plus"></i>
                     Home
                 </a>
             </li>
             <li class="nav-item">
-                <a href="program.php" class="nav-link" aria-current="page">
+                <a href="<?php echo BASE_URL . 'app\views\program\program.php'; ?>" class="nav-link text-white" aria-current="page">
                     <i class="bi bi-person-plus"></i>
                     Programs
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-white">
+                <a href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>" class="nav-link text-white">
                     <i class="bi bi-calendar-plus"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-bar-chart"></i>
-                    Statistics
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-trophy"></i>
                     Competitions
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-shield"></i>
+                <a href="<?php echo BASE_URL . 'app\views\training\training.php'; ?>" class="nav-link text-white">
+                    <i class="bi bi-bar-chart"></i>
                     Training
                 </a>
             </li>

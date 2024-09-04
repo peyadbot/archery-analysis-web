@@ -1,3 +1,5 @@
+<!-- Handle user login base on roles -->
+
 <?php
 session_start();
 

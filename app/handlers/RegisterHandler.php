@@ -1,3 +1,5 @@
+<!-- Handle user registration -->
+
 <?php
 session_start();
 

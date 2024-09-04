@@ -46,7 +46,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark">
 <div class="container-fluid ">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="<?php echo BASE_URL . 'public/home.php'; ?>">
         <img src="https://github.com/mdo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
         Archery Stats
     </a>
