@@ -4,10 +4,11 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training - Admin</title>
+    <title>Competitions - Admin</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
@@ -30,17 +31,17 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
     }
 </style>
 <body>
-    <div class="container table mt-5">
+    <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center">
-            <h3>All Competitions</h3>
+            <h3>All Training</h3>
             <form class="d-flex search-bar">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success me-2" type="submit">Search</button>
                 <a class="btn btn-primary w-50" href="training-form.php" role="button">Add New</a>
             </form>
         </div>
-        
-        <!-- Display Success and Error Messages -->
+
+        <!-- Success and Error Messages -->
         <?php if (isset($_SESSION['success'])): ?>
             <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
         <?php endif; ?>
@@ -52,9 +53,13 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                     <tr>
+                        <th>ID</th>
                         <th>Session Name</th>
-                        <th>Date</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Location</th>
+                        <th>Bow</th>
+                        <th>Event</th>
                         <th>Description</th>
                         <th>Added By</th>
                         <?php if ($isAdminOrCoach): ?>
@@ -66,9 +71,13 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
                     <?php if (!empty($trainings)): ?>
                         <?php foreach ($trainings as $training) : ?>
                             <tr>
+                                <td><?php echo htmlspecialchars($training['training_id']); ?></td>
                                 <td><?php echo htmlspecialchars($training['training_name']); ?></td>
-                                <td><?php echo htmlspecialchars($training['date']); ?></td>
+                                <td><?php echo htmlspecialchars($training['start_date']); ?></td>
+                                <td><?php echo htmlspecialchars($training['start_date']); ?></td>
                                 <td><?php echo htmlspecialchars($training['location']); ?></td>
+                                <td><?php echo formatTrainingBowTypes($training); ?></td>
+                                <td><?php echo formatTrainingEventTypes($training); ?></td>
                                 <td><?php echo htmlspecialchars($training['description']); ?></td>
                                 <td><?php echo htmlspecialchars($training['username']); ?></td>
                                 <?php if ($isAdminOrCoach): ?>

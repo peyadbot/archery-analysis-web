@@ -13,24 +13,23 @@ require_once __DIR__ . '/../../../app/handlers/CompetitionHandler.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <style>
-        /* Custom Styles */
-        body {
-            background-color: #f8f9fa;
-        }
-        .card-header {
-            background-color: #007bff;
-            color: white;
-        }
-        .table-responsive {
-            margin-top: 20px;
-        }
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
 </head>
-
+<style>
+    /* Custom Styles */
+    body {
+        background-color: #f8f9fa;
+    }
+    .card-header {
+        background-color: #007bff;
+        color: white;
+    }
+    .table-responsive {
+        margin-top: 20px;
+    }
+    .table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+</style>
 <body>
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center">
@@ -54,12 +53,17 @@ require_once __DIR__ . '/../../../app/handlers/CompetitionHandler.php';
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                     <tr>
+                        <th>ID</th>
                         <th>Competition Name</th>
-                        <th>Date</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Registration</th>
                         <th>Location</th>
+                        <th>Bow</th>
+                        <th>Event</th>
+                        <th>Level</th>
                         <th>Description</th>
                         <th>Added By</th>
-                        <th>Approved</th>
                         <?php if ($isAdminOrCoach): ?>
                             <th>Actions</th>
                         <?php endif; ?>
@@ -69,12 +73,17 @@ require_once __DIR__ . '/../../../app/handlers/CompetitionHandler.php';
                     <?php if (!empty($competitions)): ?>
                         <?php foreach ($competitions as $competition) : ?>
                             <tr>
+                                <td><?php echo htmlspecialchars($competition['competition_id']); ?></td>
                                 <td><?php echo htmlspecialchars($competition['competition_name']); ?></td>
-                                <td><?php echo htmlspecialchars($competition['start_date']) . ' ~ ' . htmlspecialchars($competition['end_date']); ?></td>
+                                <td><?php echo htmlspecialchars($competition['start_date']); ?></td>
+                                <td><?php echo htmlspecialchars($competition['end_date']); ?></td>
+                                <td><?php echo htmlspecialchars($competition['registration_deadline']); ?></td>
                                 <td><?php echo htmlspecialchars($competition['location']); ?></td>
+                                <td><?php echo formatCompetitionBowTypes($competition); ?></td>
+                                <td><?php echo formatCompetitionEventTypes($competition); ?></td>
+                                <td><?php echo htmlspecialchars($levels[array_search($competition['level_id'], array_column($levels, 'level_id'))]['level_name']); ?></td>
                                 <td><?php echo htmlspecialchars($competition['description']); ?></td>
                                 <td><?php echo htmlspecialchars($competition['username']); ?></td>
-                                <td><?php echo $competition['approved'] ? 'Yes' : 'No'; ?></td>
                                 <?php if ($isAdminOrCoach): ?>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
@@ -91,7 +100,7 @@ require_once __DIR__ . '/../../../app/handlers/CompetitionHandler.php';
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" class="text-center">No competition found.</td>
+                            <td colspan="<?php echo $isAdminOrCoach ? '11' : '10'; ?>" class="text-center">No competition found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

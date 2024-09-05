@@ -61,10 +61,11 @@ require_once __DIR__ . '/../../../app/handlers/ProgramHandler.php';
 
         <!-- Programs List -->
         <div class="table-responsive">
-            <h5 class="card-title mb-2">Existing Programs</h5>
+            <h5 class="card-title mb-4 mt-5">Existing Programs</h5>
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                     <tr>
+                        <th>ID</th>
                         <th>Program Name</th>
                         <th>Description</th>
                         <?php if ($isAdmin): ?>
@@ -76,6 +77,7 @@ require_once __DIR__ . '/../../../app/handlers/ProgramHandler.php';
                     <?php if (!empty($programs)): ?>
                         <?php foreach ($programs as $program): ?>
                             <tr>
+                                <td><?php echo htmlspecialchars($program['program_id']); ?></td>
                                 <td><?php echo htmlspecialchars($program['program_name']); ?></td>
                                 <td><?php echo htmlspecialchars($program['description']); ?></td>
                                 <?php if ($isAdmin): ?>
