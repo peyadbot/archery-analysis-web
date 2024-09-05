@@ -1,5 +1,25 @@
 <?php
-require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
+// require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
+require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
+
+// Check if the user is logged in and has the admin role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
+    header('Location: ' . BASE_URL . 'app/views/auth/login.php');
+    exit();
+}
+
+// Fetch dashboard data based on user role
+$userId = $_SESSION['user_id'];
+$role = $_SESSION['role'];
+
+try {
+    $dashboardData = getDashboardData($userId, $role);
+    $profile = getProfile($userId);
+    $profile_incomplete = $profile['incomplete'];
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -44,14 +64,14 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-trophy"></i>
+                <a href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>" class="nav-link text-white">
+                    <i class="bi bi-calendar-plus"></i>
                     Competitions
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-shield"></i>
+                <a href="<?php echo BASE_URL . 'app\views\training\training.php'; ?>" class="nav-link text-white">
+                    <i class="bi bi-bar-chart"></i>
                     Training
                 </a>
             </li>
@@ -89,16 +109,45 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
 
     <div class="container mt-5">
         <div class="row gy-4">
-            <div class="col-md-6 col-lg-7">
+            <div class="col-md-6 col-lg-12">
                 <div class="box">
-                    <h2>Statistics</h2>
-                    <p>View detailed performance stats for each match.</p>
+                    <h2>Welcome to Coach Dashboard <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
+                    <p>Today's date: <?php echo date('j M Y'); ?></p>
+                    <p id="clock"></p>
+                    <p>Ready to get started? View detailed stats and insights. track your progress and optimize your performance.</p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-5">
-                <div class="box">
-                    <h2>Recent Matches</h2>
-                    <p>Check your recent match scores and results.</p>
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Competitions</h5>
+                        <h1><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Trainings</h5>
+                        <h1><?php echo htmlspecialchars($dashboardData['trainingCount']); ?></h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Athletes</h5>
+                        <h1>200</h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">

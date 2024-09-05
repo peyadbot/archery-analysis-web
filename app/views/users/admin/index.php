@@ -1,9 +1,30 @@
 <?php
-require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
+// require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
+require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
+
+// Check if the user is logged in and has the admin role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header('Location: ' . BASE_URL . 'app/views/auth/login.php');
+    exit();
+}
+
+// Fetch dashboard data based on user role
+$userId = $_SESSION['user_id'];
+$role = $_SESSION['role'];
+
+try {
+    $dashboardData = getDashboardData($userId, $role);
+    $profile = getProfile($userId);
+    $profile_incomplete = $profile['incomplete'];
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +35,11 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo BASE_URL . 'public/css/userDashboard.css'; ?>">
 </head>
+
 <body>
+    <!-- Sidebar Admin -->
     <div id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 text-white bg-dark">
-        <button class="btn btn-dark position-fixed" id="sidebarToggle" >
+        <button class="btn btn-dark position-fixed" id="sidebarToggle">
             <i class="bi bi-list"></i>
         </button>
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -77,29 +100,77 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
         </div>
     </div>
 
+    <!-- Header -->
     <div>
         <div class="dashboard-header py-2 ps-5 bg-dark text-white">
             <p>Admin Dashboard</p>
         </div>
     </div>
 
+    <!-- Dashboard Table -->
     <div class="container mt-5">
-        <div class="row gy-4">
-            <div class="col-md-6 col-lg-7">
+        <div class="row row-cols-1 gy-4">
+            <div class="col-md-6 col-lg-12">
                 <div class="box">
-                    <h2>Statistics</h2>
-                    <p>View detailed performance stats for each match.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-5">
-                <div class="box">
-                    <h2>Recent Matches</h2>
-                    <p>Check your recent match scores and results.</p>
+                    <h2>Welcome to Admin Dashboard <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
+                    <p>Today's date: <?php echo date('j M Y'); ?></p>
+                    <p id="clock"></p>
+                    <p>Ready to get started? View detailed stats and insights. track your progress and optimize your performance.</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Athletes</h5>
+                        <h1><?php echo htmlspecialchars($dashboardData['athleteCount']); ?></h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Coaches</h5>
+                        <h1><?php echo htmlspecialchars($dashboardData['coachCount']); ?></h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Competitions</h5>
+                        <h1><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-0">
+                    <div class="card-body">
+                        <h5 class="card-title">Trainings</h5>
+                        <h1><?php echo htmlspecialchars($dashboardData['trainingCount']); ?></h1>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="card-link">View Report</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4" style="height: 400px;">
                 <div class="box">
-                    <h2>User Profile</h2>
+                    <h2>Recent Activity</h2>
+                    <p>View important updates and messages from your coach.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="box">
+                    <h2>Profile</h2>
                     <?php if ($profile_incomplete): ?>
                         <p class="text-warning">Your profile is incomplete. Please complete your profile.</p>
                         <a href="profile-form.php" class="btn btn-primary">Complete Profile</a>
@@ -135,26 +206,35 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-5">
-                <div class="box">
-                    <h2>Notifications</h2>
-                    <p>View important updates and messages from your coach.</p>
-                </div>
-            </div>
         </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-        
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            var sidebar = document.getElementById('sidebar');
-            if (sidebar.style.width === '0px' || sidebar.style.width === '') {
-                sidebar.style.width = '280px';
-            } else {
-                sidebar.style.width = '0';
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script>
+            document.getElementById('sidebarToggle').addEventListener('click', function() {
+                var sidebar = document.getElementById('sidebar');
+                if (sidebar.style.width === '0px' || sidebar.style.width === '') {
+                    sidebar.style.width = '280px';
+                } else {
+                    sidebar.style.width = '0';
+                }
+            });
+
+            function updateClock() {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+                document.getElementById('clock').textContent = `Current time: ${formattedTime}`;
             }
-        });
-    </script>
+
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>
 </body>
+
 </html>

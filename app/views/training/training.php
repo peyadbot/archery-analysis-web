@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
+require_once __DIR__ . '/../../../app/handlers/TrainingViewHandler.php';
 ?>
 
 <!DOCTYPE html>
@@ -35,10 +36,69 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
         <div class="d-flex justify-content-between align-items-center">
             <h3>All Training</h3>
             <form class="d-flex search-bar">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success me-2" type="submit">Search</button>
-                <a class="btn btn-primary w-50" href="training-form.php" role="button">Add New</a>
+                <?php if ($isAdminOrCoach): ?>
+                    <a class="btn btn-primary w-50" href="training-form.php" role="button">Add New</a>
+                <?php endif; ?>
             </form>
+        </div>
+
+        <div class="accordion mb-4 w-25">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Search & Filter
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse <?php echo isset($editMode) && $editMode ? 'show' : ''; ?>">
+                    <div class="accordion-body">
+                        <form class="row g-3" method="GET">
+                            <!-- Search input -->
+                            <div class="col-md-7">
+                                <label for="search" class="form-label">Search</label>
+                                <input id="search" class="form-control" type="search" name="search" placeholder="Search" aria-label="Search">
+                            </div>
+
+                            <!-- Dropdown to select search type (location, ID, or name) -->
+                            <div class="col-md-5">
+                                <label for="search_criteria" class="form-label">Search By</label>
+                                <select id="search_criteria" class="form-select" name="search_criteria">
+                                    <option value="name">Name</option>
+                                    <option value="location">Location</option>
+                                    <option value="id">ID</option>
+                                </select>
+                            </div>
+
+                            <!-- Dropdown to filter by bow type -->
+                            <div class="col-md-6">
+                                <label for="filter_bow_type" class="form-label">Bow Type</label>
+                                <select id="filter_bow_type" class="form-select" name="filter_bow_type">
+                                    <option value="">All</option>    
+                                    <option value="barebow">Barebow</option>
+                                    <option value="compound">Compound</option>
+                                    <option value="recurve">Recurve</option>
+                                </select>
+                            </div>
+
+                            <!-- Dropdown to filter by event type -->
+                            <div class="col-md-6">
+                                <label for="filter_event_type" class="form-label">Event Type</label>
+                                <select id="filter_event_type" class="form-select" name="filter_event_type">
+                                    <option value="">All</option>    
+                                    <option value="team">Team</option>
+                                    <option value="mixed_team">Mixed Team</option>
+                                    <option value="individual">Individual</option>
+                                </select>
+                            </div>
+
+                            <!-- Submit button and Add New button (if admin or coach) -->
+                            <div class="align-items-end">
+                                <button class="btn btn-outline-success w-75" type="submit">Search</button>
+                                <a href="<?php echo BASE_URL . 'app/views/competition/competition.php'; ?>" class="btn btn-secondary">Clear</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Success and Error Messages -->
@@ -61,8 +121,8 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
                         <th>Bow</th>
                         <th>Event</th>
                         <th>Description</th>
-                        <th>Added By</th>
                         <?php if ($isAdminOrCoach): ?>
+                            <th>Added By</th>
                             <th>Actions</th>
                         <?php endif; ?>
                     </tr>
@@ -79,8 +139,8 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
                                 <td><?php echo formatTrainingBowTypes($training); ?></td>
                                 <td><?php echo formatTrainingEventTypes($training); ?></td>
                                 <td><?php echo htmlspecialchars($training['description']); ?></td>
-                                <td><?php echo htmlspecialchars($training['username']); ?></td>
                                 <?php if ($isAdminOrCoach): ?>
+                                    <td><?php echo htmlspecialchars($training['username']); ?></td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <a href="training-form.php?edit=<?php echo htmlspecialchars($training['training_id']); ?>" class="btn btn-warning btn-sm">
@@ -96,13 +156,18 @@ require_once __DIR__ . '/../../../app/handlers/TrainingHandler.php';
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" class="text-center">No training found.</td>
+                            <td colspan="<?php echo $isAdminOrCoach ? '8' : '10'; ?>" class="text-center">No competition found.</td>
+                            <!-- <td colspan="6" class="text-center">No training found.</td> -->
                         </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
-        <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        <?php if ($isAdminOrCoach): ?>
+            <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        <?php else: ?>
+            <a href="<?php echo BASE_URL . 'public/home.php'; ?>" class="btn btn-secondary mt-3">Back to Home</a>
+        <?php endif; ?>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
