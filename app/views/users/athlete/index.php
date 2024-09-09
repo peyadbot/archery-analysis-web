@@ -65,7 +65,7 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                 <li><a class="dropdown-item" href="#">New stats...</a></li>
                 <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>">Profile</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
@@ -110,16 +110,12 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
                     <?php else: ?>
                         <p>Update your profile information and preferences.</p>
                         <div class="profile-info">
-                            <p><strong>First Name:</strong> <?php echo htmlspecialchars($profile['first_name']); ?></p>
-                            <p><strong>Last Name:</strong> <?php echo htmlspecialchars($profile['last_name']); ?></p>
+                            <p><strong>First Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
+                            <p><strong>Last Name:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
                             <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
                             <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
-                            <?php if (!empty($profile['profile_picture'])): ?>
-                                <img src="<?php echo '/public/images/user_img/' . htmlspecialchars($profile['profile_picture']); ?>" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;">
-                            <?php endif; ?>
                             <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
                             <p><strong>Passport Number:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
-                            <p><strong>State:</strong> <?php echo htmlspecialchars($profile['state']); ?></p>
                         </div>
                     <?php endif; ?>
                 </div>

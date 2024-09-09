@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)');
             $stmt->execute([$username, $hashed_password, $role]);
 
-            // // Redirect to login page after successful registration
             $success = 'Registration successful...';
 
             // Redirect to login page after 2 seconds

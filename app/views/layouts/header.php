@@ -60,7 +60,7 @@ require_once __DIR__ . '/../../../config/config.php';
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($current_page === 'home' || $current_page === '') ? 'active' : ''; ?>" href="<?php echo BASE_URL . 'public/home.php'; ?>">Home</a>
+                        <a class="nav-link <?php echo ($current_page === 'home' || $current_page === '') ? 'active' : ''; ?>" href="<?php echo BASE_URL . 'index.php'; ?>">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Training</a>

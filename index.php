@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../app/handlers/LogoutHandler.php';
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/app/handlers/LogoutHandler.php';
+require_once __DIR__ . '/config/config.php';
 ?>
 
 <!DOCTYPE html>
@@ -15,12 +15,12 @@ require_once __DIR__ . '/../config/config.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="public/css/home.css">
 </head>
 
 <body>
     <!-- Navbar -->
-    <?php include '../app/views/layouts/home-header.php'; ?>
+    <?php include 'app/views/layouts/home-header.php'; ?>
 
     <!-- Hero Section -->
     <header class="hero-section">
@@ -52,7 +52,7 @@ require_once __DIR__ . '/../config/config.php';
     </section>
 
     <!-- Footer -->
-    <?php include '../app/views/layouts/home-footer.php'; ?>
+    <?php include 'app/views/layouts/home-footer.php'; ?>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

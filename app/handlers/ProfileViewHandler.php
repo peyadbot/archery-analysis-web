@@ -9,6 +9,13 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['athlete', 'co
     exit();
 }
 
+// Check user roles
+$isLoggedIn = isset($_SESSION['user_id']);
+$isAdmin = $isLoggedIn && $_SESSION['role'] === 'admin';
+$isCoach = $isLoggedIn && $_SESSION['role'] === 'coach';
+$isAthlete = $isLoggedIn && $_SESSION['role'] === 'athlete';
+$isAdminOrCoach = $isAdmin || $isCoach;
+
 $user_id = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
@@ -17,5 +24,12 @@ $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
 $stmt->execute([$user_id]);
 $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
+if ($isAthlete) {
+    $stmt = $pdo->prepare('SELECT * FROM athlete_details WHERE user_id = ?');
+    $stmt->execute([$user_id]);
+    $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
 // Check if profile is incomplete
-$profile_incomplete = empty($profile['first_name']) || empty($profile['last_name']) || empty($profile['email']) || empty($profile['phone_number']);
+$profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);

@@ -53,13 +53,19 @@ try {
             <li class="nav-item">
                 <a href="#" class="nav-link text-white" aria-current="page">
                     <i class="bi bi-person-plus"></i>
-                    Home
+                    Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<?php echo BASE_URL . 'app\views\program\program.php'; ?>" class="nav-link text-white" aria-current="page">
+                <a href="program.php" class="nav-link text-white" aria-current="page">
                     <i class="bi bi-person-plus"></i>
                     Programs
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="user.php" class="nav-link text-white" aria-current="page">
+                    <i class="bi bi-person-plus"></i>
+                    User Management
                 </a>
             </li>
             <li>

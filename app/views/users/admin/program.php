@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../app/handlers/ProgramHandler.php';
+require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
 ?>
 
 <!DOCTYPE html>

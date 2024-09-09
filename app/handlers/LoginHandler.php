@@ -1,13 +1,10 @@
-<!-- Handle user login base on roles -->
-
 <?php
 session_start();
-
 require_once __DIR__ . '/../../config/config.php';
 
 // Redirect to the appropriate page if user already log in
 if (isset($_SESSION['user_id'])) {
-    header('Location: ' . BASE_URL . 'public/home.php');
+    header('Location: ' . BASE_URL . 'index.php');
     exit();
 }
 
@@ -20,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
+        session_regenerate_id(true);
+
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];

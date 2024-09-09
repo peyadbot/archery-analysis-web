@@ -98,7 +98,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/profile.php'; ?>">Profile</a></li>
                         <li><a class="dropdown-item" href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>">Dashboard</a></li>
-                        <form method="POST" action="">
+                        <form method="POST" action="<?php echo BASE_URL . 'app/handlers/LogoutHandler.php'; ?>">
                             <button type="submit" name="logout" class="dropdown-item">
                                 Sign out
                             </button>
