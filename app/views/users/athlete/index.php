@@ -1,113 +1,111 @@
 <?php
-require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
+require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
+
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'athlete') {
+    header('Location: ' . BASE_URL . 'app/views/auth/login.php');
+    exit();
+}
+
+// Fetch dashboard data based on user role
+$userId = $_SESSION['user_id'];
+$role = $_SESSION['role'];
+
+$profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);
+
+try {
+    $profile = getProfile($userId);
+    $profile_incomplete = empty($profile['name']) || empty($profile['email']) || empty($profile['phone_number']);
+    
+    // Only fetch dashboard data if the profile is complete
+    if (!$profile_incomplete) {
+        $dashboardData = getDashboardData($userId, $role);
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+    exit;
+}
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Athlete Dashboard - Archery Stats</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL . 'public/css/userDashboard.css'; ?>">
-</head>
-<body>
-    <div id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 text-white bg-dark">
-        <button class="btn btn-dark position-fixed" id="sidebarToggle" >
-            <i class="bi bi-list"></i>
-        </button>
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32">
-                <use xlink:href="#"></use>
-            </svg>
-            <span class="fs-4"></span>
-        </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto p-3">
-            <li class="nav-item">
-                <a href="#" class="nav-link active" aria-current="page">
-                    <i class="bi bi-person-plus"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-calendar-plus"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-bar-chart"></i>
-                    Statistics
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-trophy"></i>
-                    Competitions
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link text-white">
-                    <i class="bi bi-shield"></i>
-                    Training
-                </a>
-            </li>
-        </ul>
-        <hr>
-        <div class="dropdown px-3 pb-3">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">New stats...</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>">Profile</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="<?php echo BASE_URL . 'public/home.php'; ?>">Home</a></li>
-                <li>
-                    <form method="POST" action="">
-                        <button type="submit" name="logout" class="dropdown-item">
-                            Sign out
-                        </button>
-                    </form>
-                </li>
-            </ul>
+<?php include '../../layouts/dashboard/header.php'; ?>
+
+<div class="main-content" id="mainContent">
+    <!-- Header -->
+    <div class="row bg-dark text-white py-4 mb-5" style="border-radius: 10px;">
+        <div class="col">
+            <h3 class="m-0">Athlete Dashboard</h3>
         </div>
     </div>
 
-    <div>
-        <div class="dashboard-header py-2 ps-5 bg-dark text-white">
-            <p>Athlete Dashboard</p>
+    <!-- Profile Incomplete Warning -->
+    <?php if ($profile_incomplete): ?>
+        <div class="alert alert-warning">
+            <h4 class="text-danger">Profile Incomplete</h4>
+            <p>Your profile is incomplete. Please complete your profile to access the dashboard features.</p>
+            <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-primary">Complete Profile</a>
         </div>
-    </div>
+    <?php else: ?>
+        <!-- Overview Cards -->
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h4>Matches</h4>
+                    <p><?php echo $dashboardData['competitionCount']; ?></p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h4>Win Rate</h4>
+                    <p>98%</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h4>Best Score</h4>
+                    <p><?php echo $dashboardData['bestScore']; ?></p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <h4>Training Progress</h4>
+                    <p>80%</p>
+                </div>
+            </div>
+        </div>
 
-    <div class="container mt-5">
-        <div class="row gy-4">
-            <div class="col-md-6 col-lg-7">
-                <div class="box">
-                    <h2>Statistics</h2>
-                    <p>View detailed performance stats for each match.</p>
+        <!-- Performance & Matches Section -->
+        <div class="row mb-5 d-flex align-items-stretch">
+            <div class="col-lg-8 mb-5 d-flex flex-column">
+                <div class="card flex-grow-1">
+                    <div class="card-body">
+                        <h4>Performance Trends</h4>
+                        <canvas id="performanceChart"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-5">
-                <div class="box">
-                    <h2>Recent Matches</h2>
-                    <p>Check your recent match scores and results.</p>
+            <div class="col-lg-4 d-flex flex-column">
+                <div class="card mb-5 flex-grow-1">
+                    <div class="card-body">
+                        <h4>Recent Competitions</h4>
+                        <?php if (!empty($dashboardData['recentCompetitions'])): ?>
+                            <ul class="list-group ">
+                                <?php foreach ($dashboardData['recentCompetitions'] as $competition): ?>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold"><?php echo htmlspecialchars($competition['competition_name']); ?></div>
+                                            <span class="text-muted">Date: <?php echo htmlspecialchars($competition['start_date']); ?></span>
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill"><?php echo htmlspecialchars($competition['total_score']); ?></span>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p class="text-muted">No recent competitions found.</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="box">
-                    <h2>User Profile</h2>
-                    <?php if ($profile_incomplete): ?>
-                        <p class="text-warning">Your profile is incomplete. Please complete your profile.</p>
-                        <a href="profile-form.php" class="btn btn-primary">Complete Profile</a>
-                    <?php else: ?>
+                <div class="card mb-5 flex-grow-1">
+                    <div class="card-body">
+                        <h4>User Profile</h4>
                         <p>Update your profile information and preferences.</p>
                         <div class="profile-info">
                             <p><strong>First Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
@@ -117,44 +115,46 @@ require_once __DIR__ . '/../../../handlers/ProfileViewHandler.php';
                             <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
                             <p><strong>Passport Number:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
                         </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="box">
-                    <h2>Training Progress</h2>
-                    <p>Monitor your training performance:</p>
-                    <div class="progress mb-2">
-                        <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
                     </div>
-                    <div class="progress mb-2">
-                        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">35%</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-5">
-                <div class="box">
-                    <h2>Notifications</h2>
-                    <p>View important updates and messages from your coach.</p>
                 </div>
             </div>
         </div>
+    <?php endif; ?>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-        
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            var sidebar = document.getElementById('sidebar');
-            if (sidebar.style.width === '0px' || sidebar.style.width === '') {
-                sidebar.style.width = '280px';
-            } else {
-                sidebar.style.width = '0';
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    <?php if (!$profile_incomplete): ?>
+        // Prepare monthly scores for Chart.js
+        const months = <?php echo json_encode(array_column($dashboardData['monthlyScores'], 'month')); ?>;
+        const monthlyTotals = <?php echo json_encode(array_column($dashboardData['monthlyScores'], 'total')); ?>;
+
+        // Chart.js for Monthly Total Scores
+        var ctx = document.getElementById('performanceChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Total Score',
+                    data: monthlyTotals,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true // Adjust depending on expected score range
+                    }
+                }
             }
         });
-    </script>
-</body>
-</html>
+    <?php endif; ?>
+</script>
+
+<?php include '../../layouts/dashboard/footer.php'; ?>

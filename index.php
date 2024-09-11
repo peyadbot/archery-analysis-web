@@ -1,7 +1,25 @@
 <?php
 session_start();
-require_once __DIR__ . '/app/handlers/LogoutHandler.php';
 require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/app/handlers/LogoutHandler.php';
+
+// 900 seconds = 15 minutes
+define('SESSION_TIMEOUT', 30); 
+
+if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['last_activity'])) {
+        $timeSinceLastActivity = time() - $_SESSION['last_activity'];
+        
+        if ($timeSinceLastActivity > SESSION_TIMEOUT) {
+            // Session has expired
+            session_unset();
+            session_destroy();
+            header('Location: ' . BASE_URL . 'app/views/auth/login.php?timeout=1');
+            exit();
+        }
+    }
+    $_SESSION['last_activity'] = time();
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,17 +51,17 @@ require_once __DIR__ . '/config/config.php';
     <!-- Features Section -->
     <section class="features-section container my-5">
         <div class="row text-center">
-            <a class="hover-pointer rounded-5 col-md-4 p-4" href="comprehensive-stats.html">
+            <a class="col-md-4 p-4 hover-pointer rounded-5" href="#">
                 <i class="feature-icon bi bi-graph-up"></i>
                 <h3>Statistics</h3>
                 <p>Get detailed statistics on your performance, including scores, accuracy, and more.</p>
             </a>
-            <a class="hover-pointer rounded-5 col-md-4 p-4" href="<?php echo BASE_URL . 'views/competition/index.php'?>">
+            <a class="col-md-4 p-4 hover-pointer rounded-5" href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>">
                 <i class="feature-icon bi bi-calendar"></i>
                 <h3>Competition</h3>
                 <p>View results from various competitions and compare your performance with others.</p>
             </a>
-            <a class="hover-pointer rounded-5 col-md-4 p-4" href="personalized-training.html">
+            <a class="col-md-4 p-4 hover-pointer rounded-5" href="#">
                 <i class="feature-icon bi bi-person"></i>
                 <h3>Athlete</h3>
                 <p>Access training programs and track your progress to improve your skills.</p>

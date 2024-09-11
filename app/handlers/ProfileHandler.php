@@ -1,6 +1,8 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../config/config.php'; // Database connection, session config, etc.
+// session_start();
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/SessionExpiryHandler.php';
+checkSessionTimeout();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ' . BASE_URL . 'public/login.php');
@@ -117,6 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+
     // Redirect to avoid form resubmission
     header('Location: profile.php');
     exit;
@@ -136,9 +139,11 @@ if (isset($_GET['delete'])) {
     }
 }
 
+
 // Fetch updated profile data
 $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
 $stmt->execute([$user_id]);
 $profile = $stmt->fetch();
 
 $isLoggedIn = isset($_SESSION['user_id']);
+

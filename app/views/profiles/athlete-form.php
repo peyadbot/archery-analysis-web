@@ -47,7 +47,15 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
                 <div class="col-md-4">
                     <div class="mb-3">
                         <label for="program" class="form-label">Program</label>
-                        <input type="text" name="program" class="form-control" id="program" value="<?php echo isset($athlete['program']) ? htmlspecialchars($athlete['program']) : ''; ?>">
+                        <select name="program" class="form-select" id="program" required>
+                            <option value="">Select a Program</option>
+                            <?php foreach ($programs as $program): ?>
+                                <option value="<?php echo htmlspecialchars($program['program_id']); ?>"
+                                    <?php echo (isset($athlete['program']) && $athlete['program'] == $program['program_id']) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($program['program_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -301,7 +309,7 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
                         <input type="number" step="0.1" name="standing_broad_jump" class="form-control" id="standing_broad_jump" value="<?php echo isset($athlete['standing_broad_jump']) ? htmlspecialchars($athlete['standing_broad_jump']) : ''; ?>">
                     </div>
                 </div>
-                <div class="col-md_3">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="counter_movement_jump" class="form-label">Counter Movement Jump (cm)</label>
                         <input type="number" step="0.1" name="counter_movement_jump" class="form-control" id="counter_movement_jump" value="<?php echo isset($athlete['counter_movement_jump']) ? htmlspecialchars($athlete['counter_movement_jump']) : ''; ?>">
@@ -344,7 +352,7 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
         </div>
 
         <!-- Submit and Reset Buttons -->
-        <div class="form-group mt-4">
+        <div class="form-group mt-4 mb-5">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="index.php" class="btn btn-secondary">Cancel</a>
         </div>

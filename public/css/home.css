@@ -21,10 +21,30 @@ body {
 .hero-subtitle {
     font-size: 1.25rem; /* Adjust font size for better responsiveness */
 }
-.feature-icon {
-    font-size: 2rem;
-    color: #007bff;
+
+/* Features Section */
+.features-section {
+    padding: 60px 0;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
+.features-section .feature-icon {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+.features-section .hover-pointer {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.features-section .hover-pointer:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+}
+
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2rem; /* Adjust font size for smaller screens */
@@ -32,12 +52,4 @@ body {
     .hero-subtitle {
         font-size: 1rem; /* Adjust font size for smaller screens */
     }
-}
-.features-section {
-    padding: 60px 0; /* Adjust top and bottom padding for extra space */
-    min-height: 600px; /* Ensure the section has a minimum height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
 }

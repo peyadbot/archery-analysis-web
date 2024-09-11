@@ -185,7 +185,7 @@ require_once __DIR__ . '/../../../app/handlers/CompetitionViewHandler.php';
         <?php if ($isAdminOrCoach): ?>
             <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
         <?php else: ?>
-            <a href="<?php echo BASE_URL . 'public/home.php'; ?>" class="btn btn-secondary mt-3">Back to Home</a>
+            <a href="<?php echo BASE_URL . 'index.php'; ?>" class="btn btn-secondary mt-3">Back to Home</a>
         <?php endif; ?>
     </div>
 

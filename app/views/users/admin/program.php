@@ -96,7 +96,7 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="3" class="text-center">No programs found.</td>
+                            <td colspan="4" class="text-center">No programs found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

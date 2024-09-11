@@ -92,7 +92,7 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
         </div>
     
         <!-- Submit and Reset Buttons -->
-        <div class="form-group mt-4">
+        <div class="form-group mt-4 mb-5">
             <button type="submit" class="btn btn-primary">Save</button>
             <a href="index.php" class="btn btn-secondary">Cancel</a>
         </div>

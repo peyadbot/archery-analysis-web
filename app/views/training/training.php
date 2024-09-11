@@ -37,7 +37,7 @@ require_once __DIR__ . '/../../../app/handlers/TrainingViewHandler.php';
             <h3>All Training</h3>
             <form class="d-flex search-bar">
                 <?php if ($isAdminOrCoach): ?>
-                    <a class="btn btn-primary w-50" href="training-form.php" role="button">Add New</a>
+                    <a class="btn btn-primary " href="training-form.php" role="button">Add New</a>
                 <?php endif; ?>
             </form>
         </div>
@@ -156,8 +156,8 @@ require_once __DIR__ . '/../../../app/handlers/TrainingViewHandler.php';
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="<?php echo $isAdminOrCoach ? '8' : '10'; ?>" class="text-center">No competition found.</td>
-                            <!-- <td colspan="6" class="text-center">No training found.</td> -->
+                            <!-- <td colspan="<?php echo $isAdminOrCoach ? '10' : '8'; ?>" class="text-center">No competition found.</td> -->
+                            <td colspan="10" class="text-center">No training found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -166,7 +166,7 @@ require_once __DIR__ . '/../../../app/handlers/TrainingViewHandler.php';
         <?php if ($isAdminOrCoach): ?>
             <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
         <?php else: ?>
-            <a href="<?php echo BASE_URL . 'public/home.php'; ?>" class="btn btn-secondary mt-3">Back to Home</a>
+            <a href="<?php echo BASE_URL . 'index.php'; ?>" class="btn btn-secondary mt-3">Back to Home</a>
         <?php endif; ?>
     </div>
 

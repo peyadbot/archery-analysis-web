@@ -1,6 +1,8 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../config/config.php'; // Database connection, session config, etc.
+// session_start();
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/SessionExpiryHandler.php';
+checkSessionTimeout();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ' . BASE_URL . 'public/login.php');
@@ -32,36 +34,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $shoe_size = htmlspecialchars(trim($_POST['shoe_size']));
     $medical_conditions = htmlspecialchars(trim($_POST['medical_conditions']));
     $bow_type = htmlspecialchars(trim($_POST['bow_type']));
-    $started_archery = htmlspecialchars(trim($_POST['started_archery']));
-    $joined_national_backup_squad = htmlspecialchars(trim($_POST['joined_national_backup_squad']));
-    $joined_podium_program = htmlspecialchars(trim($_POST['joined_podium_program']));
+
+    // Handle dates
+    $started_archery = !empty($_POST['started_archery']) ? $_POST['started_archery'] : null;
+    $joined_national_backup_squad = !empty($_POST['joined_national_backup_squad']) ? $_POST['joined_national_backup_squad'] : null;
+    $joined_podium_program = !empty($_POST['joined_podium_program']) ? $_POST['joined_podium_program'] : null;
+
+    // Handle numeric/decimal 
     $arrow_type = htmlspecialchars(trim($_POST['arrow_type']));
     $arrow_size = htmlspecialchars(trim($_POST['arrow_size']));
-    $arrow_length = htmlspecialchars(trim($_POST['arrow_length']));
+    $arrow_length = !empty($_POST['arrow_length']) ? $_POST['arrow_length'] : null;
     $limbs_type = htmlspecialchars(trim($_POST['limbs_type']));
-    $limbs_length = htmlspecialchars(trim($_POST['limbs_length']));
-    $limbs_weight = htmlspecialchars(trim($_POST['limbs_weight']));
-    $clicking_poundage = htmlspecialchars(trim($_POST['clicking_poundage']));
-    $personal_best_before = htmlspecialchars(trim($_POST['personal_best_before']));
-    $current_personal_best = htmlspecialchars(trim($_POST['current_personal_best']));
-    $kpi_72_arrows = htmlspecialchars(trim($_POST['kpi_72_arrows']));
-    $kpi_avg_per_arrow = htmlspecialchars(trim($_POST['kpi_avg_per_arrow']));
-    $height = htmlspecialchars(trim($_POST['height']));
-    $weight = htmlspecialchars(trim($_POST['weight']));
-    $seat_reach_cm = htmlspecialchars(trim($_POST['seat_reach_cm']));
-    $handgrip_kg = htmlspecialchars(trim($_POST['handgrip_kg']));
-    $shuttle_run_sec = htmlspecialchars(trim($_POST['shuttle_run_sec']));
-    $shoulder_rotation = htmlspecialchars(trim($_POST['shoulder_rotation']));
-    $sit_up_30_sec = htmlspecialchars(trim($_POST['sit_up_30_sec']));
-    $push_up_30_sec = htmlspecialchars(trim($_POST['push_up_30_sec']));
-    $broad_jump_cm = htmlspecialchars(trim($_POST['broad_jump_cm']));
-    $counter_movement_jump_cm = htmlspecialchars(trim($_POST['counter_movement_jump_cm']));
-    $sprint_test_10_30m_sec = htmlspecialchars(trim($_POST['sprint_test_10_30m_sec']));
-    $ktk_jumping_sideway_sec = htmlspecialchars(trim($_POST['ktk_jumping_sideway_sec']));
-    $kt_moving_sideway = htmlspecialchars(trim($_POST['kt_moving_sideway']));
-    $ktk_walking_backward = htmlspecialchars(trim($_POST['ktk_walking_backward']));
-    $bleep_test = htmlspecialchars(trim($_POST['bleep_test']));
-    $bmi = htmlspecialchars(trim($_POST['bmi']));
+    $limbs_length = !empty($_POST['limbs_length']) ? $_POST['limbs_length'] : null;
+    $limbs_weight = !empty($_POST['limbs_weight']) ? $_POST['limbs_weight'] : null;
+    $clicking_poundage = !empty($_POST['clicking_poundage']) ? $_POST['clicking_poundage'] : null;
+    $personal_best_before = !empty($_POST['personal_best_before']) ? $_POST['personal_best_before'] : null;
+    $current_personal_best = !empty($_POST['current_personal_best']) ? $_POST['current_personal_best'] : null;
+    $kpi_72_arrows = !empty($_POST['kpi_72_arrows']) ? $_POST['kpi_72_arrows'] : null;
+    $kpi_avg_per_arrow = !empty($_POST['kpi_avg_per_arrow']) ? $_POST['kpi_avg_per_arrow'] : null;
+
+    // Handle fitness-related
+    $height = !empty($_POST['height']) ? $_POST['height'] : null;
+    $weight = !empty($_POST['weight']) ? $_POST['weight'] : null;
+    $seat_reach_cm = !empty($_POST['seat_reach_cm']) ? $_POST['seat_reach_cm'] : null;
+    $handgrip_kg = !empty($_POST['handgrip_kg']) ? $_POST['handgrip_kg'] : null;
+    $shuttle_run_sec = !empty($_POST['shuttle_run_sec']) ? $_POST['shuttle_run_sec'] : null;
+    $shoulder_rotation = !empty($_POST['shoulder_rotation']) ? $_POST['shoulder_rotation'] : null;
+    $sit_up_30_sec = !empty($_POST['sit_up_30_sec']) ? $_POST['sit_up_30_sec'] : null;
+    $push_up_30_sec = !empty($_POST['push_up_30_sec']) ? $_POST['push_up_30_sec'] : null;
+    $broad_jump_cm = !empty($_POST['broad_jump_cm']) ? $_POST['broad_jump_cm'] : null;
+    $counter_movement_jump_cm = !empty($_POST['counter_movement_jump_cm']) ? $_POST['counter_movement_jump_cm'] : null;
+    $sprint_test_10_30m_sec = !empty($_POST['sprint_test_10_30m_sec']) ? $_POST['sprint_test_10_30m_sec'] : null;
+    $ktk_jumping_sideway_sec = !empty($_POST['ktk_jumping_sideway_sec']) ? $_POST['ktk_jumping_sideway_sec'] : null;
+    $kt_moving_sideway = !empty($_POST['kt_moving_sideway']) ? $_POST['kt_moving_sideway'] : null;
+    $ktk_walking_backward = !empty($_POST['ktk_walking_backward']) ? $_POST['ktk_walking_backward'] : null;
+    $bleep_test = !empty($_POST['bleep_test']) ? $_POST['bleep_test'] : null;
+    $bmi = !empty($_POST['bmi']) ? $_POST['bmi'] : null;
 
     // Insert or update athlete details based on whether they exist
     if ($athlete) {
@@ -184,6 +192,10 @@ if (isset($_GET['delete'])) {
 $stmt = $pdo->prepare('SELECT * FROM athlete_details WHERE user_id = ?');
 $stmt->execute([$user_id]);
 $athlete = $stmt->fetch();
+
+$stmt = $pdo->prepare('SELECT program_id, program_name FROM programs');
+$stmt->execute();
+$programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $isLoggedIn = isset($_SESSION['user_id']);
 

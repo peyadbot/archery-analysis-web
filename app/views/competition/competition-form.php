@@ -112,10 +112,12 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['coach', 'admi
         document.addEventListener('DOMContentLoaded', function() {
             const startDateInput = document.getElementById('start_date');
             const endDateInput = document.getElementById('end_date');
+            const registrationDeadlineInput = document.getElementById('registration_deadline');
 
-            // Set min date for start_date to today
+            // Set min date for start_date and registration_deadline to today
             const today = new Date().toISOString().split('T')[0];
             startDateInput.setAttribute('min', today);
+            registrationDeadlineInput.setAttribute('min', today);
 
             // Update the end_date min value based on start_date
             startDateInput.addEventListener('change', function() {
@@ -124,6 +126,23 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['coach', 'admi
                 // Clear end_date if it's less than the new start_date
                 if (endDateInput.value && endDateInput.value < startDate) {
                     endDateInput.value = '';
+                }
+
+                // Ensure that registration deadline is before the start date
+                registrationDeadlineInput.setAttribute('max', startDate);
+                if (registrationDeadlineInput.value && registrationDeadlineInput.value >= startDate) {
+                    registrationDeadlineInput.value = '';
+                }
+            });
+
+            // Validate registration_deadline to ensure it's before start_date
+            registrationDeadlineInput.addEventListener('change', function() {
+                const startDate = new Date(startDateInput.value).toISOString().split('T')[0];
+                const registrationDeadline = new Date(registrationDeadlineInput.value).toISOString().split('T')[0];
+
+                if (registrationDeadline >= startDate) {
+                    alert('Registration deadline must be before the start date.');
+                    registrationDeadlineInput.value = '';
                 }
             });
 
