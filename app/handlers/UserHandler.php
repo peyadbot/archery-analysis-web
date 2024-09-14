@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once __DIR__ . '/../../config/config.php';
 
 // Check if the user is an admin

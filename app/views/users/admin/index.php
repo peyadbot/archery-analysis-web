@@ -13,8 +13,6 @@ $role = $_SESSION['role'];
 
 try {
     $dashboardData = getDashboardData($userId, $role);
-    $profile = getProfile($userId);
-    $profile_incomplete = $profile['incomplete'];
 } catch (Exception $e) {
     echo $e->getMessage();
     exit;
@@ -92,7 +90,7 @@ try {
         <div class="col-lg-4 d-flex flex-column">
             <div class="card mb-5 flex-grow-1">
                 <div class="card-body">
-                    <h4>Recesnt Activity</h4>
+                    <h4>Recent Activity</h4>
                     <ul class="list-group">
                         <li class="list-group-item">New user registered</li>
                         <li class="list-group-item">New competition added for October</li>
@@ -116,14 +114,6 @@ try {
 </div>
 
 <script>
-    // Toggle Sidebar
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        var content = document.getElementById('mainContent');
-        sidebar.classList.toggle('collapsed');
-        content.classList.toggle('collapsed');
-    });
-
     // Clock
     function updateClock() {
         const now = new Date();

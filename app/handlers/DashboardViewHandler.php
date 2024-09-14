@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/SessionExpiryHandler.php';
 require_once __DIR__ . '/LogoutHandler.php';
@@ -10,7 +11,6 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['athlete', 'co
     exit();
 }
 
-// Check user roles
 $isLoggedIn = isset($_SESSION['user_id']);
 $isAdmin = $isLoggedIn && $_SESSION['role'] === 'admin';
 $isCoach = $isLoggedIn && $_SESSION['role'] === 'coach';
@@ -23,15 +23,13 @@ $role = $_SESSION['role'];
 // Function to retrieve dashboard statistics based on user role
 function getDashboardData($user_id, $role) {
     global $pdo;
-
-    // Initialize the data array
     $data = [
         'athleteCount' => 0,
         'coachCount' => 0,
         'competitionCount' => 0,
         'trainingCount' => 0,    
-        'bestScore' => 0,               // Best score achieved by athlete
-        'recentCompetitions' => [],  // Recent competitions for athlete or coach
+        'bestScore' => 0,             
+        'recentCompetitions' => [],  
         'monthlyScores' => []
     ];
 
@@ -87,7 +85,7 @@ function getDashboardData($user_id, $role) {
                 $stmt->execute([$user_id]);
                 $data['bestScore'] = $stmt->fetch(PDO::FETCH_ASSOC)['best_score'];
 
-                // Fetch the latest 3 competitions with their scores
+                // Fetch the latest 4 competitions with their scores
                 $stmt = $pdo->prepare('
                     SELECT c.competition_name, s.total_score, c.start_date 
                     FROM scores s 
@@ -100,21 +98,20 @@ function getDashboardData($user_id, $role) {
                 
                 // Monthly total scores
                 $stmt = $pdo->prepare('
-                SELECT 
-                    DATE_FORMAT(c.start_date, "%Y-%m") AS month, 
-                    SUM(s.total_score) AS monthly_total
-                FROM scores s
-                JOIN competitions c ON s.competition_id = c.competition_id
-                WHERE s.athlete_id = (SELECT athlete_id FROM athlete_details WHERE user_id = ?)
-                AND YEAR(c.start_date) = YEAR(CURDATE())  -- This ensures only scores from the current year are fetched
-                GROUP BY month
-                ORDER BY month
+                    SELECT 
+                        DATE_FORMAT(c.start_date, "%Y-%m") AS month, 
+                        SUM(s.total_score) AS monthly_total
+                    FROM scores s
+                    JOIN competitions c ON s.competition_id = c.competition_id
+                    WHERE s.athlete_id = (SELECT athlete_id FROM athlete_details WHERE user_id = ?)
+                    AND YEAR(c.start_date) = YEAR(CURDATE())  -- This ensures only scores from the current year are fetched
+                    GROUP BY month
+                    ORDER BY month
                 ');
                 $stmt->execute([$user_id]);
                 $monthlyScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-                // Prepare monthly scores for Chart.js (e.g., Jan, Feb, etc.)
+                // Prepare monthly scores 
                 $data['monthlyScores'] = [];
                 $months = [
                     '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr', '05' => 'May', '06' => 'Jun',
@@ -138,47 +135,44 @@ function getDashboardData($user_id, $role) {
                         'total' => $monthlyTotal
                     ];
                 }
-
                 break;
         }
-
     } catch (PDOException $e) {
         throw new Exception('Database error: ' . $e->getMessage());
     }
-
     return $data;
 }
 
-// Function to retrieve user profile
-function getProfile($user_id) {
-    global $pdo;
+// // Function to retrieve user profile
+// function getProfile($user_id) {
+//     global $pdo;
 
-    try {
-        // Prepare and execute the SQL query to fetch user profile
-        $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
-        $stmt->execute([$user_id]);
+//     try {
+//         // Prepare and execute the SQL query to fetch user profile
+//         $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
+//         $stmt->execute([$user_id]);
 
-        // Fetch profile data
-        $profile = $stmt->fetch(PDO::FETCH_ASSOC);
+//         // Fetch profile data
+//         $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // If profile is not found, return a default structure
-        if (!$profile) {
-            return [
-                'incomplete' => true,
-                'first_name' => '',
-                'last_name' => '',
-                'email' => '',
-                'phone_number' => '',
-                'profile_picture' => '',
-                'ic_number' => '',
-                'passport_number' => '',
-                'state' => ''
-            ];
-        }
+//         // If profile is not found, return a default structure
+//         if (!$profile) {
+//             return [
+//                 'incomplete' => true,
+//                 'first_name' => '',
+//                 'last_name' => '',
+//                 'email' => '',
+//                 'phone_number' => '',
+//                 'profile_picture' => '',
+//                 'ic_number' => '',
+//                 'passport_number' => '',
+//                 'state' => ''
+//             ];
+//         }
 
-        return $profile;
+//         return $profile;
 
-    } catch (PDOException $e) {
-        throw new Exception('Database error: ' . $e->getMessage());
-    }
-}
+//     } catch (PDOException $e) {
+//         throw new Exception('Database error: ' . $e->getMessage());
+//     }
+// }

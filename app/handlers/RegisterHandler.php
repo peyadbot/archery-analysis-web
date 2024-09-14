@@ -1,6 +1,7 @@
 <!-- Handle user registration -->
 
 <?php
+ob_start();
 session_start();
 require_once __DIR__ . '/../../config/config.php';
 

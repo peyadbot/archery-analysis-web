@@ -1,4 +1,5 @@
 <?php
+ob_start();
 // session_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/SessionExpiryHandler.php';
@@ -20,20 +21,19 @@ $athlete = $stmt->fetch();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle Create and Update
-    $fathers_name = htmlspecialchars(trim($_POST['fathers_name']));
-    $fathers_phone_number = htmlspecialchars(trim($_POST['fathers_phone_number']));
-    $mothers_name = htmlspecialchars(trim($_POST['mothers_name']));
-    $mothers_phone_number = htmlspecialchars(trim($_POST['mothers_phone_number']));
-    $mareos_id = htmlspecialchars(trim($_POST['mareos_id']));
-    $wareos_id = htmlspecialchars(trim($_POST['wareos_id']));
-    $program = htmlspecialchars(trim($_POST['program']));
-    $coach_name = htmlspecialchars(trim($_POST['coach_name']));
-    $school = htmlspecialchars(trim($_POST['school']));
-    $t_shirt_size = htmlspecialchars(trim($_POST['t_shirt_size']));
-    $pant_size = htmlspecialchars(trim($_POST['pant_size']));
-    $shoe_size = htmlspecialchars(trim($_POST['shoe_size']));
-    $medical_conditions = htmlspecialchars(trim($_POST['medical_conditions']));
-    $bow_type = htmlspecialchars(trim($_POST['bow_type']));
+    $fathers_name = !empty($_POST['fathers_name']) ? htmlspecialchars(trim($_POST['fathers_name'])) : null;
+    $fathers_phone_number = !empty($_POST['fathers_phone_number']) ? htmlspecialchars(trim($_POST['fathers_phone_number'])) : null;
+    $mothers_name = !empty($_POST['mothers_name']) ? htmlspecialchars(trim($_POST['mothers_name'])) : null;
+    $mothers_phone_number = !empty($_POST['mothers_phone_number']) ? htmlspecialchars(trim($_POST['mothers_phone_number'])) : null;
+    $mareos_id = !empty($_POST['mareos_id']) ? htmlspecialchars(trim($_POST['mareos_id'])) : null;
+    $wareos_id = !empty($_POST['wareos_id']) ? htmlspecialchars(trim($_POST['wareos_id'])) : null;
+    $program = !empty($_POST['program']) ? htmlspecialchars(trim($_POST['program'])) : null;
+    $coach_name = !empty($_POST['coach_name']) ? htmlspecialchars(trim($_POST['coach_name'])) : null;
+    $school = !empty($_POST['school']) ? htmlspecialchars(trim($_POST['school'])) : null;
+    $t_shirt_size = !empty($_POST['t_shirt_size']) ? htmlspecialchars(trim($_POST['t_shirt_size'])) : null;
+    $pant_size = !empty($_POST['pant_size']) ? htmlspecialchars(trim($_POST['pant_size'])) : null;
+    $shoe_size = !empty($_POST['shoe_size']) ? htmlspecialchars(trim($_POST['shoe_size'])) : null;
+    $medical_conditions = !empty($_POST['medical_conditions']) ? htmlspecialchars(trim($_POST['medical_conditions'])) : null;
 
     // Handle dates
     $started_archery = !empty($_POST['started_archery']) ? $_POST['started_archery'] : null;
@@ -41,10 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $joined_podium_program = !empty($_POST['joined_podium_program']) ? $_POST['joined_podium_program'] : null;
 
     // Handle numeric/decimal 
-    $arrow_type = htmlspecialchars(trim($_POST['arrow_type']));
-    $arrow_size = htmlspecialchars(trim($_POST['arrow_size']));
+    $bow_type = !empty($_POST['bow_type']) ? htmlspecialchars(trim($_POST['bow_type'])) : null;
+    $arrow_type = !empty($_POST['arrow_type']) ? htmlspecialchars(trim($_POST['arrow_type'])) : null;
+    $arrow_size = !empty($_POST['arrow_size']) ? htmlspecialchars(trim($_POST['arrow_size'])) : null;
     $arrow_length = !empty($_POST['arrow_length']) ? $_POST['arrow_length'] : null;
-    $limbs_type = htmlspecialchars(trim($_POST['limbs_type']));
+    $limbs_type = !empty($_POST['limbs_type']) ? htmlspecialchars(trim($_POST['limbs_type'])) : null;
     $limbs_length = !empty($_POST['limbs_length']) ? $_POST['limbs_length'] : null;
     $limbs_weight = !empty($_POST['limbs_weight']) ? $_POST['limbs_weight'] : null;
     $clicking_poundage = !empty($_POST['clicking_poundage']) ? $_POST['clicking_poundage'] : null;

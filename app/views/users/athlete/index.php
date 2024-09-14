@@ -6,14 +6,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'athlete') {
     exit();
 }
 
-// Fetch dashboard data based on user role
 $userId = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
+$stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
+$stmt->execute([$user_id]);
+$profile = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$stmt = $pdo->prepare('SELECT * FROM athlete_details WHERE user_id = ?');
+$stmt->execute([$user_id]);
+$athlete_details = $stmt->fetch(PDO::FETCH_ASSOC);
+
 $profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);
+$detail_incomplete = empty($athlete_details['mareos_id']) || empty($athlete_details['wareos_id']) || empty($athlete_details['bow_type']) || empty($athlete_details['bmi']);
 
 try {
-    $profile = getProfile($userId);
     $profile_incomplete = empty($profile['name']) || empty($profile['email']) || empty($profile['phone_number']);
     
     // Only fetch dashboard data if the profile is complete
@@ -37,12 +44,21 @@ try {
     </div>
 
     <!-- Profile Incomplete Warning -->
-    <?php if ($profile_incomplete): ?>
-        <div class="alert alert-warning">
-            <h4 class="text-danger">Profile Incomplete</h4>
-            <p>Your profile is incomplete. Please complete your profile to access the dashboard features.</p>
-            <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-primary">Complete Profile</a>
-        </div>
+    <?php if ($profile_incomplete || $detail_incomplete): ?>
+        <?php if ($profile_incomplete): ?>
+            <div class="alert alert-warning">
+                <h4 class="text-danger">Profile Incomplete</h4>
+                <p>Your account is incomplete. Please complete your <strong>My Profile</strong> to access the dashboard features.</p>
+                <a href="<?php echo BASE_URL . 'app/views/profiles/profile-form.php'; ?>" class="btn btn-primary">Complete Profile</a>
+            </div>
+        <?php endif; ?>
+        <?php if ($detail_incomplete): ?>
+            <div class="alert alert-warning">
+                <h4 class="text-danger">Archery Detail Incomplete</h4>
+                <p>Your account is incomplete. Please complete your <strong>Archery Details</strong> to access the dashboard features.</p>
+                <a href="<?php echo BASE_URL . 'app/views/profiles/athlete-form.php'; ?>" class="btn btn-primary">Complete Detail</a>
+            </div>
+        <?php endif; ?>
     <?php else: ?>
         <!-- Overview Cards -->
         <div class="row mb-5">

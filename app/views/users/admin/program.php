@@ -17,7 +17,7 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
 
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Manage Programs</h1>
+        <h1 class="text-center">Manage Programs</h1>
 
         <!-- Success and Error Messages -->
         <?php if (isset($_SESSION['success'])): ?>
@@ -27,7 +27,7 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
             <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
         <?php endif; ?>
 
-        <div class="accordion mb-4">
+        <div class="accordion my-4">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button <?php echo isset($editMode) && $editMode ? '' : 'collapsed'; ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -50,9 +50,8 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
                                 <input type="hidden" name="program_id" value="<?php echo htmlspecialchars($editProgram['program_id']); ?>">
                             <?php endif; ?>
                             <button type="submit" class="btn btn-primary"><?php echo isset($editMode) && $editMode ? 'Update Program' : 'Add Program'; ?></button>
-                            <?php if (isset($editMode) && $editMode): ?>
-                                <a href="program.php" class="btn btn-secondary">Cancel</a>
-                            <?php endif; ?>
+                            
+                            <a href="program.php" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>
@@ -61,7 +60,7 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
 
         <!-- Programs List -->
         <div class="table-responsive">
-            <h5 class="card-title mb-4 mt-5">Existing Programs</h5>
+            <h5 class="card-title mb-4">Existing Programs</h5>
             <table class="table table-bordered table-striped">
                 <thead class="table-primary">
                     <tr>

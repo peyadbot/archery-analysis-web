@@ -18,6 +18,7 @@ function formatCompetitionEventTypes($competition) {
     return implode(', ', $eventTypes);
 }
 
+$user_id = isset($_SESSION['user_id']);
 
 // Retrieve form inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -25,6 +26,7 @@ $search_criteria = isset($_GET['search_criteria']) ? $_GET['search_criteria'] : 
 $filter_bow_type = isset($_GET['filter_bow_type']) ? $_GET['filter_bow_type'] : '';
 $filter_event_type = isset($_GET['filter_event_type']) ? $_GET['filter_event_type'] : '';
 $filter_level = isset($_GET['filter_level']) ? $_GET['filter_level'] : '';
+$isViewingMyCompetitions = isset($_GET['view']) && $_GET['view'] === 'my';
 
 // Base query
 $query = '
@@ -33,6 +35,11 @@ $query = '
     JOIN users ON competitions.added_by = users.user_id
     JOIN event_levels ON competitions.level_id = event_levels.level_id
     WHERE 1=1'; 
+
+
+if ($isViewingMyCompetitions) {
+    $query .= ' AND competitions.added_by = :user_id';
+}
 
 // Add search filtering
 if (!empty($search)) {
@@ -84,6 +91,10 @@ if (!empty($filter_level)) {
     $stmt->bindValue(':filter_level', $filter_level, PDO::PARAM_INT);
 }
 
+if ($isViewingMyCompetitions) {
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+}
+
 $stmt->execute();
-$competitions = $stmt->fetchAll();
+$competitions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

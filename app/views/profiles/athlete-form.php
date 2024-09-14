@@ -47,7 +47,7 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
                 <div class="col-md-4">
                     <div class="mb-3">
                         <label for="program" class="form-label">Program</label>
-                        <select name="program" class="form-select" id="program" required>
+                        <select name="program" class="form-select" id="program" >
                             <option value="">Select a Program</option>
                             <?php foreach ($programs as $program): ?>
                                 <option value="<?php echo htmlspecialchars($program['program_id']); ?>"
@@ -163,6 +163,16 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
             <div class="row">
                 <div class="col-md-3">
                     <div class="mb-3">
+                        <label for="bow_type" class="form-label">Bow Type</label>
+                        <select name="bow_type" class="form-select" id="bow_type" required>
+                            <option value="recurve" <?php echo isset($athlete['bow_type']) && $athlete['bow_type'] === 'recurve' ? 'selected' : ''; ?>>Recurve</option>
+                            <option value="compound" <?php echo isset($athlete['bow_type']) && $athlete['bow_type'] === 'compound' ? 'selected' : ''; ?>>Compound</option>
+                            <option value="barebow" <?php echo isset($athlete['bow_type']) && $athlete['bow_type'] === 'barebow' ? 'selected' : ''; ?>>Barebow</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
                         <label for="arrow_type" class="form-label">Arrow Type</label>
                         <input type="text" name="arrow_type" class="form-control" id="arrow_type" value="<?php echo isset($athlete['arrow_type']) ? htmlspecialchars($athlete['arrow_type']) : ''; ?>">
                     </div>
@@ -179,28 +189,28 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
                         <input type="number" step="0.1" name="arrow_length" class="form-control" id="arrow_length" value="<?php echo isset($athlete['arrow_length']) ? htmlspecialchars($athlete['arrow_length']) : ''; ?>">
                     </div>
                 </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="clicking_poundage" class="form-label">Clicking Poundage</label>
                         <input type="number" step="0.1" name="clicking_poundage" class="form-control" id="clicking_poundage" value="<?php echo isset($athlete['clicking_poundage']) ? htmlspecialchars($athlete['clicking_poundage']) : ''; ?>">
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="limbs_type" class="form-label">Limbs Type</label>
                         <input type="text" name="limbs_type" class="form-control" id="limbs_type" value="<?php echo isset($athlete['limbs_type']) ? htmlspecialchars($athlete['limbs_type']) : ''; ?>">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="limbs_length" class="form-label">Limbs Length</label>
                         <input type="number" step="0.1" name="limbs_length" class="form-control" id="limbs_length" value="<?php echo isset($athlete['limbs_length']) ? htmlspecialchars($athlete['limbs_length']) : ''; ?>">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="limbs_weight" class="form-label">Limbs Weight</label>
                         <input type="number" step="0.1" name="limbs_weight" class="form-control" id="limbs_weight" value="<?php echo isset($athlete['limbs_weight']) ? htmlspecialchars($athlete['limbs_weight']) : ''; ?>">
@@ -246,19 +256,19 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="weight" class="form-label">Weight (kg)</label>
-                        <input type="number" step="0.1" name="weight" class="form-control" id="weight" value="<?php echo isset($athlete['weight']) ? htmlspecialchars($athlete['weight']) : ''; ?>">
+                        <input type="number" step="0.1" name="weight" class="form-control" id="weight" value="<?php echo isset($athlete['weight']) ? htmlspecialchars($athlete['weight']) : ''; ?>" required>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="height" class="form-label">Height (cm)</label>
-                        <input type="number" step="0.1" name="height" class="form-control" id="height" value="<?php echo isset($athlete['height']) ? htmlspecialchars($athlete['height']) : ''; ?>">
+                        <input type="number" step="0.1" name="height" class="form-control" id="height" value="<?php echo isset($athlete['height']) ? htmlspecialchars($athlete['height']) : ''; ?>" required>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="bmi" class="form-label">BMI</label>
-                        <input type="number" step="0.01" name="bmi" class="form-control" id="bmi" value="<?php echo isset($athlete['bmi']) ? htmlspecialchars($athlete['bmi']) : ''; ?>">
+                        <input type="number" step="0.01" name="bmi" class="form-control" id="bmi" value="<?php echo isset($athlete['bmi']) ? htmlspecialchars($athlete['bmi']) : ''; ?>" readonly>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -358,6 +368,31 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
         </div>
     </form>
 </div>
+
+    <script>
+        function calculateBMI() {
+            // Get the values for weight and height
+            var weight = document.getElementById('weight').value;
+            var height = document.getElementById('height').value;
+
+            // Convert height from cm to meters
+            if (height > 0) {
+                height = height / 100;
+            }
+
+            // Calculate BMI if weight and height are valid
+            if (weight > 0 && height > 0) {
+                var bmi = weight / (height * height);
+                document.getElementById('bmi').value = bmi.toFixed(2); // Update the BMI field with 2 decimal places
+            } else {
+                document.getElementById('bmi').value = ''; // Clear the BMI field if values are invalid
+            }
+        }
+
+        // Add event listeners to recalculate BMI when weight or height changes
+        document.getElementById('weight').addEventListener('input', calculateBMI);
+        document.getElementById('height').addEventListener('input', calculateBMI);
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

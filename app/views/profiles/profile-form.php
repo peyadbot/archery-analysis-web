@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Archery Stats</title>
+    <title>Profile Form</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -17,9 +17,13 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
     <form method="POST" action="" enctype="multipart/form-data">
         <div class="form-section mb-4">
             <div class="row mb-3">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="<?php echo htmlspecialchars($profile['name'] ?? ''); ?>" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="date_of_birth" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<?php echo htmlspecialchars($profile['date_of_birth'] ?? ''); ?>" required>
                 </div>
             </div>
             <div class="row mb-3">
@@ -31,8 +35,11 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
                     <?php endif; ?>
                 </div>
                 <div class="col-md-6">
-                    <label for="date_of_birth" class="form-label">Date of Birth</label>
-                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="<?php echo htmlspecialchars($profile['date_of_birth'] ?? ''); ?>" required>
+                    <label for="gender" class="form-label">Gender</label>
+                    <select name="gender" class="form-select" id="gender" >
+                        <option value="male" <?php echo isset($profile['gender']) && $profile['gender'] === 'male' ? 'selected' : ''; ?>>Male</option>
+                        <option value="female" <?php echo isset($profile['gender']) && $profile['gender'] === 'female' ? 'selected' : ''; ?>>Female</option>
+                    </select>
                 </div>
             </div>
             <div class="row mb-3">
@@ -94,7 +101,7 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
         <!-- Submit and Reset Buttons -->
         <div class="form-group mt-4 mb-5">
             <button type="submit" class="btn btn-primary">Save</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
+            <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once __DIR__ . '/../../config/config.php';
 
@@ -8,7 +9,6 @@ $isAdmin = $isLoggedIn && $_SESSION['role'] === 'admin';
 $isCoach = $isLoggedIn && $_SESSION['role'] === 'coach';
 $isAthlete = $isLoggedIn && $_SESSION['role'] === 'athlete';
 $isAdminOrCoach = $isAdmin || $isCoach;
-
 
 if ($isAdminOrCoach) {
     $success = $error = '';
@@ -30,6 +30,9 @@ if ($isAdminOrCoach) {
         $level_id = $_POST['level_id'];
         $added_by = $_SESSION['user_id'];
 
+        // Generate random 8-character code for the competition
+        $generated_code = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+
         // Bow type booleans
         $bow_type_recurve = isset($_POST['bow_type_recurve']) ? 1 : 0;
         $bow_type_compound = isset($_POST['bow_type_compound']) ? 1 : 0;
@@ -43,6 +46,7 @@ if ($isAdminOrCoach) {
         if (isset($_POST['competition_id'])) {
             // Update existing competition
             $competition_id = $_POST['competition_id'];
+            
             try {
                 $stmt = $pdo->prepare('
                     UPDATE competitions 
@@ -64,11 +68,11 @@ if ($isAdminOrCoach) {
                     INSERT INTO competitions 
                         (competition_name, start_date, end_date, registration_deadline, location, description, level_id, 
                         bow_type_recurve, bow_type_compound, bow_type_barebow, 
-                        event_type_individual, event_type_team, event_type_mixed_team, added_by) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                        event_type_individual, event_type_team, event_type_mixed_team, added_by, generated_code) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
                 $stmt->execute([$competition_name, $start_date, $end_date, $registration_deadline, $location, $description, $level_id,
                     $bow_type_recurve, $bow_type_compound, $bow_type_barebow, 
-                    $event_type_individual, $event_type_team, $event_type_mixed_team, $added_by]);
+                    $event_type_individual, $event_type_team, $event_type_mixed_team, $added_by, $generated_code]);
                 $_SESSION['success'] = 'Competition added successfully!';
             } catch (PDOException $e) {
                 $_SESSION['error'] = 'Failed to add competition: ' . $e->getMessage();

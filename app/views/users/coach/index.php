@@ -11,10 +11,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
 $userId = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
+$stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
+$stmt->execute([$user_id]);
+$profile = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);
+
 try {
     $dashboardData = getDashboardData($userId, $role);
-    $profile = getProfile($userId);
-    $profile_incomplete = $profile['incomplete'];
 } catch (Exception $e) {
     echo $e->getMessage();
     exit;
@@ -144,14 +148,6 @@ try {
 </div>
 
 <script>
-    // Toggle Sidebar
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        var content = document.getElementById('mainContent');
-        sidebar.classList.toggle('collapsed');
-        content.classList.toggle('collapsed');
-    });
-
     // Clock
     function updateClock() {
         const now = new Date();
