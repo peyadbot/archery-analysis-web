@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Archery Stats</title>
+    
     <!-- Bootstrap 5.3.3 CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         /* Custom Styles */
         body {
@@ -157,7 +159,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/statisticTrain.php'; ?>" class="nav-link text-white">
+                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/inputScoreTrain.php'; ?>" class="nav-link text-white">
                         <i class="bi bi-trophy-fill"></i>
                         <span>T.Statistics</span>
                     </a>
@@ -188,9 +190,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="user.php" class="nav-link text-white">
+                    <a href="users.php" class="nav-link text-white">
                         <i class="bi bi-trophy-fill"></i>
-                        <span>User Management</span>
+                        <span>Users Management</span>
                     </a>
                 </li>
             <?php elseif ($isCoach): ?>
@@ -213,7 +215,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="<?php echo BASE_URL . 'app\views\users\coach\manage-athletes.php'; ?>" class="nav-link text-white">
                         <i class="bi bi-trophy-fill"></i>
                         <span>Athlete Management</span>
                     </a>

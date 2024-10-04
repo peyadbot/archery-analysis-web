@@ -1,5 +1,6 @@
 <?php
 ob_start();
+// session_start();
 require_once __DIR__ . '/../../config/config.php';
 
 // Check if the user is an admin
@@ -65,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Redirect to avoid form resubmission
-    header('Location: ' . BASE_URL . 'app/views/users/admin/user.php');
+    header('Location: ' . BASE_URL . 'app/views/users/admin/users.php');
     exit;
 }
 
@@ -80,7 +81,7 @@ if (isset($_GET['delete'])) {
         $_SESSION['error'] = 'Failed to delete user: ' . $e->getMessage();
     }
 
-    header('Location: ' . BASE_URL . 'app/views/users/admin/user.php');
+    header('Location: ' . BASE_URL . 'app/views/users/admin/users.php');
     exit;
 }
 

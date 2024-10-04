@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Competition Scores</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        select {
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select Tournament</h1>
+
+    <!-- Tournament Dropdown -->
+    <label for="tournament-select">Choose a tournament:</label>
+    <select id="tournament-select" onchange="fetchScoresByTournament()">
+        <option value="">Select a tournament</option>
+    </select>
+
+    <h1>Athlete Competition Scores</h1>
+
+    <!-- Scores Table -->
+    <table id="athlete-scores">
+        <thead>
+            <tr>
+                <th>Pos.</th>
+                <th>Bid</th>
+                <th>Name</th>
+                <th>Event Name</th>
+                <th>Distance</th>
+                <th>Day 1 Score</th>
+                <th>Day 2 Score</th>
+                <th>Total Score</th>
+                <th>10</th>
+                <th>9</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        // Fetch the list of tournaments and populate the dropdown
+        fetch('https://ianseo.sukanfc.com/fetch_tournaments.php')
+            .then(response => response.json())
+            .then(data => {
+                const tournamentSelect = document.getElementById('tournament-select');
+                data.forEach(tournament => {
+                    const option = document.createElement('option');
+                    option.value = tournament.ToCode;  // Using ToCode as the tournament identifier
+                    option.text = tournament.ToName;  // Displaying the tournament name
+                    tournamentSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching tournaments:', error);
+            });
+
+        // Fetch scores based on the selected tournament
+        function fetchScoresByTournament() {
+            const tournamentId = document.getElementById('tournament-select').value;
+            if (tournamentId) {
+                fetch(`https://ianseo.sukanfc.com/fetch_ianseo.php?tournament_code=${tournamentId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.querySelector('#athlete-scores tbody');
+                        tableBody.innerHTML = '';  // Clear previous data
+                        let position = 1;
+                        data.forEach(row => {
+                            const tableRow = `
+                                <tr>
+                                    <td>${position}</td>
+                                    <td>${row.athlete_id}</td>
+                                    <td>${row.full_name}</td>
+                                    <td>${row.event_name}</td>
+                                    <td>${row.event_distance}m</td>
+                                    <td>${row.day_1_score}</td>
+                                    <td>${row.day_2_score}</td>
+                                    <td>${row.total_score}</td>
+                                    <td>${row.total_10}</td>
+                                    <td>${row.total_9}</td>
+                                </tr>`;
+                            tableBody.innerHTML += tableRow;
+                            position++;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching scores:', error);
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

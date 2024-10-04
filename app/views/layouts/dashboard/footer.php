@@ -1,10 +1,18 @@
 <script>
-    // Toggle Sidebar
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
+    // Toggle Sidebar (code is in reverse)
+    document.addEventListener('DOMContentLoaded', function() {
         var sidebar = document.getElementById('sidebar');
         var content = document.getElementById('mainContent');
-        sidebar.classList.toggle('collapsed');
-        content.classList.toggle('collapsed');
+        
+        // Ensure the sidebar is collapsed by default on page load
+        sidebar.classList.add('collapsed');
+        content.classList.add('collapsed');
+        
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            // Toggle the sidebar's collapsed state
+            sidebar.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        });
     });
 </script>
 

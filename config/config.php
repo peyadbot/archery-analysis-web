@@ -1,5 +1,3 @@
-<!-- Database configuration -->
-
 <?php
 // composer require vlucas/phpdotenv
 require_once __DIR__ . '/../vendor/autoload.php';

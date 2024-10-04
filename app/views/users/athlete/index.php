@@ -41,6 +41,13 @@ try {
         <div class="col">
             <h3 class="m-0">Athlete Dashboard</h3>
         </div>
+        <?php if (isset($_SESSION['impersonating']) && $_SESSION['impersonating'] === true): ?>
+            <form method="POST" action="../../../handlers/ImpersonateStopHandler.php" class="pt-4">
+                <button type="submit" class="btn btn-warning w-100">
+                    <i class="bi bi-arrow-left-circle"></i> Return to Coach Account
+                </button>
+            </form>
+        <?php endif; ?>
     </div>
 
     <!-- Profile Incomplete Warning -->
