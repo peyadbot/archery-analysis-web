@@ -226,14 +226,13 @@
         <hr>
         <div class="dropdown m-2 text-center">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown">
-                <!-- Use user's profile picture dynamically -->
-                <img src="https://github.com/mdo.png" alt="Profile Picture" width="32" height="32" class="rounded-circle me-2 profile-img">
+            <img src="<?php echo !empty($profile['profile_picture']) ? BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($profile['profile_picture']) : BASE_URL . 'public/images/page_img/gradient.jpg'; ?>" alt="Profile Picture" width="32" height="32" class="rounded-circle me-2 profile-img">
                 <span class="profile-name"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark shadow">
                 <li class="px-3 py-2">
                     <div class="d-flex align-items-center">
-                        <img src="https://github.com/mdo.png" alt="Profile Picture" width="64" height="64" class="rounded-circle me-2">
+                        <img src="<?php echo !empty($profile['profile_picture']) ? BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($profile['profile_picture']) : BASE_URL . 'public/images/page_img/gradient.jpg'; ?>" alt="Profile Picture" width="64" height="64" class="rounded-circle me-2">
                         <div>
                             <h6 class="mb-0"><?php echo htmlspecialchars($_SESSION['username']); ?></h6>
                             <small style="color: gray;"><?php echo htmlspecialchars($_SESSION['role']); ?></small>

@@ -38,46 +38,48 @@ $user = $stmt->fetch();
             <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
         </div>
 
-        <div class="row">            
-            <!-- Profile Section -->
-            <div class="col-lg-12 profile-section mb-4">
+        <?php if ($isAthlete || $isCoach): ?>
+            <div class="row">            
+                <!-- Profile Section -->
+                <div class="col-lg-12 profile-section mb-4">
 
-                <!-- Success and Error Messages -->
-                <?php if (isset($_SESSION['success'])): ?>
-                    <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success'];
-                                                                                            unset($_SESSION['success']); ?></div>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['error'])): ?>
-                    <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error'];
-                                                                            unset($_SESSION['error']); ?></div>
-                <?php endif; ?>
+                    <!-- Success and Error Messages -->
+                    <?php if (isset($_SESSION['success'])): ?>
+                        <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success'];
+                                                                                                unset($_SESSION['success']); ?></div>
+                    <?php endif; ?>
+                    <?php if (isset($_SESSION['error'])): ?>
+                        <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error'];
+                                                                                unset($_SESSION['error']); ?></div>
+                    <?php endif; ?>
 
-                <div class="card shadow-sm border-dark">
-                    <div class="card-header bg-dark text-white">
-                        <h2>My Profile</h2>
-                    </div>
-                    <div class="card-body">
-                        <?php if (!empty($profile['profile_picture'])): ?>
-                            <img src="<?php echo BASE_URL . 'public/images/user_img/' . htmlspecialchars($profile['profile_picture']); ?>" alt="Profile Picture" class="img-thumbnail">
-                        <?php else: ?>
-                            <p>No profile picture uploaded.</p>
-                        <?php endif; ?>
+                    <div class="card shadow-sm border-dark">
+                        <div class="card-header bg-dark text-white">
+                            <h2>My Profile</h2>
+                        </div>
+                        <div class="card-body">
+                            <?php if (!empty($profile['profile_picture'])): ?>
+                                <img src="<?php echo BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($profile['profile_picture']); ?>" alt="Profile Picture" class="img-thumbnail" style="width: 120px; height: 160px; object-fit: cover;">
+                            <?php else: ?>
+                                <p>No profile picture uploaded.</p>
+                            <?php endif; ?>
 
-                        <p class="card-text"><strong>Name:</strong> <?php echo !empty($profile['name']) ? htmlspecialchars($profile['name']) : 'No name provided'; ?></p>
-                        <p class="card-text"><strong>Email:</strong> <?php echo !empty($profile['email']) ? htmlspecialchars($profile['email']) : 'No email provided'; ?></p>
-                        <p class="card-text"><strong>Phone Number:</strong> <?php echo !empty($profile['phone_number']) ? htmlspecialchars($profile['phone_number']) : 'No phone number provided'; ?></p>
-                        <p class="card-text"><strong>Date of Birth:</strong> <?php echo !empty($profile['date_of_birth']) ? htmlspecialchars($profile['date_of_birth']) : 'No date of birth provided'; ?></p>
-                        <p class="card-text"><strong>IC Number:</strong> <?php echo !empty($profile['ic_number']) ? htmlspecialchars($profile['ic_number']) : 'No IC number provided'; ?></p>
-                        <p class="card-text"><strong>Passport Number:</strong> <?php echo !empty($profile['passport_number']) ? htmlspecialchars($profile['passport_number']) : 'No passport number provided'; ?></p>
-                        <p class="card-text"><strong>Passport Expiry Date:</strong> <?php echo !empty($profile['passport_expiry_date']) ? htmlspecialchars($profile['passport_expiry_date']) : 'No expiry date provided'; ?></p>
-                        <p class="card-text"><strong>Passport Issue Place:</strong> <?php echo !empty($profile['passport_issue_place']) ? htmlspecialchars($profile['passport_issue_place']) : 'No passport issue place provided'; ?></p>
-                        <p class="card-text"><strong>Home Address:</strong> <?php echo !empty($profile['home_address']) ? htmlspecialchars($profile['home_address']) : 'No address provided'; ?></p>
+                            <p class="card-text"><strong>Name:</strong> <?php echo !empty($profile['name']) ? htmlspecialchars($profile['name']) : 'No name provided'; ?></p>
+                            <p class="card-text"><strong>Email:</strong> <?php echo !empty($profile['email']) ? htmlspecialchars($profile['email']) : 'No email provided'; ?></p>
+                            <p class="card-text"><strong>Phone Number:</strong> <?php echo !empty($profile['phone_number']) ? htmlspecialchars($profile['phone_number']) : 'No phone number provided'; ?></p>
+                            <p class="card-text"><strong>Date of Birth:</strong> <?php echo !empty($profile['date_of_birth']) ? htmlspecialchars($profile['date_of_birth']) : 'No date of birth provided'; ?></p>
+                            <p class="card-text"><strong>IC Number:</strong> <?php echo !empty($profile['ic_number']) ? htmlspecialchars($profile['ic_number']) : 'No IC number provided'; ?></p>
+                            <p class="card-text"><strong>Passport Number:</strong> <?php echo !empty($profile['passport_number']) ? htmlspecialchars($profile['passport_number']) : 'No passport number provided'; ?></p>
+                            <p class="card-text"><strong>Passport Expiry Date:</strong> <?php echo !empty($profile['passport_expiry_date']) ? htmlspecialchars($profile['passport_expiry_date']) : 'No expiry date provided'; ?></p>
+                            <p class="card-text"><strong>Passport Issue Place:</strong> <?php echo !empty($profile['passport_issue_place']) ? htmlspecialchars($profile['passport_issue_place']) : 'No passport issue place provided'; ?></p>
+                            <p class="card-text"><strong>Home Address:</strong> <?php echo !empty($profile['home_address']) ? htmlspecialchars($profile['home_address']) : 'No address provided'; ?></p>
 
-                        <a href="profile-form.php" class="btn btn-primary mt-3">Update Profile</a>
+                            <a href="profile-form.php" class="btn btn-primary mt-3">Update Profile</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <?php endif ?>
 
         <!-- Archery Details Section -->
         <?php if ($isAthlete): ?>

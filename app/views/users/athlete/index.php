@@ -188,8 +188,8 @@ try {
                     </div>
                     <!-- Edit Profile Button -->
                     <div class="text-end mt-4 p-3">
-                        <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php'; ?>" class="btn btn-outline-success">Download My Report</a>
-                        <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-outline-primary w-20">Edit Profile</a>
+                        <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php'; ?>" class="btn btn-sm btn-outline-success">Download Report</a>
+                        <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-sm btn-outline-primary w-20">Edit Profile</a>
                     </div>
                 </div>
             </div>

@@ -134,13 +134,14 @@ try {
                                     <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php?athlete_user_id=' . $user['user_id']; ?>" class="btn btn-success btn-sm">
                                         Download Report
                                     </a>
+                                    <a href="#" class="btn btn-info btn-sm view-profile-btn" data-bs-toggle="modal" data-bs-target="#profileModal" data-user-id="<?php echo $user['user_id']; ?>">
+                                        View Profile
+                                    </a>
                                 <?php else: ?>
                                     <button class="btn btn-sm btn-secondary" disabled>Impersonate</button>
                                     <button class="btn btn-sm btn-secondary" disabled>Download Report</button>
+                                    <button class="btn btn-sm btn-secondary" disabled>View Profile</button>
                                 <?php endif; ?>
-                                <a href="#" class="btn btn-info btn-sm view-profile-btn" data-bs-toggle="modal" data-bs-target="#profileModal" data-user-id="<?php echo $user['user_id']; ?>">
-                                    View Profile
-                                </a>
                                 <a href="users.php?edit=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>

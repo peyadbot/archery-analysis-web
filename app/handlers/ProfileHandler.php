@@ -32,28 +32,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $passport_issue_place = htmlspecialchars(trim($_POST['passport_issue_place']));
     $home_address = htmlspecialchars(trim($_POST['home_address']));
 
-    // File uploads
-    $upload_dir = __DIR__ . '/../../public/images/user_img/';
+    // File uploads directories
+    $profile_pic_dir = __DIR__ . '/../../public/images/profile_picture/';
+    $ic_file_dir = __DIR__ . '/../../public/images/ic_file/';
+    $passport_file_dir = __DIR__ . '/../../public/images/passport_file/';
+
+    // Ensure directories exist
+    if (!is_dir($profile_pic_dir)) mkdir($profile_pic_dir, 0777, true);
+    if (!is_dir($ic_file_dir)) mkdir($ic_file_dir, 0777, true);
+    if (!is_dir($passport_file_dir)) mkdir($passport_file_dir, 0777, true);
+
+    // File variables
     $profile_picture = $profile['profile_picture'] ?? '';
     $ic_file = $profile['ic_file'] ?? '';
     $passport_file = $profile['passport_file'] ?? '';
 
+    // Handle profile picture upload
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-        $profile_picture = basename($_FILES['profile_picture']['name']);
-        move_uploaded_file($_FILES['profile_picture']['tmp_name'], $upload_dir . $profile_picture);
+        $profile_picture_name = basename($_FILES['profile_picture']['name']);
+        $profile_picture_path = $profile_pic_dir . $profile_picture_name;
+        move_uploaded_file($_FILES['profile_picture']['tmp_name'], $profile_picture_path);
+        $profile_picture = $profile_picture_name;
     }
 
+    // Handle IC file upload
     if (isset($_FILES['ic_file']) && $_FILES['ic_file']['error'] === UPLOAD_ERR_OK) {
-        $ic_file = basename($_FILES['ic_file']['name']);
-        move_uploaded_file($_FILES['ic_file']['tmp_name'], $upload_dir . $ic_file);
+        $ic_file_name = basename($_FILES['ic_file']['name']);
+        $ic_file_path = $ic_file_dir . $ic_file_name;
+        move_uploaded_file($_FILES['ic_file']['tmp_name'], $ic_file_path);
+        $ic_file = $ic_file_name;
     }
 
+    // Handle passport file upload
     if (isset($_FILES['passport_file']) && $_FILES['passport_file']['error'] === UPLOAD_ERR_OK) {
-        $passport_file = basename($_FILES['passport_file']['name']);
-        move_uploaded_file($_FILES['passport_file']['tmp_name'], $upload_dir . $passport_file);
+        $passport_file_name = basename($_FILES['passport_file']['name']);
+        $passport_file_path = $passport_file_dir . $passport_file_name;
+        move_uploaded_file($_FILES['passport_file']['tmp_name'], $passport_file_path);
+        $passport_file = $passport_file_name;
     }
 
-    // Insert or update user profile based on whether it exists
     if ($profile) {
         // Update existing profile
         try {
@@ -120,8 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-
-    // Redirect to avoid form resubmission
     header('Location: profile.php');
     exit;
 }
@@ -139,7 +154,6 @@ if (isset($_GET['delete'])) {
         $_SESSION['error'] = 'Failed to delete profile: ' . $e->getMessage();
     }
 }
-
 
 // Fetch updated profile data
 $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');

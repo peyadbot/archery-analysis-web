@@ -11,9 +11,13 @@ $userRole = $_SESSION['role'];
 $userId = $_SESSION['user_id'];
 $athlete_user_id = null;
 
-
 if ($userRole === 'athlete') {
     $athlete_user_id = $userId;
+} elseif ($userRole === 'coach') {
+    $athlete_user_id = $_GET['athlete_user_id'] ?? null;
+    if (!$athlete_user_id) {
+        $athlete_user_id = $userId;
+    }
 } else {
     $athlete_user_id = $_GET['athlete_user_id'] ?? null;
     if (!$athlete_user_id) {
@@ -39,7 +43,6 @@ function displayValue($value) {
     return !empty($value) ? $value : '-';
 }
 
-
 $pdf = new FPDF();
 $pdf->AddPage();
 
@@ -50,7 +53,20 @@ $pdf->SetDrawColor(70, 70, 100);
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->Cell(0, 10, 'User Report', 0, 1, 'C');
 
-$pdf->Ln(10);
+// Add profile picture if available
+if (!empty($profile['profile_picture'])) {
+    $profile_picture_path = __DIR__ . '/../../public/images/profile_picture/' . $profile['profile_picture'];
+
+    if (file_exists($profile_picture_path)) {
+        $pdf->Image($profile_picture_path, 10, 30, 40, 53);
+    } else {
+        $pdf->Cell(0, 10, 'Profile picture not found.', 0, 1);
+    }
+} else {
+    $pdf->Cell(0, 10, 'No profile picture uploaded.', 0, 1);
+}
+
+$pdf->Ln(60);
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(0, 10, 'Personal Information', 0, 1, 'L');
 
@@ -100,6 +116,61 @@ if (!empty($profile['mareos_id'])) {
     $pdf->Cell(70, 8, 'Arrow Length: ' . displayValue($profile['arrow_length']) . ' inches', 0, 0);
     $pdf->Cell(70, 8, 'Arrow Size: ' . displayValue($profile['arrow_size']), 0, 1);
 }
+
+// IC document if available
+if (!empty($profile['ic_file'])) {
+    $ic_file_path = __DIR__ . '/../../public/images/ic_file/' . $profile['ic_file'];
+
+    if (file_exists($ic_file_path)) {
+        $pdf->AddPage(); 
+
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(0, 10, 'IC File', 0, 1, 'R');
+
+        // 3/4 size (75%)
+        $scaled_width = 210 * 0.75;
+        $scaled_height = 297 * 0.75;
+
+        $x = (210 - $scaled_width) / 2;
+        $y = (297 - $scaled_height) / 2;
+
+        $pdf->Image($ic_file_path, $x, $y, $scaled_width, $scaled_height);
+    } else {
+        $pdf->AddPage();
+        $pdf->Cell(0, 10, 'IC file not found.', 0, 1);
+    }
+} else {
+    $pdf->AddPage();
+    $pdf->Cell(0, 10, 'No IC file uploaded.', 0, 1);
+}
+
+// Passport document if available
+if (!empty($profile['passport_file'])) {
+    $passport_file_path = __DIR__ . '/../../public/images/passport_file/' . $profile['passport_file'];
+
+    if (file_exists($passport_file_path)) {
+        $pdf->AddPage(); 
+
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(0, 10, 'Passport File', 0, 1, 'R');
+
+        // 3/4 size (75%)
+        $scaled_width = 210 * 0.75;
+        $scaled_height = 297 * 0.75;
+
+        $x = (210 - $scaled_width) / 2;
+        $y = (297 - $scaled_height) / 2;
+
+        $pdf->Image($passport_file_path, $x, $y, $scaled_width, $scaled_height);
+    } else {
+        $pdf->AddPage(); 
+        $pdf->Cell(0, 10, 'Passport file not found.', 0, 1);
+    }
+} else {
+    $pdf->AddPage(); 
+    $pdf->Cell(0, 10, 'No passport file uploaded.', 0, 1);
+}
+
 
 // Output the PDF
 $pdf->Output('I', 'User_Report_' . $profile['name'] . '.pdf');

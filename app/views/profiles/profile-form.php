@@ -28,10 +28,10 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="profile_picture" class="form-label">Profile Picture</label>
+                    <label for="profile_picture" class="form-label">Profile Picture <small>(Passport Size)</small></label>
                     <input type="file" class="form-control" id="profile_picture" name="profile_picture">
                     <?php if (!empty($profile['profile_picture'])): ?>
-                        <img src="<?php echo '/public/images/user_img/' . htmlspecialchars($profile['profile_picture']); ?>" alt="Profile Picture" class="img-thumbnail mt-2">
+                        <img src="<?php echo BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($profile['profile_picture']); ?>" alt="Profile Picture" class="img-thumbnail" style="width: 120px; height: 160px; object-fit: cover;">
                     <?php endif; ?>
                 </div>
                 <div class="col-md-6">
@@ -62,7 +62,7 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
                     <label for="ic_file" class="form-label">Upload IC</label>
                     <input type="file" class="form-control" id="ic_file" name="ic_file">
                     <?php if (!empty($profile['ic_file'])): ?>
-                        <a href="<?php echo '/public/images/user_img/' . htmlspecialchars($profile['ic_file']); ?>" target="_blank">View IC</a>
+                        <a href="<?php echo BASE_URL . '/public/images/ic_file/' . htmlspecialchars($profile['ic_file']); ?>" target="_blank">View IC</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -75,7 +75,7 @@ require_once __DIR__ . '/../../handlers/ProfileHandler.php';
                     <label for="passport_file" class="form-label">Upload Passport</label>
                     <input type="file" class="form-control" id="passport_file" name="passport_file">
                     <?php if (!empty($profile['passport_file'])): ?>
-                        <a href="<?php echo '/public/images/user_img/' . htmlspecialchars($profile['passport_file']); ?>" target="_blank">View Passport</a>
+                        <a href="<?php echo BASE_URL . '/public/images/passport_file/' . htmlspecialchars($profile['passport_file']); ?>" target="_blank">View Passport</a>
                     <?php endif; ?>
                 </div>
             </div>
