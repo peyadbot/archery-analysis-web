@@ -51,64 +51,82 @@ function getDashboardData($user_id, $role) {
                 break;
 
             case 'coach':
-                // Coach-specific data: Competitions and trainings added by the coach
-                $stmt = $pdo->prepare('SELECT COUNT(*) AS count FROM competitions WHERE added_by = ?');
-                $stmt->execute([$user_id]);
-                $data['competitionCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-
                 $stmt = $pdo->prepare('SELECT COUNT(*) AS count FROM trainings WHERE added_by = ?');
                 $stmt->execute([$user_id]);
                 $data['trainingCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
-                // Fetch recent competitions added by the coach
-                $stmt = $pdo->prepare('SELECT competition_name, start_date FROM competitions WHERE added_by = ? ORDER BY start_date DESC LIMIT 5');
+                // Fetch the number of athletes managed by the coach
+                $stmt = $pdo->prepare('SELECT COUNT(*) AS count FROM coach_athlete WHERE coach_user_id = ?');
                 $stmt->execute([$user_id]);
-                $data['recentCompetitions'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $data['athleteCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
                 break;
 
             case 'athlete':
-                // Fetch the total number of competitions the athlete has participated in
+                // Fetch the total number of competitions the athlete has participated in (local + international)
                 $stmt = $pdo->prepare('
                     SELECT COUNT(DISTINCT competition_id) AS total_competitions
-                    FROM scores
-                    WHERE athlete_id = (SELECT athlete_id FROM athlete_details WHERE user_id = ?)
+                    FROM (
+                        SELECT competition_id FROM local_comp_scores WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        UNION ALL
+                        SELECT competition_id FROM international_comp_scores WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                    ) AS combined_competitions
                 ');
-                $stmt->execute([$user_id]);
+                $stmt->execute([$user_id, $user_id]);
                 $data['competitionCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['total_competitions'];
 
-                // Fetch the best score
+                // Fetch the best score for Local Competitions
                 $stmt = $pdo->prepare('
-                    SELECT  COALESCE(MAX(total_score), 0) AS best_score
-                    FROM scores
-                    WHERE athlete_id = (SELECT athlete_id FROM athlete_details WHERE user_id = ?)
+                    SELECT MAX(total_score) AS best_local_score
+                    FROM local_comp_scores
+                    WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
                 ');
                 $stmt->execute([$user_id]);
-                $data['bestScore'] = $stmt->fetch(PDO::FETCH_ASSOC)['best_score'];
+                $data['bestLocalScore'] = $stmt->fetch(PDO::FETCH_ASSOC)['best_local_score'];
 
-                // Fetch the latest 4 competitions with their scores
+                // Fetch the best score for International Competitions
                 $stmt = $pdo->prepare('
-                    SELECT c.competition_name, s.total_score, c.start_date 
-                    FROM scores s 
-                    JOIN competitions c ON s.competition_id = c.competition_id 
-                    WHERE s.athlete_id = (SELECT athlete_id FROM athlete_details WHERE user_id = ?)
-                    ORDER BY c.start_date DESC LIMIT 4
+                    SELECT MAX(total_score) AS best_international_score
+                    FROM international_comp_scores
+                    WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
                 ');
                 $stmt->execute([$user_id]);
-                $data['recentCompetitions'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                
-                // Monthly total scores
+                $data['bestInternationalScore'] = $stmt->fetch(PDO::FETCH_ASSOC)['best_international_score'];
+
+                // Fetch the latest 4 competitions with their scores (local + international)
                 $stmt = $pdo->prepare('
-                    SELECT 
-                        DATE_FORMAT(c.start_date, "%Y-%m") AS month, 
-                        SUM(s.total_score) AS monthly_total
-                    FROM scores s
-                    JOIN competitions c ON s.competition_id = c.competition_id
-                    WHERE s.athlete_id = (SELECT athlete_id FROM athlete_details WHERE user_id = ?)
-                    AND YEAR(c.start_date) = YEAR(CURDATE())  -- This ensures only scores from the current year are fetched
+                    SELECT competition_id, total_score, created_at FROM (
+                        SELECT competition_id, total_score, created_at 
+                        FROM local_comp_scores 
+                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        
+                        UNION ALL
+                        
+                        SELECT competition_id, total_score, created_at 
+                        FROM international_comp_scores 
+                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                    ) AS combined_competitions
+                    ORDER BY created_at DESC LIMIT 4
+                ');
+                $stmt->execute([$user_id, $user_id]);
+                $data['recentCompetitions'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Fetch the monthly total scores for both local and international competitions
+                $stmt = $pdo->prepare('
+                    SELECT month, SUM(local_total) AS local_total, SUM(international_total) AS international_total FROM (
+                        SELECT DATE_FORMAT(created_at, "%Y-%m") AS month, SUM(total_score) AS local_total, 0 AS international_total
+                        FROM local_comp_scores
+                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        GROUP BY month
+                        UNION ALL
+                        SELECT DATE_FORMAT(created_at, "%Y-%m") AS month, 0 AS local_total, SUM(total_score) AS international_total
+                        FROM international_comp_scores
+                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        GROUP BY month
+                    ) AS combined_scores
                     GROUP BY month
                     ORDER BY month
                 ');
-                $stmt->execute([$user_id]);
+                $stmt->execute([$user_id, $user_id]);
                 $monthlyScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 // Prepare monthly scores 
@@ -120,19 +138,22 @@ function getDashboardData($user_id, $role) {
 
                 foreach ($months as $month => $monthName) {
                     $monthKey = date('Y') . '-' . $month;
-                    $monthlyTotal = 0;
+                    $localTotal = 0;
+                    $internationalTotal = 0;
 
                     // Check if data exists for this month
                     foreach ($monthlyScores as $score) {
                         if ($score['month'] === $monthKey) {
-                            $monthlyTotal = $score['monthly_total'];
+                            $localTotal = $score['local_total'];
+                            $internationalTotal = $score['international_total'];
                             break;
                         }
                     }
 
                     $data['monthlyScores'][] = [
                         'month' => $monthName,
-                        'total' => $monthlyTotal
+                        'local_total' => $localTotal,
+                        'international_total' => $internationalTotal
                     ];
                 }
                 break;
@@ -142,37 +163,3 @@ function getDashboardData($user_id, $role) {
     }
     return $data;
 }
-
-// // Function to retrieve user profile
-// function getProfile($user_id) {
-//     global $pdo;
-
-//     try {
-//         // Prepare and execute the SQL query to fetch user profile
-//         $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
-//         $stmt->execute([$user_id]);
-
-//         // Fetch profile data
-//         $profile = $stmt->fetch(PDO::FETCH_ASSOC);
-
-//         // If profile is not found, return a default structure
-//         if (!$profile) {
-//             return [
-//                 'incomplete' => true,
-//                 'first_name' => '',
-//                 'last_name' => '',
-//                 'email' => '',
-//                 'phone_number' => '',
-//                 'profile_picture' => '',
-//                 'ic_number' => '',
-//                 'passport_number' => '',
-//                 'state' => ''
-//             ];
-//         }
-
-//         return $profile;
-
-//     } catch (PDOException $e) {
-//         throw new Exception('Database error: ' . $e->getMessage());
-//     }
-// }

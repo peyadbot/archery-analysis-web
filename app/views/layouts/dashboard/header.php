@@ -159,7 +159,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/inputScoreTrain.php'; ?>" class="nav-link text-white">
+                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/statCompetition.php'; ?>" class="nav-link text-white">
                         <i class="bi bi-trophy-fill"></i>
                         <span>T.Statistics</span>
                     </a>

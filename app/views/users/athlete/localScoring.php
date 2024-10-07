@@ -1,5 +1,4 @@
 <?php
-// Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'User not logged in']);
     exit();
@@ -275,7 +274,7 @@ function fetchSavedScores(tournamentId) {
 function saveScore(scoreData) {
     scoreData.competition_id = document.getElementById('tournament-select').value;
 
-    fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoreHandler.php', {
+    fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -305,7 +304,7 @@ function saveScore(scoreData) {
 
 // Function to delete a score
 function deleteScore(scoreId) {
-    fetch(`<?php echo BASE_URL; ?>app/handlers/LocalScoreHandler.php?score_id=${scoreId}`, {
+    fetch(`<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php?score_id=${scoreId}`, {
         method: 'DELETE',
     })
     .then(response => response.json())

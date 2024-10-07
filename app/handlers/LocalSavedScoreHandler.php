@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';  
 
+// Use to fetch saved score
 // Check if competition_id is set
 if (isset($_GET['competition_id'])) {
     $competition_id = $_GET['competition_id'];

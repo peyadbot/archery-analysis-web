@@ -23,6 +23,18 @@ try {
     echo $e->getMessage();
     exit;
 }
+
+// Fetch the list of tournaments from the Ianseo API
+$latestCompetitions = [];
+try {
+    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+    $competitions = json_decode($json, true);
+
+    // Limit the number of latest competitions
+    $latestCompetitions = array_slice($competitions, 0, 5); // Show only 5 recent competitions
+} catch (Exception $e) {
+    $latestCompetitions = []; // In case of error, leave the array empty
+}
 ?>
 
 <?php include '../../layouts/dashboard/header.php'; ?>
@@ -32,9 +44,9 @@ try {
     <div class="row bg-dark text-white py-4 mb-5" style="border-radius: 10px;">
         <div class="d-flex justify-content-between align-items-center w-100">
             <h3 class="m-0">Coach Dashboard</h3>
-            <div class="d-flex flex-column align-items-end ms-auto">
-                <p id="clock" class="mb-0"></p>
-                <p class="mb-0"><?php echo date('j M Y'); ?></p>
+            <div id="clock-container" class="text-end">
+                <p id="clock-time" class="mb-0"></p>
+                <p id="clock-date" class="mb-0"></p>
             </div>
         </div>
     </div>
@@ -51,95 +63,114 @@ try {
         <!-- Dashboard Overview -->
         <div class="row gy-4 mb-5">
             <div class="col-lg-4 col-md-6">
-                <div class="card text-center shadow-sm">
+                <div class="card border-0 shadow-lg text-center">
                     <div class="card-body">
-                        <i class="bi bi-graph-up text-primary" style="font-size: 2rem;"></i>
-                        <h5 class="card-title mt-3">Competitions</h5>
-                        <h1><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h1>
+                        <i class="bi bi-graph-up-arrow text-primary mb-3" style="font-size: 2.5rem;"></i>
+                        <h5 class="card-title">Competitions</h5>
+                        <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h2>
                     </div>
-                    <div class="card-footer">
-                        <a href="#" class="card-link">View Details</a>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="#" class="btn btn-outline-primary">View Competitions</a>
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6">
-                <div class="card text-center shadow-sm">
+                <div class="card border-0 shadow-lg text-center">
                     <div class="card-body">
-                        <i class="bi bi-person text-success" style="font-size: 2rem;"></i>
-                        <h5 class="card-title mt-3">Trainings</h5>
-                        <h1><?php echo htmlspecialchars($dashboardData['trainingCount']); ?></h1>
+                        <i class="bi bi-person-check text-success mb-3" style="font-size: 2.5rem;"></i>
+                        <h5 class="card-title">Trainings</h5>
+                        <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['trainingCount']); ?></h2>
                     </div>
-                    <div class="card-footer">
-                        <a href="#" class="card-link">View Report</a>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="#" class="btn btn-outline-success">View Report</a>
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6">
-                <div class="card text-center shadow-sm">
+                <div class="card border-0 shadow-lg text-center">
                     <div class="card-body">
-                        <i class="bi bi-people text-info" style="font-size: 2rem;"></i>
-                        <h5 class="card-title mt-3">Athletes</h5>
-                        <h1>200</h1>
+                        <i class="bi bi-people-fill text-info mb-3" style="font-size: 2.5rem;"></i>
+                        <h5 class="card-title">Athletes</h5>
+                        <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['athleteCount']); ?></h2>
                     </div>
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Manage Athletes</a>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="<?php echo BASE_URL . 'app/views/users/coach/manage-athletes.php'; ?>" class="btn btn-outline-info">Manage Athletes</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Performance & Matches Section -->
-        <div class="row mb-5 d-flex align-items-stretch">
-            <div class="col-lg-8 mb-5 d-flex flex-column">
-                <div class="card shadow-sm flex-grow-1 p-4">
-                    <h2 class="text-primary">Training Progress</h2>
-                    <p class="text-muted">Monitor your training performance:</p>
-
-                    <!-- Progress Bar 1 -->
-                    <div class="progress mb-3" style="height: 30px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                            <span class="fw-bold">75% Complete</span>
-                        </div>
+        <div class="row mb-5">
+            <!-- Coach Profile Section -->
+            <div class="col-lg-4 d-flex flex-column">
+                <div class="card mb-5 flex-grow-1 shadow-lg">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Profile</h4>
                     </div>
-
-                    <!-- Progress Bar 2 -->
-                    <div class="progress mb-3" style="height: 30px;">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
-                            <span class="fw-bold">50% Complete</span>
+                    <div class="card-body">
+                        <div class="profile-info">
+                            <!-- Display Profile Info in Two Columns -->
+                            <div class="row">
+                                <div class="col-6">
+                                    <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
+                                </div>
+                                <div class="col-6">
+                                    <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Progress Bar 3 -->
-                    <div class="progress mb-3" style="height: 30px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                            <span class="fw-bold">35% Complete</span>
+                        <!-- Edit Profile Button -->
+                        <div class="text-end mt-4">
+                            <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-outline-primary">Edit Profile</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-4 d-flex flex-column">
-                <div class="card mb-5 flex-grow-1">
-                    <div class="card-body">
-                        <h4>Notification</h4>
-                        <ul class="list-group">
-                            <li class="list-group-item">Upcoming training session on Sept 20</li>
-                            <li class="list-group-item">New competition added for October</li>
-                        </ul>
+            <!-- Latest Competitions Section -->
+            <div class="col-lg-8 d-flex flex-column">
+                <div class="card shadow-lg mb-5">
+                    <div class="card-header bg-dark text-white">
+                        <h4 class="mb-0">Latest Competitions</h4>
                     </div>
-                </div>
-                <div class="card mb-5 flex-grow-1">
                     <div class="card-body">
-                        <h4>User Profile</h4>
-                        <p>Update your profile information and preferences.</p>
-                        <div class="profile-info">
-                            <p><strong>First Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
-                            <p><strong>Last Name:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
-                            <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
-                            <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
-                            <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
-                            <p><strong>Passport Number:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
-                        </div>
+                        <ul class="list-group list-group-flush">
+                            <?php if (!empty($latestCompetitions)): ?>
+                                <?php foreach ($latestCompetitions as $competition): ?>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <h6 class="fw-bold"><?php echo htmlspecialchars($competition['ToName']); ?></h6>
+                                            <small class="text-muted">Code: <?php echo htmlspecialchars($competition['ToCode']); ?></small><br>
+                                            <small class="text-muted">Location: <?php echo htmlspecialchars($competition['ToWhere']); ?></small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-primary rounded-pill">
+                                                From: <?php echo htmlspecialchars($competition['ToWhenFrom']); ?>
+                                            </span><br>
+                                            <span class="badge bg-secondary rounded-pill">
+                                                To: <?php echo htmlspecialchars($competition['ToWhenTo']); ?>
+                                            </span>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <li class="list-group-item text-muted">No competitions available at the moment.</li>
+                            <?php endif; ?>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -158,7 +189,14 @@ try {
         hours = hours % 12;
         hours = hours ? hours : 12; // the hour '0' should be '12'
         const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
-        document.getElementById('clock').textContent = `${formattedTime}`;
+        const formattedDate = now.toLocaleDateString('en-US', {
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+        });
+
+        document.getElementById('clock-time').textContent = formattedTime;
+        document.getElementById('clock-date').textContent = formattedDate;
     }
 
     setInterval(updateClock, 1000);

@@ -73,13 +73,12 @@ try {
 
     <!-- Athletes Table -->
     <table class="table table-bordered table-striped">
-        <thead class="table-primary">
+        <thead class="table-dark">
             <tr>
                 <th>No.</th>
                 <th>Mareos ID</th>
                 <th>Name</th>
                 <th>Start Date</th>
-                <th>End Date</th>
                 <th>Last Updated</th>
                 <th>Actions</th>
             </tr>
@@ -92,7 +91,6 @@ try {
                         <td><?php echo htmlspecialchars($athlete['mareos_id']); ?></td>
                         <td><?php echo htmlspecialchars($athlete['name']); ?></td>
                         <td><?php echo htmlspecialchars($athlete['start_date']); ?></td>
-                        <td><?php echo htmlspecialchars($athlete['end_date'] ?? 'Ongoing'); ?></td>
                         <td><?php echo htmlspecialchars($athlete['updated_at']); ?></td>
                         <td>
                             <!-- Impersonate Athlete -->
@@ -100,7 +98,10 @@ try {
                                 <input type="hidden" name="athlete_user_id" value="<?php echo htmlspecialchars($athlete['user_id']); ?>">
                                 <button type="submit" class="btn btn-primary btn-sm">Access Athlete Dashboard</button>
                             </form>
-                            </form>
+                            <!-- Download Report -->
+                            <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php?athlete_user_id=' . $athlete['user_id']; ?>" class="btn btn-success btn-sm">
+                                Download Report
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
