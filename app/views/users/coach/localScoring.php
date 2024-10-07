@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../handlers/CoachAthleteHandler.php';
 
 // Ensure the user is logged in and is a coach
 if ($_SESSION['role'] !== 'coach') {
-    header('Location: ' . BASE_URL . 'public/home.php');
+    header('Location: ' . BASE_URL . 'index.php');
     exit();
 }
 
@@ -205,7 +205,7 @@ function populateTable(tournamentId, data, savedScores) {
                     <td class="align-middle">${row.total_10}</td>
                     <td class="align-middle">${row.total_9}</td>
                     <td class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-primary save-btn" data-score='${JSON.stringify(row)}' ${isSaved ? 'disabled' : ''}>${isSaved ? 'Saved' : 'Save Score'}</button>
+                        <button class="btn btn-primary save-btn" data-score='${JSON.stringify({...row, athlete_name: matchingAthlete.name})}' ${isSaved ? 'disabled' : ''}>${isSaved ? 'Saved' : 'Save Score'}</button>
                     </td>
                 </tr>`;
             tableBody.innerHTML += tableRow;
@@ -241,7 +241,7 @@ function addEventListeners() {
     document.querySelectorAll('.save-btn').forEach(button => {
         button.addEventListener('click', function () {
             const scoreData = JSON.parse(this.getAttribute('data-score'));
-            openConfirmationModal(`Are you sure you want to save this score for ${scoreData.athlete_name}?`, function() {
+            openConfirmationModal(`Are you sure you want to save this for ${scoreData.athlete_name}, Score: ${scoreData.total_score}?`, function() {
                 saveScore(scoreData).catch(error => displayError('Error saving score', error.message));
             });
         });
@@ -304,7 +304,7 @@ document.getElementById('fetchSelectedScores').addEventListener('click', functio
 function saveScore(scoreData) {
     scoreData.competition_id = document.getElementById('tournament-select').value;
 
-    return fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoreHandler.php', {
+    return fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

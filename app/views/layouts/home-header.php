@@ -65,35 +65,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo BASE_URL . 'app\views\training\training.php'; ?>">Training</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Competition</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>">All</a></li>
-                        <li><a class="dropdown-item" href="http://localhost/archery-analysis-web/app/views/competition/competition.php?filter_level=1">International</a></li>
-                        <li><a class="dropdown-item" href="http://localhost/archery-analysis-web/app/views/competition/competition.php?filter_level=2">Local</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Athlete</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All</a></li>
-                        <li><a class="dropdown-item" href="#">Compound</a></li>
-                        <li><a class="dropdown-item" href="#">Barebow</a></li>
-                        <li><a class="dropdown-item" href="#">Recurve</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Coaches</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All</a></li>
-                        <li><a class="dropdown-item" href="#">Compound</a></li>
-                        <li><a class="dropdown-item" href="#">Barebow</a></li>
-                        <li><a class="dropdown-item" href="#">Recurve</a></li>
-                    </ul>
-                </li>
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

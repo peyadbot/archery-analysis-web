@@ -147,76 +147,76 @@
         <ul class="nav nav-pills flex-column mb-auto px-3">
             <?php if ($isAthlete): ?>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/index.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-speedometer2"></i>
+                    <a href="index.php" class="nav-link text-white">
+                        <i class="bi bi-house-door-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/statisticComp.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-bar-chart-line"></i>
+                    <a href="statCompetition.php" class="nav-link text-white">
+                        <i class="bi bi-trophy-fill"></i>
                         <span>C.Statistics</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/athlete/statCompetition.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
+                    <a href="statisticComp.php" class="nav-link text-white">
+                        <i class="bi bi-bullseye"></i>
                         <span>T.Statistics</span>
                     </a>
                 </li>
             <?php elseif ($isAdmin): ?>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/admin/index.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-speedometer2"></i>
+                    <a href="index.php" class="nav-link text-white">
+                        <i class="bi bi-house-door-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-bar-chart-line"></i>
+                    <a href="competition.php" class="nav-link text-white">
+                        <i class="bi bi-trophy-fill"></i>
                         <span>Competition</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app\views\training\training.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
+                    <a href="training.php" class="nav-link text-white">
+                        <i class="bi bi-bullseye"></i>
                         <span>Training</span>
                     </a>
                 </li>
                 <li>
                     <a href="program.php" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
+                        <i class="bi bi-bank2"></i>
                         <span>Program</span>
                     </a>
                 </li>
                 <li>
-                    <a href="users.php" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
+                    <a href="manageUsers.php" class="nav-link text-white">
+                        <i class="bi bi-people-fill"></i>
                         <span>Users Management</span>
                     </a>
                 </li>
             <?php elseif ($isCoach): ?>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app/views/users/coach/index.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-speedometer2"></i>
+                    <a href="index.php" class="nav-link text-white">
+                        <i class="bi bi-house-door-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-bar-chart-line"></i>
+                    <a href="competition.php" class="nav-link text-white">
+                        <i class="bi bi-trophy-fill"></i>
                         <span>Competition</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app\views\training\training.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
+                    <a href="training.php" class="nav-link text-white">
+                        <i class="bi bi-bullseye"></i>
                         <span>Training</span>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL . 'app\views\users\coach\manage-athletes.php'; ?>" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
+                    <a href="manageAthletes.php" class="nav-link text-white">
+                        <i class="bi bi-people-fill"></i>
                         <span>Athlete Management</span>
                     </a>
                 </li>

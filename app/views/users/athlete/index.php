@@ -41,7 +41,7 @@ try {
         <?php if (isset($_SESSION['impersonating']) && $_SESSION['impersonating'] === true): ?>
             <form method="POST" action="../../../handlers/ImpersonateStopHandler.php" class="pt-4">
                 <button type="submit" class="btn btn-warning w-100">
-                    <i class="bi bi-arrow-left-circle"></i> Return to Coach Account
+                    <i class="bi bi-arrow-left-circle"></i> Return to Account
                 </button>
             </form>
         <?php endif; ?>
@@ -155,40 +155,41 @@ try {
                     </div>
                 </div>
 
-                <!-- Profile -->
-                <div class="card mb-5 flex-grow-1 shadow-lg">
-                    <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">Profile</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="profile-info">
-                            <!-- Display Profile Info in Two Columns -->
-                            <div class="row">
-                                <div class="col-6">
-                                    <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                <!-- Profile Section -->
+                <div class="card mb-5 flex-grow-1 shadow-lg d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="card-header bg-dark text-white">
+                            <h4 class="mb-0">Profile</h4>
+                        </div>
+                        <div class="card-body flex-grow-1">
+                            <div class="profile-info">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="text-end mt-4">
-                            <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php'; ?>" class="btn btn-outline-success">Download My Report</a>
-                            <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-outline-primary">Edit Profile</a>
-                        </div>
+                    </div>
+                    <!-- Edit Profile Button -->
+                    <div class="text-end mt-4 p-3">
+                        <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php'; ?>" class="btn btn-outline-success">Download My Report</a>
+                        <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-outline-primary w-20">Edit Profile</a>
                     </div>
                 </div>
             </div>

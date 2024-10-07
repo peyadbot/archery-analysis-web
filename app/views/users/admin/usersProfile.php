@@ -25,10 +25,10 @@ if (!$user) {
 } 
 ?>
 
-
-<div class="container mt-5">
+<!-- Modal users in admin manage user -->
+<div class="container">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-dark text-white">
             <h2><?php echo htmlspecialchars($user['name'] ?? $user['username']); ?></h2>
         </div>
         <div class="card-body">

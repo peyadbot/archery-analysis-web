@@ -28,50 +28,32 @@ $user = $stmt->fetch();
     <title>My Profile - Archery Stats</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
-        .card-header {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-        }
 
-        .card-body {
-            padding: 2rem;
-        }
-
-        .card img {
-            max-width: 150px;
-            margin-bottom: 20px;
-        }
-
-        .profile-section,
-        .archery-section {
-            margin-bottom: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-        }
     </style>
 </head>
 
 <body>
-    <div class="m-3 text-start">
-        <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
-    </div>
     <div class="container mt-5 mb-5">
-        <div class="row">
-            <!-- Success and Error Messages -->
-            <?php if (isset($_SESSION['success'])): ?>
-                <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['error'])): ?>
-                <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
-            <?php endif; ?>
-            
+        <div class="text-start mb-4">
+            <a href="<?php echo BASE_URL . 'app/views/users/' . htmlspecialchars($_SESSION['role']) . '/index.php'; ?>" class="btn btn-secondary mt-3">Back to Dashboard</a>
+        </div>
+
+        <div class="row">            
             <!-- Profile Section -->
-            <div class="col-lg-12 profile-section">
-                <div class="card shadow-sm">
-                    <div class="card-header">
+            <div class="col-lg-12 profile-section mb-4">
+
+                <!-- Success and Error Messages -->
+                <?php if (isset($_SESSION['success'])): ?>
+                    <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success'];
+                                                                                            unset($_SESSION['success']); ?></div>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error'];
+                                                                            unset($_SESSION['error']); ?></div>
+                <?php endif; ?>
+
+                <div class="card shadow-sm border-dark">
+                    <div class="card-header bg-dark text-white">
                         <h2>My Profile</h2>
                     </div>
                     <div class="card-body">
@@ -100,9 +82,9 @@ $user = $stmt->fetch();
         <!-- Archery Details Section -->
         <?php if ($isAthlete): ?>
             <div class="row">
-                <div class="col-lg-12 archery-section">
-                    <div class="card shadow-sm">
-                        <div class="card-header">
+                <div class="col-lg-12 archery-section mb-4">
+                    <div class="card shadow-sm border-dark">
+                        <div class="card-header bg-dark text-white">
                             <h2>Archery Details</h2>
                         </div>
                         <div class="card-body">
@@ -124,7 +106,6 @@ $user = $stmt->fetch();
                             <p class="card-text"><strong>KPI (72 Arrows):</strong> <?php echo !empty($athlete['kpi_72_arrows']) ? htmlspecialchars($athlete['kpi_72_arrows']) : 'Not provided'; ?></p>
                             <p class="card-text"><strong>KPI Average Per Arrow:</strong> <?php echo !empty($athlete['kpi_avg_per_arrow']) ? htmlspecialchars($athlete['kpi_avg_per_arrow']) : 'Not provided'; ?></p>
 
-
                             <a href="athlete-form.php" class="btn btn-primary mt-3">Update Details</a>
                         </div>
                     </div>
@@ -132,7 +113,6 @@ $user = $stmt->fetch();
             </div>
         <?php endif ?>
         
-
         <!-- Danger Zone Section (Username/Password & Account Deletion) -->
         <div class="row">
             <div class="col-lg-12">

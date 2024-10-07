@@ -37,12 +37,14 @@ if (isset($_GET['edit'])) {
 }
 ?>
 
-<!-- Display success or error messages -->
+<!-- Success and Error Messages -->
 <?php if (isset($_SESSION['success'])): ?>
-    <div class="alert alert-success"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
+    <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success'];
+                                                                            unset($_SESSION['success']); ?></div>
 <?php endif; ?>
 <?php if (isset($_SESSION['error'])): ?>
-    <div class="alert alert-danger"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
+    <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error'];
+                                                            unset($_SESSION['error']); ?></div>
 <?php endif; ?>
 
 <!-- Accordion for Add/Edit Score Form -->

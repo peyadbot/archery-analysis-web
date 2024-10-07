@@ -1,5 +1,6 @@
 <?php
     require_once __DIR__ . '/../../../app/handlers/RegisterHandler.php';
+    $view = $_GET['view'] ?? 'register'; 
 ?>
 
 <!DOCTYPE html>
@@ -13,12 +14,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* Full-page background */
         body {
             min-height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
         }
 
         .register-container {
@@ -92,18 +93,34 @@
     </style>
 </head>
 
-<body>
-    <div class="register-container">
+<body>    
+    <div class="register-container justify-content-center">
+        <!-- Toggle Buttons for Login and Register -->
+        <div class="d-flex justify-content-center mb-4">
+            <div class="btn-group">
+                <a href="login.php" class="btn <?php echo ($view === 'login') ? 'btn-secondary' : 'btn-outline-secondary'; ?>">Login</a>
+                <a href="register.php" class="btn <?php echo ($view === 'register') ? 'btn-secondary' : 'btn-outline-secondary'; ?>">Register</a>
+            </div>
+        </div>
+
         <h2>Register</h2>
         <?php if (isset($error)) : ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php elseif (isset($success)) : ?>
             <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
+
         <form method="POST" action="" id="registrationForm">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option value="coach">Coach</option>
+                    <option value="athlete">Athlete</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
@@ -114,19 +131,9 @@
                 <label for="confirm_password" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
             </div>
-            <div class="mb-3">
-                <label for="role" class="form-label">Role</label>
-                <select class="form-select" id="role" name="role" required>
-                    <option value="admin">Admin</option>
-                    <option value="coach">Coach</option>
-                    <option value="athlete">Athlete</option>
-                </select>
-            </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
-            <div class="link-toggle">
-                <p>Already have an account? <a href="login.php">Login here</a></p>
-            </div>
-            <div class="link-toggle">
+            
+            <div class="link-toggle mt-4">
                 <a href="<?php echo BASE_URL . 'index.php'; ?>">Home</a>
             </div>
         </form>

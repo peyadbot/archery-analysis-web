@@ -17,24 +17,14 @@ $profile = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);
 
+// Get data
 try {
     $dashboardData = getDashboardData($userId, $role);
 } catch (Exception $e) {
     echo $e->getMessage();
     exit;
 }
-
-// Fetch the list of tournaments from the Ianseo API
-$latestCompetitions = [];
-try {
-    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
-    $competitions = json_decode($json, true);
-
-    // Limit the number of latest competitions
-    $latestCompetitions = array_slice($competitions, 0, 5); // Show only 5 recent competitions
-} catch (Exception $e) {
-    $latestCompetitions = []; // In case of error, leave the array empty
-}
+$latestCompetitions = $dashboardData['latestCompetitions'];  
 ?>
 
 <?php include '../../layouts/dashboard/header.php'; ?>
@@ -49,6 +39,13 @@ try {
                 <p id="clock-date" class="mb-0"></p>
             </div>
         </div>
+        <?php if (isset($_SESSION['impersonating']) && $_SESSION['impersonating'] === true): ?>
+            <form method="POST" action="../../../handlers/ImpersonateStopHandler.php" class="pt-4">
+                <button type="submit" class="btn btn-warning w-100">
+                    <i class="bi bi-arrow-left-circle"></i> Return to Account
+                </button>
+            </form>
+        <?php endif; ?>
     </div>
 
     <!-- Profile Incomplete Warning -->
@@ -103,40 +100,41 @@ try {
         </div>
 
         <div class="row mb-5">
-            <!-- Coach Profile Section -->
+            <!-- Profile Section -->
             <div class="col-lg-4 d-flex flex-column">
-                <div class="card mb-5 flex-grow-1 shadow-lg">
-                    <div class="card-header bg-dark text-white">
-                        <h4 class="mb-0">Profile</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="profile-info">
-                            <!-- Display Profile Info in Two Columns -->
-                            <div class="row">
-                                <div class="col-6">
-                                    <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
-                                </div>
-                                <div class="col-6">
-                                    <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                <div class="card mb-5 flex-grow-1 shadow-lg d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="card-header bg-dark text-white">
+                            <h4 class="mb-0">Profile</h4>
+                        </div>
+                        <div class="card-body flex-grow-1">
+                            <div class="profile-info">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Edit Profile Button -->
-                        <div class="text-end mt-4">
-                            <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-outline-primary">Edit Profile</a>
-                        </div>
+                    </div>
+                    <!-- Edit Profile Button -->
+                    <div class="text-end mt-4 p-3">
+                        <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-outline-primary w-20">Edit Profile</a>
                     </div>
                 </div>
             </div>

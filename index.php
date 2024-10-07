@@ -56,7 +56,7 @@ if (isset($_SESSION['user_id'])) {
                 <h3>Statistics</h3>
                 <p>Get detailed statistics on your performance, including scores, accuracy, and more.</p>
             </a>
-            <a class="col-md-4 p-4 hover-pointer rounded-5" href="<?php echo BASE_URL . 'app\views\competition\competition.php'; ?>">
+            <a class="col-md-4 p-4 hover-pointer rounded-5" href="#">
                 <i class="feature-icon bi bi-calendar"></i>
                 <h3>Competition</h3>
                 <p>View results from various competitions and compare your performance with others.</p>

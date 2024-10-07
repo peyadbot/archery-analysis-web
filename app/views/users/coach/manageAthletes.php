@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../handlers/CoachAthleteHandler.php';
 
 // Ensure the user is logged in and is a coach
 if ($_SESSION['role'] !== 'coach') {
-    header('Location: ' . BASE_URL . 'public/home.php');
+    header('Location: ' . BASE_URL . 'index.php');
     exit();
 }
 
@@ -93,11 +93,10 @@ try {
                         <td><?php echo htmlspecialchars($athlete['start_date']); ?></td>
                         <td><?php echo htmlspecialchars($athlete['updated_at']); ?></td>
                         <td>
-                            <!-- Impersonate Athlete -->
-                            <form method="POST" action="../../../handlers/ImpersonateAthleteHandler.php" style="display:inline;">
-                                <input type="hidden" name="athlete_user_id" value="<?php echo htmlspecialchars($athlete['user_id']); ?>">
-                                <button type="submit" class="btn btn-primary btn-sm">Access Athlete Dashboard</button>
-                            </form>
+                            <!-- Impersonate Button -->
+                            <a href="<?php echo BASE_URL . 'app/handlers/ImpersonateHandler.php?impersonate=' . htmlspecialchars($athlete['user_id']); ?>" class="btn btn-sm btn-primary">
+                                Impersonate
+                            </a>
                             <!-- Download Report -->
                             <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php?athlete_user_id=' . $athlete['user_id']; ?>" class="btn btn-success btn-sm">
                                 Download Report

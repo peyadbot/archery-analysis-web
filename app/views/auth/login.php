@@ -1,10 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../app/handlers/LoginHandler.php';
-
-// For a specific page css & title 
-// (page css)    $page_specific_css = 'dashboard.css';
-// (page title)  $title = 'Dashboard - Archery Stats';\
-// ?php echo BASE_URL . 'public/css/' . htmlspecialchars($current_page_css); 
+$view = $_GET['view'] ?? 'login'; 
 ?>
 
 <!DOCTYPE html>
@@ -89,12 +85,21 @@ require_once __DIR__ . '/../../../app/handlers/LoginHandler.php';
 
 <body>
     <div class="login-container">
+        <!-- Toggle Buttons for Login and Register -->
+        <div class="d-flex justify-content-center mb-4">
+            <div class="btn-group">
+                <a href="login.php" class="btn <?php echo ($view === 'login') ? 'btn-secondary' : 'btn-outline-secondary'; ?>">Login</a>
+                <a href="register.php" class="btn <?php echo ($view === 'register') ? 'btn-secondary' : 'btn-outline-secondary'; ?>">Register</a>
+            </div>
+        </div>
+
         <h2>Login</h2>
         <?php if (isset($error)) : ?>
             <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
+
         <form method="POST" action="">
-            <div class="mb-3">
+            <div class="mb-5">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
@@ -104,10 +109,8 @@ require_once __DIR__ . '/../../../app/handlers/LoginHandler.php';
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
+        
         <div class="link-toggle mt-3">
-            <p>Don't have an account? <a href="register.php">Register here</a></p>
-        </div>
-        <div class="link-toggle mt-1">
             <a href="<?php echo BASE_URL . 'index.php'; ?>">Home</a>
         </div>
     </div>

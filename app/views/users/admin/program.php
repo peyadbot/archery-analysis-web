@@ -12,13 +12,15 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
             <h3 class="m-0">Manage Programs</h3>
         </div>
     </div>
-
+    
     <!-- Success and Error Messages -->
     <?php if (isset($_SESSION['success'])): ?>
-        <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
+        <div id="alertMessage" class="alert alert-success mt-2" role="alert"><?php echo $_SESSION['success'];
+                                                                                unset($_SESSION['success']); ?></div>
     <?php endif; ?>
     <?php if (isset($_SESSION['error'])): ?>
-        <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
+        <div id="alertMessage" class="alert alert-danger mt-2"><?php echo $_SESSION['error'];
+                                                                unset($_SESSION['error']); ?></div>
     <?php endif; ?>
 
     <div class="accordion my-4">
@@ -55,7 +57,7 @@ require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
     <!-- Programs List -->
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
-            <thead class="table-primary">
+            <thead class="table-dark">
                 <tr>
                     <th>ID</th>
                     <th>Program Name</th>

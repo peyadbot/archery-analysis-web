@@ -28,9 +28,11 @@ function getDashboardData($user_id, $role) {
         'coachCount' => 0,
         'competitionCount' => 0,
         'trainingCount' => 0,    
-        'bestScore' => 0,             
-        'recentCompetitions' => [],  
-        'monthlyScores' => []
+        'bestScore' => 0,              
+        'monthlyScores' => [],
+        'allCompetition'=> [],
+        'recentCompetitions' => [], 
+        'latestCompetitions' => []
     ];
 
     try {
@@ -43,11 +45,39 @@ function getDashboardData($user_id, $role) {
                 $stmt = $pdo->query('SELECT COUNT(*) AS count FROM users WHERE role = "coach"');
                 $data['coachCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
-                $stmt = $pdo->query('SELECT COUNT(*) AS count FROM competitions');
-                $data['competitionCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-
                 $stmt = $pdo->query('SELECT COUNT(*) AS count FROM trainings');
                 $data['trainingCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+                // Fetch the recent user registrations
+                $stmt = $pdo->prepare('SELECT user_id, username, role, created_at FROM users ORDER BY created_at DESC LIMIT 4');
+                $stmt->execute();
+                $data['recentUsers'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Fetch the latest competition
+                try {
+                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $competitions = json_decode($json, true);
+
+                    if (!empty($competitions)) {
+                        $data['latestCompetitions'] = array_slice($competitions, 0, 4); // Show only 5 recent competitions
+                    } else {
+                        $data['latestCompetitions'] = [];
+                    }
+                } catch (Exception $e) {
+                    $data['latestCompetitions'] = [];
+                }
+
+                // Fetch all competition
+                try {
+                    // Replace with the correct API endpoint
+                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $competitions = json_decode($json, true);
+                
+                    $data['allCompetitions'] = $competitions; 
+                } catch (Exception $e) {
+                    $data['allCompetitions'] = []; 
+                }
+                $data['competitionCount'] =  count($data['allCompetitions']); 
                 break;
 
             case 'coach':
@@ -59,6 +89,21 @@ function getDashboardData($user_id, $role) {
                 $stmt = $pdo->prepare('SELECT COUNT(*) AS count FROM coach_athlete WHERE coach_user_id = ?');
                 $stmt->execute([$user_id]);
                 $data['athleteCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+
+                // Fetch the list of tournaments from the Ianseo API
+                try {
+                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $competitions = json_decode($json, true);
+
+                    if (!empty($competitions)) {
+                        $data['latestCompetitions'] = array_slice($competitions, 0, 5); // Show only 5 recent competitions
+                    } else {
+                        $data['latestCompetitions'] = [];
+                    }
+                } catch (Exception $e) {
+                    // Handle the case where the API fetch fails
+                    $data['latestCompetitions'] = [];
+                }
                 break;
 
             case 'athlete':
