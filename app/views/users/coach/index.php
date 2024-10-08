@@ -67,7 +67,7 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
                         <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h2>
                     </div>
                     <div class="card-footer bg-transparent border-top-0">
-                        <a href="#" class="btn btn-outline-primary">View Competitions</a>
+                        <a href="competition.php" class="btn btn-outline-primary">View Competitions</a>
                     </div>
                 </div>
             </div>

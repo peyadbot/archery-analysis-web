@@ -1,10 +1,7 @@
 <?php
-ob_start();
-// session_start();
+session_start();
 require_once __DIR__ . '/../../config/config.php';
-require_once __DIR__ . '/SessionExpiryHandler.php';
 require_once __DIR__ . '/LogoutHandler.php';
-checkSessionTimeout();
 
 // Ensure user is logged in and is either athlete, coach, or admin
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['athlete', 'coach', 'admin'])) {

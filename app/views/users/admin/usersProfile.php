@@ -31,15 +31,15 @@ if (!$user) {
         </div>
         <div class="card-body">
             <h4 class="mt-4 mb-2"><strong>Basic Information</strong></h4>
-            <p><img src="<?php echo !empty($user['profile_picture']) ? BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($user['profile_picture']) : BASE_URL . 'public/images/profile_picture/default_image.jpg'; ?>" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;"></p>
+            <p><?php echo !empty($user['profile_picture']) ? '<img src="' . BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($user['profile_picture']) . '" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;">' : 'Profile picture not uploaded'; ?></p>
             <p><strong>Username:</strong> <?php echo !empty($user['username']) ? htmlspecialchars($user['username']) : 'Not filled in'; ?></p>
             <p><strong>Email:</strong> <?php echo !empty($user['email']) ? htmlspecialchars($user['email']) : 'Not filled in'; ?></p>
             <p><strong>Date of Birth:</strong> <?php echo !empty($user['date_of_birth']) ? htmlspecialchars($user['date_of_birth']) : 'Not filled in'; ?></p>
             <p><strong>Phone Number:</strong> <?php echo !empty($user['phone_number']) ? htmlspecialchars($user['phone_number']) : 'Not filled in'; ?></p>
             <p><strong>IC Number:</strong> <?php echo !empty($user['ic_number']) ? htmlspecialchars($user['ic_number']) : 'Not filled in'; ?></p>
-            <p><strong>IC File:</strong> <?php echo !empty($user['ic_file']) ? '<a href="' . htmlspecialchars($user['ic_file']) . '" target="_blank">View File</a>' : 'Not uploaded'; ?></p>
+            <p><strong>IC File:</strong> <?php echo !empty($user['ic_file']) ? '<a href="' . BASE_URL . 'public/images/ic_file/' . htmlspecialchars($user['ic_file']) . '" target="_blank">View File</a>' : 'Not uploaded'; ?></p>
             <p><strong>Passport Number:</strong> <?php echo !empty($user['passport_number']) ? htmlspecialchars($user['passport_number']) : 'Not filled in'; ?></p>
-            <p><strong>Passport File:</strong> <?php echo !empty($user['passport_file']) ? '<a href="' . htmlspecialchars($user['passport_file']) . '" target="_blank">View File</a>' : 'Not uploaded'; ?></p>
+            <p><strong>Passport File:</strong> <?php echo !empty($user['passport_file']) ? '<a href="' . BASE_URL . 'public/images/passport_file/' . htmlspecialchars($user['passport_file']) . '" target="_blank">View File</a>' : 'Not uploaded'; ?></p>
             <p><strong>Passport Expiry Date:</strong> <?php echo !empty($user['passport_expiry_date']) ? htmlspecialchars($user['passport_expiry_date']) : 'Not filled in'; ?></p>
             <p><strong>Passport Issue Place:</strong> <?php echo !empty($user['passport_issue_place']) ? htmlspecialchars($user['passport_issue_place']) : 'Not filled in'; ?></p>
             <p><strong>Home Address:</strong> <?php echo !empty($user['home_address']) ? htmlspecialchars($user['home_address']) : 'Not filled in'; ?></p>

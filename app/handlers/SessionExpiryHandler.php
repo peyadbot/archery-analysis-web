@@ -1,7 +1,6 @@
-<!-- Session timeout -->
-
 <?php 
 session_start();
+require_once __DIR__ . '/../../config/config.php';
 
 // 900 seconds = 15 minutes
 define('SESSION_TIMEOUT', 900); 

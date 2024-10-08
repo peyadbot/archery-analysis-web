@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/SessionExpiryHandler.php';
 checkSessionTimeout();

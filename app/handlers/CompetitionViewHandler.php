@@ -1,5 +1,4 @@
 <?php
-
 // Function to format bow types
 function formatCompetitionBowTypes($competition) {
     $bowTypes = [];

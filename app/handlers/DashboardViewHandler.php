@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/SessionExpiryHandler.php';
 require_once __DIR__ . '/LogoutHandler.php';
@@ -104,6 +103,18 @@ function getDashboardData($user_id, $role) {
                     // Handle the case where the API fetch fails
                     $data['latestCompetitions'] = [];
                 }
+
+                // Fetch all competition
+                try {
+                    // Replace with the correct API endpoint
+                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $competitions = json_decode($json, true);
+                
+                    $data['allCompetitions'] = $competitions; 
+                } catch (Exception $e) {
+                    $data['allCompetitions'] = []; 
+                }
+                $data['competitionCount'] =  count($data['allCompetitions']); 
                 break;
 
             case 'athlete':

@@ -159,7 +159,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="statisticComp.php" class="nav-link text-white">
+                    <a href="#" class="nav-link text-white">
                         <i class="bi bi-bullseye"></i>
                         <span>T.Statistics</span>
                     </a>

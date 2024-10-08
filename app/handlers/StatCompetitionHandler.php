@@ -1,5 +1,4 @@
 <?php
-
 function getAthleteData($pdo, $user_id) {
     // Assuming athlete_id corresponds to user_id in the local_comp_scores/international_comp_scores table
     $stmt = $pdo->prepare('SELECT mareos_id FROM athlete_details WHERE user_id = ?');
