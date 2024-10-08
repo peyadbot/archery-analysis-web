@@ -61,8 +61,13 @@ try {
                         </select>
                     </div>
 
+                    <div class="mb-4">
+                        <!-- Input Field for Tournament ID -->
+                        <input type="text" id="tournament-id-input" class="form-control" placeholder="Or enter tournament ID">
+                    </div>
+
                     <!-- Scores Table -->
-                    <div class="table-responsive">
+                    <div class="table-responsive" id="scoresTableContainer">
                         <table class="table table-striped table-bordered" id="ianseo-scores">
                             <thead class="table-dark">
                                 <tr>
@@ -80,6 +85,12 @@ try {
                             </thead>
                             <tbody></tbody>
                         </table>
+                    </div>
+
+                    <!-- No Athlete Found Message -->
+                    <div id="noAthleteFoundMessage" class="alert alert-danger d-none">
+                        No athlete found for the selected tournament ID: <span id="noAthleteTournamentId"></span> 
+                        <br>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -179,20 +190,21 @@ try {
 </div>
 
 <script>
-const currentMareosId = '<?php echo $currentMareosId; ?>'; 
-const fetchModal = document.getElementById('fetchScoresModal');
+// Refresh page    
+const fetchModal = document.getElementById('fetchScoresModal'); 
 
-// Refresh page when modal close
 fetchModal.addEventListener('hidden.bs.modal', function () {
     location.reload();
 });
 
-// Refresh page button
 document.getElementById('refreshPage').addEventListener('click', function() {
-        location.reload(); // Refresh the page
-    });
+    location.reload();
+});
 
-// Fetch the list of tournaments and populate the dropdown
+// Modal score fetch
+const currentMareosId = '<?php echo $currentMareosId; ?>';
+
+// Fetch the list of tournaments
 fetch('https://ianseo.sukanfc.com/fetch_tournaments.php')
     .then(response => response.json())
     .then(data => {
@@ -200,27 +212,34 @@ fetch('https://ianseo.sukanfc.com/fetch_tournaments.php')
         data.forEach(tournament => {
             const option = document.createElement('option');
             option.value = tournament.ToCode;
-            option.text = `[${tournament.ToCode}] ${tournament.ToName}`; 
+            option.text = `[${tournament.ToCode}] ${tournament.ToName} —— ${tournament.ToWhenFrom} to ${tournament.ToWhenTo}`;
             tournamentSelect.appendChild(option);
         });
     })
     .catch(error => console.error('Error fetching tournaments:', error));
 
-// Fetch scores for the athlete based on the selected tournament
-document.getElementById('tournament-select').addEventListener('change', function () {
-    const tournamentId = this.value;
+// Fetch scores based on the tournament ID or selected tournament
+function fetchScores() {
+    const inputField = document.getElementById('tournament-id-input').value.trim();
+    const dropdownValue = document.getElementById('tournament-select').value;
+    const tournamentId = inputField || dropdownValue;
+
     if (tournamentId) {
         fetch(`https://ianseo.sukanfc.com/fetch_ianseo.php?tournament_code=${tournamentId}`)
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector('#ianseo-scores tbody');
+                const noAthleteFoundMessage = document.getElementById('noAthleteFoundMessage');
+                const scoresTableContainer = document.getElementById('scoresTableContainer');
+
                 tableBody.innerHTML = ''; 
                 let position = 1;
+                let athleteFound = false;
 
-                // Fetch saved scores for the athlete
                 fetchSavedScores(tournamentId).then(savedScores => {
                     data.forEach(row => {
                         if (row.athlete_id === currentMareosId) {
+                            athleteFound = true;
                             const isSaved = savedScores.some(saved => saved.mareos_id === row.athlete_id);
                             const tableRow = `
                                 <tr>
@@ -238,16 +257,23 @@ document.getElementById('tournament-select').addEventListener('change', function
                                     </td>
                                 </tr>`;
                             tableBody.innerHTML += tableRow;
-
                             position++;
                         }
                     });
 
+                    if (!athleteFound) {
+                        scoresTableContainer.classList.add('d-none');
+                        noAthleteFoundMessage.classList.remove('d-none');
+                        document.getElementById('noAthleteTournamentId').textContent = tournamentId;
+                    } else {
+                        scoresTableContainer.classList.remove('d-none');
+                        noAthleteFoundMessage.classList.add('d-none');
+                    }
                     // Add event listeners to the save buttons
                     document.querySelectorAll('.save-btn').forEach(button => {
                         button.addEventListener('click', function () {
                             const scoreData = JSON.parse(this.getAttribute('data-score'));
-                            const message = `Do you want to save the score for event: ${scoreData.event_name}, total score: ${scoreData.total_score}?`;
+                            const message = `Do you want to save the score for event: ${tournamentId}, total score: ${scoreData.total_score}?`;
 
                             openConfirmModal(message, function () {
                                 saveScore(scoreData); 
@@ -258,7 +284,7 @@ document.getElementById('tournament-select').addEventListener('change', function
             })
             .catch(error => console.error('Error fetching scores:', error));
     }
-});
+}
 
 // Fetch saved scores for the logged-in athlete
 function fetchSavedScores(tournamentId) {
@@ -270,9 +296,48 @@ function fetchSavedScores(tournamentId) {
         });
 }
 
+// Debounce function to prevent multiple requests while typing
+function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    }
+}
+
+// Convert input to uppercase
+document.getElementById('tournament-id-input').addEventListener('input', function() {
+    this.value = this.value.toUpperCase();  
+});
+
+// Tournament dropdown
+document.getElementById('tournament-select').addEventListener('change', function () {
+    const tournamentId = this.value;
+    document.getElementById('tournament-id-input').value = '';
+    fetchScores();  
+});
+
+// Tournament ID 
+document.getElementById('tournament-id-input').addEventListener('keyup', debounce(function () {
+    const tournamentId = this.value.trim();
+    if (tournamentId) {
+        document.getElementById('tournament-select').value = ''; 
+    }
+    fetchScores();  
+}, 500));  
+
 // Save score to the server
 function saveScore(scoreData) {
-    scoreData.competition_id = document.getElementById('tournament-select').value;
+    let tournamentId = document.getElementById('tournament-id-input').value.trim() || document.getElementById('tournament-select').value;
+    
+    if (!tournamentId) {
+        alert('No tournament selected or entered.');
+        return;
+    }
+    tournamentId = tournamentId.toUpperCase();
+    scoreData.competition_id = tournamentId;
 
     fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php', {
         method: 'POST',

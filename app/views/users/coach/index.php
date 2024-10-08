@@ -93,7 +93,7 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
                         <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['athleteCount']); ?></h2>
                     </div>
                     <div class="card-footer bg-transparent border-top-0">
-                        <a href="<?php echo BASE_URL . 'app/views/users/coach/manage-athletes.php'; ?>" class="btn btn-outline-info">Manage Athletes</a>
+                        <a href="<?php echo BASE_URL . 'app/views/users/coach/manageAthletes.php'; ?>" class="btn btn-outline-info">Manage Athletes</a>
                     </div>
                 </div>
             </div>

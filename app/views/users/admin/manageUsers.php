@@ -205,13 +205,13 @@ try {
         });
     });
 
-    // Password validation to add user
+    // Password validation
     document.addEventListener('DOMContentLoaded', function() {
         const passwordField = document.getElementById('password');
         const confirmPasswordField = document.getElementById('confirm_password');
         const passwordInfo = document.getElementById('passwordInfo');
 
-        // Check if password and confirm_password fields exist before adding event listeners
+        // Check if password and confirm_password fields exist
         if (passwordField && confirmPasswordField && passwordInfo) {
             // Validate password length
             passwordField.addEventListener('input', function() {

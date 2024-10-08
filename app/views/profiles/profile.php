@@ -204,7 +204,6 @@ $user = $stmt->fetch();
     </div>
     <!-- JavaScript for Password Strength Meter & Confirmation -->
     <script>
-        // Hide success and error messages
         setTimeout(function() {
             const alertMessage = document.getElementById('alertMessage');
             if (alertMessage) {
@@ -212,7 +211,6 @@ $user = $stmt->fetch();
             }
         }, 5000);
 
-        // Password Strength Meter
         const passwordInput = document.getElementById('password-input');
         const strengthValue = document.getElementById('strength-value');
         const strengthMeter = {

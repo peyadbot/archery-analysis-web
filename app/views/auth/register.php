@@ -95,7 +95,6 @@
 
 <body>    
     <div class="register-container justify-content-center">
-        <!-- Toggle Buttons for Login and Register -->
         <div class="d-flex justify-content-center mb-4">
             <div class="btn-group">
                 <a href="login.php" class="btn <?php echo ($view === 'login') ? 'btn-secondary' : 'btn-outline-secondary'; ?>">Login</a>

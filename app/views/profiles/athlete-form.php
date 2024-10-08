@@ -361,7 +361,6 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
             </div>
         </div>
 
-        <!-- Submit and Reset Buttons -->
         <div class="form-group mt-4 mb-5">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a href="index.php" class="btn btn-secondary">Cancel</a>
@@ -370,31 +369,27 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
 </div>
 
     <script>
+        // Calculate BMI
         function calculateBMI() {
-            // Get the values for weight and height
             var weight = document.getElementById('weight').value;
             var height = document.getElementById('height').value;
 
-            // Convert height from cm to meters
             if (height > 0) {
                 height = height / 100;
             }
 
-            // Calculate BMI if weight and height are valid
             if (weight > 0 && height > 0) {
                 var bmi = weight / (height * height);
-                document.getElementById('bmi').value = bmi.toFixed(2); // Update the BMI field with 2 decimal places
+                document.getElementById('bmi').value = bmi.toFixed(2); 
             } else {
-                document.getElementById('bmi').value = ''; // Clear the BMI field if values are invalid
+                document.getElementById('bmi').value = ''; 
             }
         }
 
-        // Add event listeners to recalculate BMI when weight or height changes
         document.getElementById('weight').addEventListener('input', calculateBMI);
         document.getElementById('height').addEventListener('input', calculateBMI);
     </script>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

@@ -6,9 +6,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'athlete') {
     exit();
 }
 
-$user_id = $_SESSION['user_id']; // Use user_id instead of mareos_id
+$user_id = $_SESSION['user_id']; 
 
-// Fetch international competition scores for the logged-in athlete
+// Fetch international competition
 $stmt = $pdo->prepare('
     SELECT s.score_id, s.m_1_score, s.m_2_score, s.total_10, s.total_9, s.total_score, s.event_name, s.event_distance, s.competition_id, s.competition_name
     FROM international_comp_scores s
@@ -18,7 +18,6 @@ $stmt = $pdo->prepare('
 $stmt->execute([$user_id]);
 $scores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Edit mode check
 $editMode = false;
 $editScore = null;
 

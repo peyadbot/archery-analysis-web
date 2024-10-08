@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../../config/config.php';
 
-// Get the selected user ID from the URL
 if (!isset($_GET['user_id'])) {
     $_SESSION['error'] = 'User ID is missing.';
     header('Location: admin_view_users.php');
@@ -10,7 +9,6 @@ if (!isset($_GET['user_id'])) {
 
 $user_id = $_GET['user_id'];
 
-// Fetch the selected user's details from the database
 $stmt = $pdo->prepare('SELECT u.*, p.*, a.* FROM users u 
     LEFT JOIN profiles p ON u.user_id = p.user_id 
     LEFT JOIN athlete_details a ON u.user_id = a.user_id 

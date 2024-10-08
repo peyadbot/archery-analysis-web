@@ -85,7 +85,6 @@ $view = $_GET['view'] ?? 'login';
 
 <body>
     <div class="login-container">
-        <!-- Toggle Buttons for Login and Register -->
         <div class="d-flex justify-content-center mb-4">
             <div class="btn-group">
                 <a href="login.php" class="btn <?php echo ($view === 'login') ? 'btn-secondary' : 'btn-outline-secondary'; ?>">Login</a>
@@ -114,7 +113,7 @@ $view = $_GET['view'] ?? 'login';
             <a href="<?php echo BASE_URL . 'index.php'; ?>">Home</a>
         </div>
     </div>
-    <!-- Bootstrap JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

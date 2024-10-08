@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 require_once __DIR__ . '/../../../handlers/CoachAthleteHandler.php';
 
-// Ensure the user is logged in and is a coach
 if ($_SESSION['role'] !== 'coach') {
     header('Location: ' . BASE_URL . 'index.php');
     exit();
@@ -44,14 +43,20 @@ try {
     <button id="fetchSelectedScores" class="btn btn-success mb-4">Save Selected Scores</button>
     <button id="refreshPage" class="btn btn-primary mb-4">Refresh Page</button>
 
-    <!-- Tournament Dropdown -->
     <div class="row">
         <div class="col-12">
+            <!-- Dropdown -->
             <div class="mb-4">
                 <label for="tournament-select" class="form-label">Choose a tournament:</label>
                 <select id="tournament-select" class="form-select">
                     <option value="">Select a tournament</option>
                 </select>
+            </div>
+
+            <!-- ID search -->
+            <div class="mb-4">
+                <label for="tournament-id-input" class="form-label">Or enter tournament ID:</label>
+                <input type="text" id="tournament-id-input" class="form-control" placeholder="Enter tournament ID">
             </div>
 
             <!-- Scores Table -->
@@ -125,7 +130,7 @@ let selectedScores = [];
 
 // Refresh page
 document.getElementById('refreshPage').addEventListener('click', function() {
-    location.reload(); // Refresh the page
+    location.reload();
 });
 
 // Fetch the list of competitions and populate the dropdown
@@ -144,29 +149,15 @@ function fetchTournaments() {
         .catch(error => displayError('Error fetching tournaments', error.message));
 }
 
-// Uncheck the "Select All" checkbox
-document.getElementById('tournament-select').addEventListener('change', function () {
-    const tournamentId = this.value;
-    
-    // Reset the "Select All" checkbox when switching competitions
-    const selectAllCheckbox = document.getElementById('select-all');
-    if (selectAllCheckbox) {
-        selectAllCheckbox.checked = false;
-    }
-
-    if (tournamentId) {
-        fetchTournamentScores(tournamentId).then(data => {
-            fetchSavedScores(tournamentId).then(savedScores => {
-                populateTable(tournamentId, data, savedScores);
-            });
-        });
-    }
-});
-
 // Fetch scores based on the selected tournament
 function fetchTournamentScores(tournamentId) {
     return fetch(`https://ianseo.sukanfc.com/fetch_ianseo.php?tournament_code=${tournamentId}`)
         .then(response => response.json())
+        .then(data => {
+            fetchSavedScores(tournamentId).then(savedScores => {
+                populateTable(tournamentId, data, savedScores);
+            });
+        })
         .catch(error => displayError('Error fetching scores', error.message));
 }
 
@@ -183,12 +174,15 @@ function fetchSavedScores(tournamentId) {
 // Populate the table with athlete data
 function populateTable(tournamentId, data, savedScores) {
     const tableBody = document.querySelector('#ianseo-scores tbody');
-    tableBody.innerHTML = '';  // Clear previous data
+    tableBody.innerHTML = ''; 
 
     let position = 1;
+    let athletesFound = false;  
+
     data.forEach(row => {
         const matchingAthlete = athletes.find(athlete => athlete.mareos_id == row.athlete_id);
         if (matchingAthlete) {
+            athletesFound = true;  
             const isSaved = savedScores.some(saved => saved.mareos_id === row.athlete_id);
             const tableRow = `
                 <tr data-athlete-id="${row.athlete_id}">
@@ -209,31 +203,18 @@ function populateTable(tournamentId, data, savedScores) {
                     </td>
                 </tr>`;
             tableBody.innerHTML += tableRow;
-
             if (isSaved) updateSavedScoreUI(row.athlete_id);
-
             position++;
         }
     });
 
-    addEventListeners();
-}
-
-// Update UI for saved scores
-function updateSavedScoreUI(athleteId) {
-    const row = document.querySelector(`tr[data-athlete-id="${athleteId}"]`);
-    if (row) {
-        row.classList.add('table-success');
-        const saveButton = row.querySelector('.save-btn');
-        if (saveButton) {
-            saveButton.disabled = true;
-            saveButton.textContent = 'Saved';
-        }
-        const checkbox = row.querySelector('.select-score');
-        if (checkbox) {
-            checkbox.disabled = true;
-        }
+    if (!athletesFound) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="13" class="text-center">No athletes found for this tournament.</td>
+            </tr>`;
     }
+    addEventListeners();  
 }
 
 // Event listener functions
@@ -259,12 +240,38 @@ function addEventListeners() {
     selectAllCheckbox.addEventListener('change', selectAllHandler);
 }
 
-// Handler for individual checkbox change
+// Event listener for tournament ID input
+document.getElementById('tournament-id-input').addEventListener('input', function() {
+    this.value = this.value.toUpperCase();  
+    const tournamentId = this.value.trim();
+    if (tournamentId) {
+        document.getElementById('tournament-select').value = '';
+        fetchTournamentScores(tournamentId);
+    }
+});
+
+// Handler for "Select All" checkbox
+function selectAllHandler() {
+    const checkboxes = document.querySelectorAll('.select-score');
+    const isChecked = this.checked;
+    selectedScores = [];  
+
+    checkboxes.forEach(checkbox => {
+        if (!checkbox.disabled) {  
+            checkbox.checked = isChecked;
+            checkbox.dispatchEvent(new Event('change'));
+        }
+    });
+
+    console.log(`${selectedScores.length} athletes selected.`);
+}
+
+// Handler individual checkbox 
 function checkboxChangeHandler() {
     const scoreData = JSON.parse(this.getAttribute('data-score'));
 
     if (this.checked && !this.disabled) {
-        selectedScores = selectedScores.filter(score => score.athlete_id !== scoreData.athlete_id); // Ensure no duplicates
+        selectedScores = selectedScores.filter(score => score.athlete_id !== scoreData.athlete_id); 
         selectedScores.push(scoreData);
     } else {
         selectedScores = selectedScores.filter(score => score.athlete_id !== scoreData.athlete_id);
@@ -273,21 +280,20 @@ function checkboxChangeHandler() {
     console.log(`${selectedScores.length} athletes selected.`);
 }
 
-// Handler for "Select All" checkbox
-function selectAllHandler() {
-    const checkboxes = document.querySelectorAll('.select-score');
-    const isChecked = this.checked;
-    selectedScores = [];  // Reset selectedScores when selecting all or deselecting all
+// Uncheck checkbox
+document.getElementById('tournament-select').addEventListener('change', function () {
+    const tournamentId = this.value;
+    const selectAllCheckbox = document.getElementById('select-all');
 
-    checkboxes.forEach(checkbox => {
-        if (!checkbox.disabled) {  // Only select checkboxes that aren't disabled (i.e., unsaved scores)
-            checkbox.checked = isChecked;
-            checkbox.dispatchEvent(new Event('change'));
-        }
-    });
+    if (selectAllCheckbox) {
+        selectAllCheckbox.checked = false;
+    }
 
-    console.log(`${selectedScores.length} athletes selected.`);
-}
+    if (tournamentId) {
+        document.getElementById('tournament-id-input').value = '';  
+        fetchTournamentScores(tournamentId);
+    }
+});
 
 // Save Selected Scores (Batch Save)
 document.getElementById('fetchSelectedScores').addEventListener('click', function() {
@@ -300,9 +306,20 @@ document.getElementById('fetchSelectedScores').addEventListener('click', functio
     }
 });
 
+// Save multiple scores (batch save)
+function saveScores(scores) {
+    const promises = scores.map(score => saveScore(score));
+
+    Promise.all(promises)
+        .then(() => {
+            scores.forEach(score => updateSavedScoreUI(score.athlete_id));
+        })
+        .catch(error => displayError('Error saving scores', error.message));
+}
+
 // Save score to the server
 function saveScore(scoreData) {
-    scoreData.competition_id = document.getElementById('tournament-select').value;
+    scoreData.competition_id = document.getElementById('tournament-select').value || document.getElementById('tournament-id-input').value;
 
     return fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php', {
         method: 'POST',
@@ -324,15 +341,21 @@ function saveScore(scoreData) {
     });
 }
 
-// Save multiple scores (batch save)
-function saveScores(scores) {
-    const promises = scores.map(score => saveScore(score));
-
-    Promise.all(promises)
-        .then(() => {
-            scores.forEach(score => updateSavedScoreUI(score.athlete_id));
-        })
-        .catch(error => displayError('Error saving scores', error.message));
+// Update UI for saved scores
+function updateSavedScoreUI(athleteId) {
+    const row = document.querySelector(`tr[data-athlete-id="${athleteId}"]`);
+    if (row) {
+        row.classList.add('table-success');
+        const saveButton = row.querySelector('.save-btn');
+        if (saveButton) {
+            saveButton.disabled = true;
+            saveButton.textContent = 'Saved';
+        }
+        const checkbox = row.querySelector('.select-score');
+        if (checkbox) {
+            checkbox.disabled = true;
+        }
+    }
 }
 
 // Reusable confirmation modal
@@ -356,9 +379,7 @@ function displayError(title, message) {
     errorModal.show();
 }
 
-// Initialization: Fetch tournaments when the page loads
 fetchTournaments();
-
 </script>
 
 <?php include '../../layouts/dashboard/footer.php'; ?>

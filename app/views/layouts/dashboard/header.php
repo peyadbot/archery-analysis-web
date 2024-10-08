@@ -220,6 +220,12 @@
                         <span>Athlete Management</span>
                     </a>
                 </li>
+                <li>
+                    <a href="localScoring.php" class="nav-link text-white">
+                        <i class="bi bi-clipboard-data-fill"></i>
+                        <span>Local Scoring</span>
+                    </a>
+                </li>
             <?php endif ?>
         </ul>
 
