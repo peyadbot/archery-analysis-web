@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Redirect to avoid form resubmission
-    header('Location: ' . BASE_URL . 'app/views/users/admin/users.php');
+    header('Location: ' . BASE_URL . 'app/views/users/admin/manageUsers.php');
     exit;
 }
 
@@ -100,7 +100,7 @@ if (isset($_GET['delete'])) {
         $_SESSION['error'] = 'Failed to delete user: ' . $e->getMessage();
     }
 
-    header('Location: ' . BASE_URL . 'app/views/users/admin/users.php');
+    header('Location: ' . BASE_URL . 'app/views/users/admin/manageUsers.php');
     exit;
 }
 

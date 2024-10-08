@@ -94,10 +94,20 @@ try {
                                 <label for="confirm_new_password" class="form-label">Confirm New Password</label>
                                 <input type="password" name="confirm_new_password" class="form-control" id="confirm_new_password">
                             </div>
+                        <?php else: ?>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password e</label>
+                                <input type="password" name="password" class="form-control" id="password" required>
+                                <small id="passwordInfo" class="password-info">Password must be at least 8 characters long.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
+                            </div>
                         <?php endif; ?>
 
                         <button type="submit" class="btn btn-primary"><?php echo $editMode ? 'Update User' : 'Add User'; ?></button>
-                        <a href="users.php" class="btn btn-secondary">Cancel</a>
+                        <a href="manageUsers.php" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
@@ -142,10 +152,10 @@ try {
                                     <button class="btn btn-sm btn-secondary" disabled>Download Report</button>
                                     <button class="btn btn-sm btn-secondary" disabled>View Profile</button>
                                 <?php endif; ?>
-                                <a href="users.php?edit=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn btn-warning btn-sm">
+                                <a href="manageUsers.php?edit=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>
-                                <a href="users.php?delete=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">
+                                <a href="manageUsers.php?delete=<?php echo htmlspecialchars($user['user_id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">
                                     <i class="bi bi-trash"></i> Delete
                                 </a>
                             </div>

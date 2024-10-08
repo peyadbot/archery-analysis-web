@@ -31,7 +31,7 @@ if (!$user) {
         </div>
         <div class="card-body">
             <h4 class="mt-4 mb-2"><strong>Basic Information</strong></h4>
-            <p><strong>Profile Picture:</strong> <img src="<?php echo !empty($user['profile_picture']) ? htmlspecialchars($user['profile_picture']) : 'default_image.jpg'; ?>" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;"></p>
+            <p><img src="<?php echo !empty($user['profile_picture']) ? BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($user['profile_picture']) : BASE_URL . 'public/images/profile_picture/default_image.jpg'; ?>" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;"></p>
             <p><strong>Username:</strong> <?php echo !empty($user['username']) ? htmlspecialchars($user['username']) : 'Not filled in'; ?></p>
             <p><strong>Email:</strong> <?php echo !empty($user['email']) ? htmlspecialchars($user['email']) : 'Not filled in'; ?></p>
             <p><strong>Date of Birth:</strong> <?php echo !empty($user['date_of_birth']) ? htmlspecialchars($user['date_of_birth']) : 'Not filled in'; ?></p>
