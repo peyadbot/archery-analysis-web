@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 
 if (!isset($_SESSION['user_id'])) {

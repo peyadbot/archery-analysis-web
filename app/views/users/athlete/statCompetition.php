@@ -66,35 +66,6 @@ $monthly_competitions = prepareMonthlyCompetitions($monthly_competition_data);
         </div>
     </div>
 
-    <!-- Display average statistics -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body">
-            <h5 class="text-primary mb-3">Overall Averages</h5>
-            <div class="row text-center">
-                <div class="col-md-4 mb-2">
-                    <p class="mb-1">Average M1 Score</p>
-                    <p class="text-muted"><?php echo round($avg_stats['avg_m1'], 2); ?></p>
-                </div>
-                <div class="col-md-4 mb-2">
-                    <p class="mb-1">Average M2 Score</p>
-                    <p class="text-muted"><?php echo round($avg_stats['avg_m2'], 2); ?></p>
-                </div>
-                <div class="col-md-4 mb-2">
-                    <p class="mb-1">Total Average Score</p>
-                    <p class="text-muted"><?php echo round($avg_stats['avg_total_score'], 2); ?></p>
-                </div>
-                <div class="col-md-4 mb-2">
-                    <p class="mb-1">Average 10s Count</p>
-                    <p class="text-muted"><?php echo round($avg_stats['avg_total_10'], 2); ?></p>
-                </div>
-                <div class="col-md-4 mb-2">
-                    <p class="mb-1">Average 9s Count</p>
-                    <p class="text-muted"><?php echo round($avg_stats['avg_total_9'], 2); ?></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Display best and lowest performances -->
     <div class="card mb-4 shadow-sm">
         <div class="card-body">
@@ -182,6 +153,35 @@ $monthly_competitions = prepareMonthlyCompetitions($monthly_competition_data);
             <h4 class="text-primary">Competition Counter</h4>
             <div style="position: relative; height: 60vh; width: 100%;">
                 <canvas id="monthlyCompetitionsBar"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display average statistics -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="text-primary mb-3">Overall Averages</h5>
+            <div class="row text-center">
+                <div class="col-md-4 mb-2">
+                    <p class="mb-1">Average M1 Score</p>
+                    <p class="text-muted"><?php echo round($avg_stats['avg_m1'], 2); ?></p>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <p class="mb-1">Average M2 Score</p>
+                    <p class="text-muted"><?php echo round($avg_stats['avg_m2'], 2); ?></p>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <p class="mb-1">Total Average Score</p>
+                    <p class="text-muted"><?php echo round($avg_stats['avg_total_score'], 2); ?></p>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <p class="mb-1">Average 10s Count</p>
+                    <p class="text-muted"><?php echo round($avg_stats['avg_total_10'], 2); ?></p>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <p class="mb-1">Average 9s Count</p>
+                    <p class="text-muted"><?php echo round($avg_stats['avg_total_9'], 2); ?></p>
+                </div>
             </div>
         </div>
     </div>

@@ -30,7 +30,7 @@ if (isset($_GET['edit'])) {
 
     if (!$editScore) {
         $_SESSION['error'] = 'Score not found or permission denied.';
-        header('Location: ' . BASE_URL . 'app/views/users/athlete/internationalScoring.php');
+        header('Location: ' . BASE_URL . 'app/views/users/athlete/compScoring.php.php');
         exit();
     }
 }

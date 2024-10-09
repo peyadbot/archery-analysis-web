@@ -1,10 +1,9 @@
 <?php
-require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/SessionExpiryHandler.php';
+require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/LogoutHandler.php';
 checkSessionTimeout();
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['athlete', 'coach', 'admin'])) {
     header('Location: ' . BASE_URL . 'app/views/auth/login.php');
     exit();
