@@ -10,8 +10,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$coach_id = $_SESSION['user_id']; // This is the logged-in user, which might be a coach or an athlete.
-$role = $_SESSION['role']; // Track the role (athlete/coach)
+$coach_id = $_SESSION['user_id'];
+$role = $_SESSION['role']; 
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Handle DELETE Request
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['score_id'])) {
         }
 
         // Now check if the user (athlete or coach) has permission to delete the score
-        $stmt = $pdo->prepare('SELECT user_id FROM athlete_details WHERE mareos_id = ?');
+        $stmt = $pdo->prepare('SELECT user_id FROM profiles WHERE mareos_id = ?');
         $stmt->execute([$score['mareos_id']]);
         $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Validate the incoming data
-    if (!isset($data['athlete_id'], $data['event_name'], $data['event_distance'], $data['m_1_score'], 
+    if (!isset($data['athlete_id'], $data['event_name'], $data['event_distance'], $data['m_1_score'], $data['1_10'], $data['1_9'], $data['m_2_score'], $data['2_10'], $data['2_9'],
         $data['m_2_score'], $data['total_score'], $data['total_10'], $data['total_9'], $data['competition_id'])) {
         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
         exit();
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'error', 'message' => 'You have already saved a score for this competition.']);
         } else {
             // Fetch athlete's user_id from mareos_id
-            $stmt = $pdo->prepare('SELECT user_id FROM athlete_details WHERE mareos_id = ?');
+            $stmt = $pdo->prepare('SELECT user_id FROM profiles WHERE mareos_id = ?');
             $stmt->execute([$data['athlete_id']]);
             $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -87,11 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert new score for the athlete, saving the athlete's user_id
             $stmt = $pdo->prepare('
-                INSERT INTO local_comp_scores (user_id, mareos_id, total_score, m_1_score, m_2_score, total_10, total_9, event_name, event_distance, competition_id, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                INSERT INTO local_comp_scores (user_id, mareos_id, total_score, 1_10, 1_9, m_1_score, 2_10, 2_9, m_2_score, total_10, total_9, event_name, event_distance, competition_id, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ');
             $stmt->execute([
-                $athlete['user_id'], $data['athlete_id'], $data['total_score'], $data['m_1_score'], $data['m_2_score'], 
+                $athlete['user_id'], $data['athlete_id'], $data['m_1_score'], $data['1_10'], $data['1_9'], $data['m_2_score'], $data['2_10'], $data['2_9'], $data['total_score'],
                 $data['total_10'], $data['total_9'], $data['event_name'], $data['event_distance'], $data['competition_id']
             ]);
 

@@ -8,7 +8,7 @@ $user_id = $_SESSION['user_id'];
 
 // Fetch mareos_id of the logged-in athlete
 try {
-    $stmt = $pdo->prepare('SELECT mareos_id FROM athlete_details WHERE user_id = ?');
+    $stmt = $pdo->prepare('SELECT mareos_id FROM profiles WHERE user_id = ?');
     $stmt->execute([$user_id]);
     $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -76,7 +76,11 @@ try {
                                     <th>Event Name</th>
                                     <th>Distance</th>
                                     <th>M 1 Score</th>
+                                    <th>10</th>
+                                    <th>9</th>
                                     <th>M 2 Score</th>
+                                    <th>10</th>
+                                    <th>9</th>
                                     <th>Total Score</th>
                                     <th>10</th>
                                     <th>9</th>
@@ -111,10 +115,14 @@ try {
                         <th>Event Name</th>
                         <th>Distance</th>
                         <th>M-1 Score</th>
+                        <th>M1 10+X</th>
+                        <th>M1 10/9</th>
                         <th>M-2 Score</th>
-                        <th>10</th>
-                        <th>9</th>
+                        <th>M2 10+X</th>
+                        <th>M2 10/9</th>
                         <th>Total Score</th>
+                        <th>Total 10+X</th>
+                        <th>Total 10/9</th>
                         <th>Date Saved</th>
                         <th>Action</th>
                     </tr>
@@ -127,11 +135,15 @@ try {
                                 <td><?php echo htmlspecialchars($score['competition_id']); ?></td>
                                 <td><?php echo htmlspecialchars($score['event_name']); ?></td>
                                 <td><?php echo htmlspecialchars($score['event_distance']); ?>m</td>
-                                <td><?php echo htmlspecialchars($score['m_1_score']); ?></td>
-                                <td><?php echo htmlspecialchars($score['m_2_score']); ?></td>
+                                <td class="table-primary"><?php echo htmlspecialchars($score['m_1_score']); ?></td>
+                                <td class="table-primary"><?php echo htmlspecialchars($score['1_10']); ?></td>
+                                <td class="table-primary"><?php echo htmlspecialchars($score['1_9']); ?></td>
+                                <td class="table-info"><?php echo htmlspecialchars($score['m_2_score']); ?></td>
+                                <td class="table-info"><?php echo htmlspecialchars($score['2_10']); ?></td>
+                                <td class="table-info"><?php echo htmlspecialchars($score['2_9']); ?></td>
+                                <td><?php echo htmlspecialchars($score['total_score']); ?></td>
                                 <td><?php echo htmlspecialchars($score['total_10']); ?></td>
                                 <td><?php echo htmlspecialchars($score['total_9']); ?></td>
-                                <td><?php echo htmlspecialchars($score['total_score']); ?></td>
                                 <td><?php echo htmlspecialchars($score['created_at']); ?></td>
                                 <td class="d-flex justify-content-center align-items-center">
                                     <!-- Delete Button -->
@@ -248,7 +260,11 @@ function fetchScores() {
                                     <td class="align-middle">${row.event_name}</td>
                                     <td class="align-middle">${row.event_distance}m</td>
                                     <td class="align-middle">${row.m_1_score}</td>
+                                    <td class="align-middle">${row['1_10']}</td>
+                                    <td class="align-middle">${row['1_9']}</td>
                                     <td class="align-middle">${row.m_2_score}</td>
+                                    <td class="align-middle">${row['2_10']}</td>
+                                    <td class="align-middle">${row['2_9']}</td>
                                     <td class="align-middle">${row.total_score}</td>
                                     <td class="align-middle">${row.total_10}</td>
                                     <td class="align-middle">${row.total_9}</td>

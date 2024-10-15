@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once __DIR__ . '/../../config/config.php';
 require_once __DIR__ . '/SessionExpiryHandler.php';
 checkSessionTimeout();
@@ -30,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $passport_expiry_date = htmlspecialchars(trim($_POST['passport_expiry_date']));
     $passport_issue_place = htmlspecialchars(trim($_POST['passport_issue_place']));
     $home_address = htmlspecialchars(trim($_POST['home_address']));
+    $mareos_id = htmlspecialchars(trim($_POST['mareos_id']));
+    $wareos_id = htmlspecialchars(trim($_POST['wareos_id']));
 
     // File uploads directories
     $profile_pic_dir = __DIR__ . '/../../public/images/profile_picture/';
@@ -86,7 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     home_address = ?, 
                     profile_picture = ?, 
                     ic_file = ?, 
-                    passport_file = ?
+                    passport_file = ?,
+                    mareos_id = ?,
+                    wareos_id = ?
                 WHERE user_id = ?
             ");
             $stmt->execute([
@@ -101,7 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $home_address, 
                 $profile_picture, 
                 $ic_file, 
-                $passport_file, 
+                $passport_file,
+                $mareos_id,
+                $wareos_id,
                 $user_id
             ]);
             $_SESSION['success'] = 'Profile updated successfully!';
@@ -112,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert new profile (only if needed)
         try {
             $stmt = $pdo->prepare("
-                INSERT INTO profiles (name, date_of_birth, phone_number, email, ic_number, passport_number, passport_expiry_date, passport_issue_place, home_address, profile_picture, ic_file, passport_file, user_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO profiles (name, date_of_birth, phone_number, email, ic_number, passport_number, passport_expiry_date, passport_issue_place, home_address, profile_picture, ic_file, passport_file, mareos_id, wareos_id, user_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
                 $name, 
@@ -127,7 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $home_address, 
                 $profile_picture, 
                 $ic_file, 
-                $passport_file, 
+                $passport_file,
+                $mareos_id,
+                $wareos_id,
                 $user_id
             ]);
             $_SESSION['success'] = 'Profile created successfully!';
@@ -160,4 +167,3 @@ $stmt->execute([$user_id]);
 $profile = $stmt->fetch();
 
 $isLoggedIn = isset($_SESSION['user_id']);
-

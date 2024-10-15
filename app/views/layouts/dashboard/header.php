@@ -152,7 +152,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="inputScoreTrain.php" class="nav-link text-white">
                         <i class="bi bi-bullseye"></i>
                         <span>T.Statistics</span>
                     </a>

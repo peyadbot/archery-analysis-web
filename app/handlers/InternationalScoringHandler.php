@@ -34,7 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $event_name = $_POST['event_name'];
     $event_distance = $_POST['event_distance'];
     $m_1_score = $_POST['m_1_score'];
+    $one_10 = $_POST['1_10'];
+    $one_9 = $_POST['1_9'];
     $m_2_score = $_POST['m_2_score'];
+    $two_10 = $_POST['2_10'];
+    $two_9 = $_POST['2_9'];
     $total_10 = $_POST['total_10'];
     $total_9 = $_POST['total_9'];
     $total_score = $_POST['total_score'];
@@ -46,12 +50,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare('
                 UPDATE international_comp_scores 
-                SET competition_id = ?, competition_name = ?, event_name = ?, event_distance = ?, m_1_score = ?, m_2_score = ?, total_10 = ?, total_9 = ?, total_score = ?, mareos_id = ?, updated_at = NOW()
+                SET competition_id = ?, competition_name = ?, event_name = ?, event_distance = ?, 
+                    m_1_score = ?, 1_10 = ?, 1_9 = ?, m_2_score = ?, 2_10 = ?, 2_9 = ?, 
+                    total_10 = ?, total_9 = ?, total_score = ?, mareos_id = ?, updated_at = NOW()
                 WHERE score_id = ? AND user_id = ?
             ');
-            $stmt->execute([$competition_id, $competition_name, $event_name, $event_distance, $m_1_score, $m_2_score, $total_10, $total_9, $total_score, $mareos_id, $score_id, $user_id]);
+            $stmt->execute([
+                $competition_id, $competition_name, $event_name, $event_distance, 
+                $m_1_score, $one_10, $one_9, $m_2_score, $two_10, $two_9, 
+                $total_10, $total_9, $total_score, $mareos_id, $score_id, $user_id
+            ]);
 
-            $_SESSION['success'] = 'Score updated successfully!';
+            if ($stmt->rowCount() > 0) {
+                $_SESSION['success'] = 'Score updated successfully!';
+            } else {
+                $_SESSION['error'] = 'No changes were made or score not found.';
+            }
         } catch (PDOException $e) {
             $_SESSION['error'] = 'Failed to update score: ' . $e->getMessage();
         }
@@ -59,12 +73,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert new score
         try {
             $stmt = $pdo->prepare('
-                INSERT INTO international_comp_scores (user_id, mareos_id, competition_id, competition_name, event_name, event_distance, m_1_score, m_2_score, total_10, total_9, total_score, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                INSERT INTO international_comp_scores 
+                (user_id, mareos_id, competition_id, competition_name, event_name, event_distance, 
+                m_1_score, 1_10, 1_9, m_2_score, 2_10, 2_9, total_10, total_9, total_score, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ');
-            $stmt->execute([$user_id, $mareos_id, $competition_id, $competition_name, $event_name, $event_distance, $m_1_score, $m_2_score, $total_10, $total_9, $total_score]);
-
-            $_SESSION['success'] = 'Score added successfully!';
+            $stmt->execute([
+                $user_id, $mareos_id, $competition_id, $competition_name, $event_name, $event_distance, 
+                $m_1_score, $one_10, $one_9, $m_2_score, $two_10, $two_9, $total_10, $total_9, $total_score
+            ]);
+            
+            if ($stmt->rowCount() > 0) {
+                $_SESSION['success'] = 'Score added successfully!';
+            } else {
+                $_SESSION['error'] = 'Failed to add score. No rows affected.';
+            }
         } catch (PDOException $e) {
             $_SESSION['error'] = 'Failed to add score: ' . $e->getMessage();
         }

@@ -43,9 +43,6 @@ function getDashboardData($user_id, $role) {
                 $stmt = $pdo->query('SELECT COUNT(*) AS count FROM users WHERE role = "coach"');
                 $data['coachCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
-                $stmt = $pdo->query('SELECT COUNT(*) AS count FROM trainings');
-                $data['trainingCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-
                 // Fetch the recent user registrations
                 $stmt = $pdo->prepare('SELECT user_id, username, role, created_at FROM users ORDER BY created_at DESC LIMIT 4');
                 $stmt->execute();
@@ -79,10 +76,6 @@ function getDashboardData($user_id, $role) {
                 break;
 
             case 'coach':
-                $stmt = $pdo->prepare('SELECT COUNT(*) AS count FROM trainings WHERE added_by = ?');
-                $stmt->execute([$user_id]);
-                $data['trainingCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-
                 // Fetch the number of athletes managed by the coach
                 $stmt = $pdo->prepare('SELECT COUNT(*) AS count FROM coach_athlete WHERE coach_user_id = ?');
                 $stmt->execute([$user_id]);
