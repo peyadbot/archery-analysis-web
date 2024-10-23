@@ -75,15 +75,15 @@ try {
                                     <th>Competition ID</th>
                                     <th>Event Name</th>
                                     <th>Distance</th>
-                                    <th>M 1 Score</th>
-                                    <th>10</th>
-                                    <th>9</th>
-                                    <th>M 2 Score</th>
-                                    <th>10</th>
-                                    <th>9</th>
+                                    <th>M1 Score</th>
+                                    <th>M1 10+X</th>
+                                    <th>M1 10/9</th>
+                                    <th>M2 Score</th>
+                                    <th>M2 10+X</th>
+                                    <th>M2 10/9</th>
                                     <th>Total Score</th>
-                                    <th>10</th>
-                                    <th>9</th>
+                                    <th>Total 10+X</th>
+                                    <th>Total 10/9</th> 
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -112,12 +112,12 @@ try {
                     <tr>
                         <th>No</th>
                         <th>Competition ID</th>
-                        <th>Event Name</th>
+                        <th>Competition Name</th>
                         <th>Distance</th>
-                        <th>M-1 Score</th>
+                        <th>M1 Score</th>
                         <th>M1 10+X</th>
                         <th>M1 10/9</th>
-                        <th>M-2 Score</th>
+                        <th>M2 Score</th>
                         <th>M2 10+X</th>
                         <th>M2 10/9</th>
                         <th>Total Score</th>
@@ -135,15 +135,15 @@ try {
                                 <td><?php echo htmlspecialchars($score['competition_id']); ?></td>
                                 <td><?php echo htmlspecialchars($score['event_name']); ?></td>
                                 <td><?php echo htmlspecialchars($score['event_distance']); ?>m</td>
-                                <td class="table-primary"><?php echo htmlspecialchars($score['m_1_score']); ?></td>
-                                <td class="table-primary"><?php echo htmlspecialchars($score['1_10']); ?></td>
-                                <td class="table-primary"><?php echo htmlspecialchars($score['1_9']); ?></td>
-                                <td class="table-info"><?php echo htmlspecialchars($score['m_2_score']); ?></td>
-                                <td class="table-info"><?php echo htmlspecialchars($score['2_10']); ?></td>
-                                <td class="table-info"><?php echo htmlspecialchars($score['2_9']); ?></td>
+                                <td class="table-primary"><?php echo htmlspecialchars($score['m1_score']); ?></td>
+                                <td class="table-primary"><?php echo htmlspecialchars($score['m1_10X']); ?></td>
+                                <td class="table-primary"><?php echo htmlspecialchars($score['m1_109']); ?></td>
+                                <td class="table-info"><?php echo htmlspecialchars($score['m2_score']); ?></td>
+                                <td class="table-info"><?php echo htmlspecialchars($score['m2_10X']); ?></td>
+                                <td class="table-info"><?php echo htmlspecialchars($score['m2_109']); ?></td>
                                 <td><?php echo htmlspecialchars($score['total_score']); ?></td>
-                                <td><?php echo htmlspecialchars($score['total_10']); ?></td>
-                                <td><?php echo htmlspecialchars($score['total_9']); ?></td>
+                                <td><?php echo htmlspecialchars($score['total_10X']); ?></td>
+                                <td><?php echo htmlspecialchars($score['total_109']); ?></td>
                                 <td><?php echo htmlspecialchars($score['created_at']); ?></td>
                                 <td class="d-flex justify-content-center align-items-center">
                                     <!-- Delete Button -->
@@ -259,15 +259,15 @@ function fetchScores() {
                                     <td class="align-middle">${tournamentId}</td>
                                     <td class="align-middle">${row.event_name}</td>
                                     <td class="align-middle">${row.event_distance}m</td>
-                                    <td class="align-middle">${row.m_1_score}</td>
-                                    <td class="align-middle">${row['1_10']}</td>
-                                    <td class="align-middle">${row['1_9']}</td>
-                                    <td class="align-middle">${row.m_2_score}</td>
-                                    <td class="align-middle">${row['2_10']}</td>
-                                    <td class="align-middle">${row['2_9']}</td>
+                                    <td class="align-middle table-primary">${row.m1_score}</td>
+                                    <td class="align-middle table-primary">${row['m1_10X']}</td>
+                                    <td class="align-middle table-primary">${row['m1_109']}</td>
+                                    <td class="align-middle table-info">${row.m2_score}</td>
+                                    <td class="align-middle table-info">${row['m2_10X']}</td>
+                                    <td class="align-middle table-info">${row['m2_109']}</td>
                                     <td class="align-middle">${row.total_score}</td>
-                                    <td class="align-middle">${row.total_10}</td>
-                                    <td class="align-middle">${row.total_9}</td>
+                                    <td class="align-middle">${row.total_10X}</td>
+                                    <td class="align-middle">${row.total_109}</td>
                                     <td class="d-flex justify-content-center align-items-center">
                                         <button class="btn btn-primary save-btn" data-score='${JSON.stringify(row)}' ${isSaved ? 'disabled' : ''}>${isSaved ? 'Saved' : 'Save Score'}</button>
                                     </td>

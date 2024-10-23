@@ -10,7 +10,9 @@ $user_id = $_SESSION['user_id'];
 
 // Fetch international competition
 $stmt = $pdo->prepare('
-    SELECT s.score_id, s.m_1_score, s.1_10, s.1_9, s.m_2_score, s.2_10, s.2_9, s.total_10, s.total_9, s.total_score, s.event_name, s.event_distance, s.competition_id, s.competition_name, s.created_at
+    SELECT s.score_id, s.m1_score, s.m1_10X, s.m1_109, s.m2_score, s.m2_10X, s.m2_109, 
+        s.total_score, s.total_10X, s.total_109, s.event_name, s.event_distance, 
+        s.competition_id, s.competition_name, s.created_at
     FROM international_comp_scores s
     WHERE s.user_id = ? 
     ORDER BY s.created_at DESC
@@ -89,56 +91,56 @@ if (isset($_GET['edit'])) {
 
                         <!-- First Round Score -->
                         <div class="col-md-4 mb-3">
-                            <label for="m_1_score" class="form-label">M-1 Score</label>
-                            <input type="number" class="form-control" id="m_1_score" name="m_1_score" max="500" value="<?php echo $editMode ? htmlspecialchars($editScore['m_1_score']) : ''; ?>" required>
+                            <label for="m1_score" class="form-label">M-1 Score</label>
+                            <input type="number" class="form-control" id="m1_score" name="m1_score" max="360" value="<?php echo $editMode ? htmlspecialchars($editScore['m1_score']) : ''; ?>" required>
                         </div>
 
-                        <!-- First Round 10s -->
+                        <!-- First Round 10+X -->
                         <div class="col-md-4 mb-3">
-                            <label for="1_10" class="form-label">M-1 10+X</label>
-                            <input type="number" class="form-control" id="1_10" name="1_10" max="50" value="<?php echo $editMode ? htmlspecialchars($editScore['1_10']) : ''; ?>" required>
+                            <label for="m1_10X" class="form-label">M-1 10+X</label>
+                            <input type="number" class="form-control" id="m1_10X" name="m1_10X" max="36" value="<?php echo $editMode ? htmlspecialchars($editScore['m1_10X']) : ''; ?>" required>
                         </div>
 
-                        <!-- First Round 9s -->
+                        <!-- First Round 10/9 -->
                         <div class="col-md-4 mb-3">
-                            <label for="1_9" class="form-label">M-1 10/9</label>
-                            <input type="number" class="form-control" id="1_9" name="1_9" max="50" value="<?php echo $editMode ? htmlspecialchars($editScore['1_9']) : ''; ?>" required>
+                            <label for="m1_109" class="form-label">M-1 10/9</label>
+                            <input type="number" class="form-control" id="m1_109" name="m1_109" max="36" value="<?php echo $editMode ? htmlspecialchars($editScore['m1_109']) : ''; ?>" required>
                         </div>
 
                         <!-- Second Round Score -->
                         <div class="col-md-4 mb-3">
-                            <label for="m_2_score" class="form-label">M-2 Score</label>
-                            <input type="number" class="form-control" id="m_2_score" name="m_2_score" max="500" value="<?php echo $editMode ? htmlspecialchars($editScore['m_2_score']) : ''; ?>" required>
+                            <label for="m2_score" class="form-label">M-2 Score</label>
+                            <input type="number" class="form-control" id="m2_score" name="m2_score" max="360" value="<?php echo $editMode ? htmlspecialchars($editScore['m2_score']) : ''; ?>" required>
                         </div>
 
-                        <!-- Second Round 10s -->
+                        <!-- Second Round 10+X -->
                         <div class="col-md-4 mb-3">
-                            <label for="2_10" class="form-label">M-2 10+X</label>
-                            <input type="number" class="form-control" id="2_10" name="2_10" max="50" value="<?php echo $editMode ? htmlspecialchars($editScore['2_10']) : ''; ?>" required>
+                            <label for="m2_10X" class="form-label">M-2 10+X</label>
+                            <input type="number" class="form-control" id="m2_10X" name="m2_10X" max="36" value="<?php echo $editMode ? htmlspecialchars($editScore['m2_10X']) : ''; ?>" required>
                         </div>
 
-                        <!-- Second Round 9s -->
+                        <!-- Second Round 10/9 -->
                         <div class="col-md-4 mb-3">
-                            <label for="2_9" class="form-label">M-2 10/9</label>
-                            <input type="number" class="form-control" id="2_9" name="2_9" max="50" value="<?php echo $editMode ? htmlspecialchars($editScore['2_9']) : ''; ?>" required>
+                            <label for="m2_109" class="form-label">M-2 10/9</label>
+                            <input type="number" class="form-control" id="m2_109" name="m2_109" max="36" value="<?php echo $editMode ? htmlspecialchars($editScore['m2_109']) : ''; ?>" required>
                         </div>
 
                         <!-- Total Score -->
                         <div class="col-md-4 mb-3">
                             <label for="total_score" class="form-label">Total Score</label>
-                            <input type="number" class="form-control" id="total_score" name="total_score" value="<?php echo $editMode ? htmlspecialchars($editScore['total_score']) : ''; ?>" readonly required>
+                            <input type="number" class="form-control" id="total_score" name="total_score" max="720" value="<?php echo $editMode ? htmlspecialchars($editScore['total_score']) : ''; ?>" readonly required>
                         </div>
 
-                        <!-- Total 10s -->
+                        <!-- Total 10+X -->
                         <div class="col-md-4 mb-3">
-                            <label for="total_10" class="form-label">Total 10+X</label>
-                            <input type="number" class="form-control" id="total_10" name="total_10" max="100" value="<?php echo $editMode ? htmlspecialchars($editScore['total_10']) : ''; ?>" readonly required>
+                            <label for="total_10X" class="form-label">Total 10+X</label>
+                            <input type="number" class="form-control" id="total_10X" name="total_10X" max="72" value="<?php echo $editMode ? htmlspecialchars($editScore['total_10X']) : ''; ?>" readonly required>
                         </div>
 
-                        <!-- Total 9s -->
+                        <!-- Total 10/9 -->
                         <div class="col-md-4 mb-3">
-                            <label for="total_9" class="form-label">Total 10/9</label>
-                            <input type="number" class="form-control" id="total_9" name="total_9" max="100" value="<?php echo $editMode ? htmlspecialchars($editScore['total_9']) : ''; ?>" readonly required>
+                            <label for="total_109" class="form-label">Total 10/9</label>
+                            <input type="number" class="form-control" id="total_109" name="total_109" max="72" value="<?php echo $editMode ? htmlspecialchars($editScore['total_109']) : ''; ?>" readonly required>
                         </div>
 
                         <!-- Action Buttons -->
@@ -159,7 +161,7 @@ if (isset($_GET['edit'])) {
 
 <!-- Table displaying competition scores -->
 <div class="table-responsive mb-2">
-    <table class="table table-bordered table-hover shadow-sm">
+    <table class="table table-bordered table-striped table-hover shadow-sm">
         <thead class="table-dark">
             <tr>
                 <th>No.</th>
@@ -188,15 +190,15 @@ if (isset($_GET['edit'])) {
                         <td><?php echo htmlspecialchars($score['competition_name']); ?></td>
                         <td><?php echo htmlspecialchars($score['event_name']); ?></td>
                         <td><?php echo htmlspecialchars($score['event_distance']); ?>m</td>
-                        <td class="table-primary"><?php echo htmlspecialchars($score['m_1_score']); ?></td>
-                        <td class="table-primary"><?php echo htmlspecialchars($score['1_10']); ?></td>
-                        <td class="table-primary"><?php echo htmlspecialchars($score['1_9']); ?></td>
-                        <td class="table-info"><?php echo htmlspecialchars($score['m_2_score']); ?></td>
-                        <td class="table-info"><?php echo htmlspecialchars($score['2_10']); ?></td>
-                        <td class="table-info"><?php echo htmlspecialchars($score['2_9']); ?></td>
+                        <td class="table-primary"><?php echo htmlspecialchars($score['m1_score']); ?></td>
+                        <td class="table-primary"><?php echo htmlspecialchars($score['m1_10X']); ?></td>
+                        <td class="table-primary"><?php echo htmlspecialchars($score['m1_109']); ?></td>
+                        <td class="table-info"><?php echo htmlspecialchars($score['m2_score']); ?></td>
+                        <td class="table-info"><?php echo htmlspecialchars($score['m2_10X']); ?></td>
+                        <td class="table-info"><?php echo htmlspecialchars($score['m2_109']); ?></td>
                         <td><?php echo htmlspecialchars($score['total_score']); ?></td>
-                        <td><?php echo htmlspecialchars($score['total_10']); ?></td>
-                        <td><?php echo htmlspecialchars($score['total_9']); ?></td>
+                        <td><?php echo htmlspecialchars($score['total_10X']); ?></td>
+                        <td><?php echo htmlspecialchars($score['total_109']); ?></td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
                                 <a href="?view=international&edit=<?php echo htmlspecialchars($score['score_id']); ?>" class="btn btn-warning btn-sm">
@@ -219,32 +221,39 @@ if (isset($_GET['edit'])) {
 </div>
 
 <script>
-    // Automatically calculate the total score, total 10, and total 9
+    // Automatically calculate the total score, total 10+X, and total 10/9
     document.addEventListener("DOMContentLoaded", function() {
-        var m1ScoreInput = document.getElementById('m_1_score');
-        var m2ScoreInput = document.getElementById('m_2_score');
-        var m1_10Input = document.getElementById('1_10');
-        var m2_10Input = document.getElementById('2_10');
-        var m1_9Input = document.getElementById('1_9');
-        var m2_9Input = document.getElementById('2_9');
-        var totalScoreInput = document.getElementById('total_score');
-        var total10Input = document.getElementById('total_10');
-        var total9Input = document.getElementById('total_9');
+        const m1ScoreInput = document.getElementById('m1_score');
+        const m2ScoreInput = document.getElementById('m2_score');
+        const m1_10XInput = document.getElementById('m1_10X');
+        const m2_10XInput = document.getElementById('m2_10X');
+        const m1_109Input = document.getElementById('m1_109');
+        const m2_109Input = document.getElementById('m2_109');
+        const totalScoreInput = document.getElementById('total_score');
+        const total10XInput = document.getElementById('total_10X');
+        const total109Input = document.getElementById('total_109');
 
         function updateTotals() {
-            var m1Score = parseFloat(m1ScoreInput.value) || 0;
-            var m2Score = parseFloat(m2ScoreInput.value) || 0;
-            var m1_10 = parseInt(m1_10Input.value) || 0;
-            var m2_10 = parseInt(m2_10Input.value) || 0;
-            var m1_9 = parseInt(m1_9Input.value) || 0;
-            var m2_9 = parseInt(m2_9Input.value) || 0;
+            const m1Score = parseFloat(m1ScoreInput.value) || 0;
+            const m2Score = parseFloat(m2ScoreInput.value) || 0;
+            const m1_10X = parseInt(m1_10XInput.value) || 0;
+            const m2_10X = parseInt(m2_10XInput.value) || 0;
+            const m1_109 = parseInt(m1_109Input.value) || 0;
+            const m2_109 = parseInt(m2_109Input.value) || 0;
 
-            totalScoreInput.value = m1Score + m2Score;
-            total10Input.value = m1_10 + m2_10;
-            total9Input.value = m1_9 + m2_9;
+            // Calculate totals
+            const totalScore = m1Score + m2Score;
+            const total10X = m1_10X + m2_10X;
+            const total109 = m1_109 + m2_109;
+
+            // Update the total fields
+            totalScoreInput.value = totalScore;
+            total10XInput.value = total10X;
+            total109Input.value = total109;
         }
 
-        [m1ScoreInput, m2ScoreInput, m1_10Input, m2_10Input, m1_9Input, m2_9Input].forEach(input => {
+        // Add event listeners to all input fields that affect the totals
+        [m1ScoreInput, m2ScoreInput, m1_10XInput, m2_10XInput, m1_109Input, m2_109Input].forEach(function(input) {
             input.addEventListener('input', updateTotals);
         });
     });

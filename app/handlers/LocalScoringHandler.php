@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Validate the incoming data
-    if (!isset($data['athlete_id'], $data['event_name'], $data['event_distance'], $data['m_1_score'], $data['1_10'], $data['1_9'], $data['m_2_score'], $data['2_10'], $data['2_9'],
-        $data['m_2_score'], $data['total_score'], $data['total_10'], $data['total_9'], $data['competition_id'])) {
+    if (!isset($data['athlete_id'], $data['event_name'], $data['event_distance'], $data['m1_score'], $data['m1_10X'], $data['m1_109'], $data['m2_score'], $data['m2_10X'], $data['m2_109'],
+        $data['total_score'], $data['total_10X'], $data['total_109'], $data['competition_id'])) {
         echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
         exit();
     }
@@ -87,12 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert new score for the athlete, saving the athlete's user_id
             $stmt = $pdo->prepare('
-                INSERT INTO local_comp_scores (user_id, mareos_id, total_score, 1_10, 1_9, m_1_score, 2_10, 2_9, m_2_score, total_10, total_9, event_name, event_distance, competition_id, created_at) 
+                INSERT INTO local_comp_scores (user_id, mareos_id, m1_10X, m1_109, m1_score, m2_10X, m2_109, m2_score, total_score, total_10X, total_109, event_name, event_distance, competition_id, created_at) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ');
             $stmt->execute([
-                $athlete['user_id'], $data['athlete_id'], $data['m_1_score'], $data['1_10'], $data['1_9'], $data['m_2_score'], $data['2_10'], $data['2_9'], $data['total_score'],
-                $data['total_10'], $data['total_9'], $data['event_name'], $data['event_distance'], $data['competition_id']
+                $athlete['user_id'], $data['athlete_id'], $data['m1_10X'], $data['m1_109'], $data['m1_score'], $data['m2_10X'], $data['m2_109'], $data['m2_score'],
+                $data['total_score'], $data['total_10X'], $data['total_109'], $data['event_name'], $data['event_distance'], $data['competition_id']
             ]);
 
             echo json_encode(['status' => 'success', 'message' => 'Score saved successfully']);

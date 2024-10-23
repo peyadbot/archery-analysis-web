@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../public/library/fpdf186/fpdf.php'; 
 require_once __DIR__ . '/../../config/config.php';
-
 session_start();
+
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['athlete', 'coach', 'admin'])) {
     die('You need to be logged in as an athlete, coach, or admin to access this.');
 }

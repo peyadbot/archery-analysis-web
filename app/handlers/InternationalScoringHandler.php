@@ -27,20 +27,20 @@ try {
     exit();
 }
 
-// Save new score
+// Save new score or update existing score
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $competition_id = $_POST['competition_id'];
     $competition_name = $_POST['competition_name'];
     $event_name = $_POST['event_name'];
     $event_distance = $_POST['event_distance'];
-    $m_1_score = $_POST['m_1_score'];
-    $one_10 = $_POST['1_10'];
-    $one_9 = $_POST['1_9'];
-    $m_2_score = $_POST['m_2_score'];
-    $two_10 = $_POST['2_10'];
-    $two_9 = $_POST['2_9'];
-    $total_10 = $_POST['total_10'];
-    $total_9 = $_POST['total_9'];
+    $m1_score = $_POST['m1_score'];
+    $m1_10X = $_POST['m1_10X'];
+    $m1_109 = $_POST['m1_109'];
+    $m2_score = $_POST['m2_score'];
+    $m2_10X = $_POST['m2_10X'];
+    $m2_109 = $_POST['m2_109'];
+    $total_10X = $_POST['total_10X'];
+    $total_109 = $_POST['total_109'];
     $total_score = $_POST['total_score'];
 
     // Check if updating an existing score
@@ -51,14 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare('
                 UPDATE international_comp_scores 
                 SET competition_id = ?, competition_name = ?, event_name = ?, event_distance = ?, 
-                    m_1_score = ?, 1_10 = ?, 1_9 = ?, m_2_score = ?, 2_10 = ?, 2_9 = ?, 
-                    total_10 = ?, total_9 = ?, total_score = ?, mareos_id = ?, updated_at = NOW()
+                    m1_score = ?, m1_10X = ?, m1_109 = ?, m2_score = ?, m2_10X = ?, m2_109 = ?, 
+                    total_10X = ?, total_109 = ?, total_score = ?, mareos_id = ?, updated_at = NOW()
                 WHERE score_id = ? AND user_id = ?
             ');
             $stmt->execute([
                 $competition_id, $competition_name, $event_name, $event_distance, 
-                $m_1_score, $one_10, $one_9, $m_2_score, $two_10, $two_9, 
-                $total_10, $total_9, $total_score, $mareos_id, $score_id, $user_id
+                $m1_score, $m1_10X, $m1_109, $m2_score, $m2_10X, $m2_109, 
+                $total_10X, $total_109, $total_score, $mareos_id, $score_id, $user_id
             ]);
 
             if ($stmt->rowCount() > 0) {
@@ -75,12 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare('
                 INSERT INTO international_comp_scores 
                 (user_id, mareos_id, competition_id, competition_name, event_name, event_distance, 
-                m_1_score, 1_10, 1_9, m_2_score, 2_10, 2_9, total_10, total_9, total_score, created_at)
+                m1_score, m1_10X, m1_109, m2_score, m2_10X, m2_109, total_10X, total_109, total_score, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             ');
             $stmt->execute([
                 $user_id, $mareos_id, $competition_id, $competition_name, $event_name, $event_distance, 
-                $m_1_score, $one_10, $one_9, $m_2_score, $two_10, $two_9, $total_10, $total_9, $total_score
+                $m1_score, $m1_10X, $m1_109, $m2_score, $m2_10X, $m2_109, $total_10X, $total_109, $total_score
             ]);
             
             if ($stmt->rowCount() > 0) {
