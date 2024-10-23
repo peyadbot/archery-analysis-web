@@ -1,6 +1,4 @@
-<!-- Main header template -->
 <style>
-    /* Navbar Styling */
     .navbar {
         position: fixed;
         top: 0;
@@ -9,11 +7,11 @@
         z-index: 1000;
         background-color: transparent;
         transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
-        backdrop-filter: blur(10px); /* Soft blur for modern look */
+        backdrop-filter: blur(10px);
     }
     .navbar.scrolled {
         background-color: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px); /* Additional blur on scroll */
+        backdrop-filter: blur(10px); 
     }
     .navbar .nav-link,
     .navbar .navbar-brand {
@@ -23,7 +21,6 @@
     .navbar .nav-link:hover {
         color: #007bff;
     }
-    /* Hover Effects for Dropdowns and Links */
     .hover-pointer {
         cursor: pointer;
         text-decoration: none;
@@ -31,11 +28,10 @@
     }
     .hover-pointer:hover {
         background-color: rgba(0, 0, 0, 0.1);
-        color: #007bff; /* Hover color for nav items */
+        color: #007bff; 
     }
-    /* Dropdown Menu Styling */
     .dropdown-menu {
-        background-color: #343a40; /* Darker background for dropdown */
+        background-color: #343a40;
         border-radius: 0.5rem;
     }
     .dropdown-item {
@@ -46,7 +42,6 @@
         background-color: #007bff;
         color: #fff;
     }
-    /* Responsive Design */
     @media (max-width: 768px) {
         .navbar-brand {
             font-size: 1.25rem;

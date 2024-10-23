@@ -1,4 +1,5 @@
 <?php
+$title = 'Admin Dashboard';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 
 // Check if the user is logged in and has the admin role

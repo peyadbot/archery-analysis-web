@@ -1,5 +1,4 @@
 <?php
-// composer require vlucas/phpdotenv
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
@@ -17,5 +16,4 @@ try {
     die("Connection failed: " . $e->getMessage());
 }
 
-// Base URL to avoid hardcoding file path 
 define('BASE_URL', 'http://localhost/archery-analysis-web/');

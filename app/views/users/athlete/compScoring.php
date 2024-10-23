@@ -7,14 +7,15 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$isViewingLocal = isset($_GET['view']) && $_GET['view'] === 'local';
-$isViewingInternational = isset($_GET['view']) && $_GET['view'] === 'international';
+$view = $_GET['view'] ?? 'local';
+$isViewingLocal = $view === 'local';
+$isViewingInternational = $view === 'international';
 
-if (!$isViewingLocal && !$isViewingInternational) {
-    $isViewingLocal = true;
+if ($isViewingLocal) {
+    $title = 'Local Competition Scoring';
+} else {
+    $title = 'International Competition Scoring';
 }
-
-$view = isset($_GET['view']) ? $_GET['view'] : 'local';
 ?>
 
 <?php include '../../layouts/dashboard/header.php'; ?>

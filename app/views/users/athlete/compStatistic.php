@@ -68,14 +68,23 @@ $monthly_competitions = prepareMonthlyCompetitions($monthly_competition_data);
                     <div class="col">
                         <button type="submit" class="btn btn-primary w-100">Apply</button>
                     </div>
+                    <div class="col">
+                        <button type="button" id="resetDateFilter" class="btn btn-secondary">Reset</button>
+                    </div>
                 </form>
             </div>
 
             <!-- Add Score and Download Report Buttons -->
             <div class="col-12 col-md-3 d-flex justify-content-md-end">
-                <a href="compScoring.php" class="btn btn-success me-2">
-                    <i class="bi bi-plus-lg me-2"></i> Add Score
-                </a>
+                <?php if ($view === 'local'): ?>
+                    <a href="compScoring.php?view=local" class="btn btn-success me-2">
+                        <i class="bi bi-plus-lg me-2"></i> Add Local Score
+                    </a>
+                <?php elseif ($view === 'international'): ?>
+                    <a href="compScoring.php?view=international" class="btn btn-success me-2">
+                        <i class="bi bi-plus-lg me-2"></i> Add International Score
+                    </a>
+                <?php endif; ?>
                 <button id="download-report-pdf" class="btn btn-primary">Download Report</button>
             </div>
         </div>
@@ -462,6 +471,20 @@ $monthly_competitions = prepareMonthlyCompetitions($monthly_competition_data);
     if (urlParams.has('end_date')) {
         document.getElementById('end_date').value = urlParams.get('end_date');
     }
+
+    // Reset date filter
+    document.addEventListener('DOMContentLoaded', function() {
+        const resetButton = document.getElementById('resetDateFilter');
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const dateRangeForm = document.getElementById('dateRangeForm');
+
+        resetButton.addEventListener('click', function() {
+            startDateInput.value = '';
+            endDateInput.value = '';
+            dateRangeForm.submit();
+        });
+    });
 
     window.onload = function() {
         // PDF Download Script

@@ -1,5 +1,6 @@
 <?php
 ob_start();
+// $title = 'Competition Statistics';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -24,8 +25,15 @@ if (!isset($_SESSION['view'])) {
 if (isset($_GET['view'])) {
     $_SESSION['view'] = $_GET['view'];
 }
-
 $view = $_SESSION['view'];
+
+if ($isViewingLocalStats) {
+    $title = 'Local Competition Statistics';
+} elseif ($isViewingInternationalStats) {
+    $title = 'International Competition Statistics';
+} else {
+    $title = 'Compare Competitions';
+}
 ?>
 
 <?php include '../../layouts/dashboard/header.php'; ?>
@@ -33,6 +41,7 @@ $view = $_SESSION['view'];
 <div class="main-content" id="mainContent">
     <!-- Header -->
     <?php if ($isViewingLocalStats): ?>
+        <?php $title = 'Local Competition Statistics'; ?>
         <div class="row bg-dark text-white py-4 mb-4" style="border-radius: 10px;">
             <div class="col">
                 <h3 class="m-0">Local Competition Statistics</h3>
@@ -64,7 +73,7 @@ $view = $_SESSION['view'];
     <?php if ($isViewingLocalStats): ?>
         <?php include 'compStatistic.php'; ?>
     <?php elseif ($isViewingInternationalStats): ?>
-        <?php include 'statStatistic.php'; ?>
+        <?php include 'compStatistic.php'; ?>
     <?php elseif ($isViewingCompare): ?>
         <?php include 'compCompare.php'; ?>
     <?php endif; ?>

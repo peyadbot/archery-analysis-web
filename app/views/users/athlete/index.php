@@ -1,4 +1,5 @@
 <?php
+$title = 'Athlete Dashboard';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'athlete') {

@@ -1,4 +1,5 @@
 <?php
+$title = 'Admin - Manage Programs';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 require_once __DIR__ . '/../../../../app/handlers/ProgramHandler.php';
 ?>

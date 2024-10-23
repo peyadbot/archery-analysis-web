@@ -1,4 +1,5 @@
 <?php
+$title = 'Athletes Local Scoring';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 require_once __DIR__ . '/../../../handlers/CoachAthleteHandler.php';
 
