@@ -146,7 +146,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="statCompetition.php" class="nav-link text-white">
+                    <a href="homeCompetition.php" class="nav-link text-white">
                         <i class="bi bi-trophy-fill"></i>
                         <span>C.Statistics</span>
                     </a>

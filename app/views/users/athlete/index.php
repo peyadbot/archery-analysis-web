@@ -71,7 +71,7 @@ try {
                         <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h2>
                     </div>
                     <div class="card-footer bg-transparent border-top-0">
-                        <a href="<?php echo BASE_URL . 'app/views/users/athlete/statCompetition.php'; ?>" class="btn btn-outline-primary">View Stats</a>
+                        <a href="<?php echo BASE_URL . 'app/views/users/athlete/homeCompetition.php'; ?>" class="btn btn-outline-primary">View Stats</a>
                     </div>
                 </div>
             </div>
