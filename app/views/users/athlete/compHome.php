@@ -62,9 +62,9 @@ $view = $_SESSION['view'];
     </div>
 
     <?php if ($isViewingLocalStats): ?>
-        <?php include 'statCompetition.php'; ?>
+        <?php include 'compStatistic.php'; ?>
     <?php elseif ($isViewingInternationalStats): ?>
-        <?php include 'statCompetition.php'; ?>
+        <?php include 'statStatistic.php'; ?>
     <?php elseif ($isViewingCompare): ?>
         <?php include 'compCompare.php'; ?>
     <?php endif; ?>

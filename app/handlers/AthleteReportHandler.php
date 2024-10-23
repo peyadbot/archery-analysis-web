@@ -51,7 +51,7 @@ $pdf->SetFont('Arial', 'I', 8);
 $pdf->Cell(0, 10, 'Generated on ' . date('Y-m-d'), 0, 1, 'R'); 
 $pdf->SetDrawColor(70, 70, 100);
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, 'User Report', 0, 1, 'C');
+$pdf->Cell(0, 10, 'Details Report', 0, 1, 'C');
 
 // Add profile picture if available
 if (!empty($profile['profile_picture'])) {

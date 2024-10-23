@@ -58,8 +58,10 @@ try {
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse">
                 <div class="accordion-body">
-                    <!-- Add Athlete Form -->
+                    
+                    <!-- Add New Athlete Form -->
                     <form method="POST" action="../../../handlers/CoachAthleteHandler.php" id="addAthleteForm">
+                        <input type="hidden" name="action" value="add">
                         <div class="mb-3">
                             <label for="mareos_id" class="form-label">Mareos ID</label>
                             <input type="text" name="mareos_id" class="form-control" id="mareos_id" required>
@@ -101,6 +103,12 @@ try {
                             <a href="<?php echo BASE_URL . 'app/handlers/AthleteReportHandler.php?athlete_user_id=' . $athlete['user_id']; ?>" class="btn btn-success btn-sm">
                                 Download Report
                             </a>
+                            <!-- Remove Athlete Button -->
+                            <form action="../../../handlers/CoachAthleteHandler.php" method="POST" style="display:inline-block;">
+                                <input type="hidden" name="athlete_user_id" value="<?php echo htmlspecialchars($athlete['user_id']); ?>">
+                                <input type="hidden" name="action" value="remove">
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>

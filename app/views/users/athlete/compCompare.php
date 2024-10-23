@@ -1,7 +1,7 @@
 <?php
 ob_start();
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
-require_once __DIR__ . '/../../../handlers/StatCompetitionHandler.php';
+require_once __DIR__ . '/../../../handlers/CompStatisticHandler.php';
 require_once __DIR__ . '/../../../handlers/CompCompareHandler.php';
 
 if ($_SESSION['role'] !== 'athlete') {
