@@ -17,3 +17,7 @@ try {
 }
 
 define('BASE_URL', 'http://localhost/archery-analysis-web/');
+define('COMP_LIST_URL', 'https://ianseo.sukanfc.com/fetch_comp_list.php');
+define('COMP_SCORE_URL', 'https://ianseo.sukanfc.com/fetch_comp_score.php');
+define('TRAIN_LIST_URL', 'https://ianseo.sukanfc.com/fetch_train_list.php');
+define('TRAIN_SCORE_URL', 'https://ianseo.sukanfc.com/fetch_train_score.php');

@@ -23,57 +23,57 @@ try {
     exit();
 }
 
-// Fetch all local scores for the logged-in athlete
+// Fetch all local training scores for the logged-in athlete
 try {
-    $stmt = $pdo->prepare('SELECT * FROM local_comp_scores WHERE mareos_id = ? ORDER BY created_at DESC');
+    $stmt = $pdo->prepare('SELECT * FROM team_training_scores WHERE mareos_id = ? ORDER BY created_at DESC');
     $stmt->execute([$currentMareosId]);
-    $localScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $teamScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     exit();
-}
+} 
 ?>
 
 <div class="row">
     <div class="col-12 mb-3">
         <!-- Button to Open Modal -->
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#fetchScoresModal">
-            Fetch New Scores
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#fetchTrainingModal">
+            Fetch New Training Scores
         </button>
         <button id="refreshPage" class="btn btn-primary">Refresh Page</button>
     </div>
 </div>
 
 <div class="row">
-    <!-- Modal for Fetching Scores -->
-    <div class="modal fade" id="fetchScoresModal" tabindex="-1" aria-labelledby="fetchScoresModalLabel" aria-hidden="true">
+    <!-- Modal for Fetching Training Scores -->
+    <div class="modal fade" id="fetchTrainingModal" tabindex="-1" aria-labelledby="fetchTrainingModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="fetchScoresModalLabel">Fetch New Scores</h5>
+                    <h5 class="modal-title" id="fetchTrainingModalLabel">Fetch New Training Scores</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Tournament Dropdown -->
+                    <!-- Training Session Dropdown -->
                     <div class="mb-4">
-                        <select id="tournament-select" class="form-select p-3">
-                            <option value="">Select a tournament</option>
+                        <select id="training-select" class="form-select p-3">
+                            <option value="">Select a training session</option>
                         </select>
                     </div>
 
                     <div class="mb-4">
-                        <!-- Input Field for Tournament ID -->
-                        <input type="text" id="tournament-id-input" class="form-control" placeholder="Or enter tournament ID">
+                        <!-- Input Field for Training Session ID -->
+                        <input type="text" id="training-id-input" class="form-control" placeholder="Or enter training session ID">
                     </div>
 
-                    <!-- Scores Table -->
-                    <div class="table-responsive" id="scoresTableContainer">
-                        <table class="table table-striped table-bordered" id="ianseo-scores">
+                    <!-- Training Scores Table -->
+                    <div class="table-responsive" id="trainingScoresTableContainer">
+                        <table class="table table-striped table-bordered" id="training-scores">
                             <thead class="table-dark">
                                 <tr>
                                     <th>No</th>
-                                    <th>Competition ID</th>
-                                    <th>Event Name</th>
+                                    <th>Training ID</th>
+                                    <th>Session Name</th>
                                     <th>Distance</th>
                                     <th>M1 Score</th>
                                     <th>M1 10+X</th>
@@ -93,7 +93,7 @@ try {
 
                     <!-- No Athlete Found Message -->
                     <div id="noAthleteFoundMessage" class="alert alert-danger d-none">
-                        No athlete found for the selected tournament ID: <span id="noAthleteTournamentId"></span> 
+                        No athlete found for the selected training session ID: <span id="noAthleteTrainingId"></span> 
                         <br>
                     </div>
                 </div>
@@ -104,15 +104,15 @@ try {
         </div>
     </div>
 
-    <!-- Local Tournament Scores Table -->
+    <!-- Team Training Scores Table -->
     <div class="col-12">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered" id="local-scores-table">
+            <table class="table table-striped table-bordered" id="team-training-scores-table">
                 <thead class="table-dark">
                     <tr>
                         <th>No</th>
-                        <th>Competition ID</th>
-                        <th>Competition Name</th>
+                        <th>Training ID</th>
+                        <th>Session Name</th>
                         <th>Distance</th>
                         <th>M1 Score</th>
                         <th>M1 10+X</th>
@@ -122,17 +122,17 @@ try {
                         <th>M2 10/9</th>
                         <th>Total Score</th>
                         <th>Total 10+X</th>
-                        <th>Total 10/9</th>
+                        <th>Total 10/9</th> 
                         <th>Date Saved</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($localScores)): ?>
-                        <?php foreach ($localScores as $index => $score): ?>
+                    <?php if (!empty($teamScores)): ?>
+                        <?php foreach ($teamScores as $index => $score): ?>
                             <tr>
                                 <td><?php echo $index + 1; ?></td>
-                                <td><?php echo htmlspecialchars($score['competition_id']); ?></td>
+                                <td><?php echo htmlspecialchars($score['training_id']); ?></td>
                                 <td><?php echo htmlspecialchars($score['event_name']); ?></td>
                                 <td><?php echo htmlspecialchars($score['event_distance']); ?>m</td>
                                 <td class="table-primary"><?php echo htmlspecialchars($score['m1_score']); ?></td>
@@ -155,7 +155,7 @@ try {
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="11" class="text-center">No local tournament scores found.</td>
+                            <td colspan="15" class="text-center">No local training scores found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -203,7 +203,7 @@ try {
 
 <script>
 // Refresh page    
-const fetchModal = document.getElementById('fetchScoresModal'); 
+const fetchModal = document.getElementById('fetchTrainingModal'); 
 
 fetchModal.addEventListener('hidden.bs.modal', function () {
     location.reload();
@@ -216,39 +216,39 @@ document.getElementById('refreshPage').addEventListener('click', function() {
 // Modal score fetch
 const currentMareosId = '<?php echo $currentMareosId; ?>';
 
-// Fetch the list of tournaments
-fetch('<?php echo COMP_LIST_URL; ?>')
+// Fetch the list of training sessions
+fetch('<?php echo TRAIN_LIST_URL; ?>')
     .then(response => response.json())
     .then(data => {
-        const tournamentSelect = document.getElementById('tournament-select');
-        data.forEach(tournament => {
+        const trainingSelect = document.getElementById('training-select');
+        data.forEach(session => {
             const option = document.createElement('option');
-            option.value = tournament.ToCode;
-            option.text = `[${tournament.ToCode}] ${tournament.ToName} —— ${tournament.ToWhenFrom} to ${tournament.ToWhenTo}`;
-            tournamentSelect.appendChild(option);
+            option.value = session.ToCode;
+            option.text = `[${session.ToCode}] ${session.ToName} —— ${session.ToWhenFrom} to ${session.ToWhenTo}`;
+            trainingSelect.appendChild(option);
         });
     })
-    .catch(error => console.error('Error fetching tournaments:', error));
+    .catch(error => console.error('Error fetching training sessions:', error));
 
-// Fetch scores based on the tournament ID or selected tournament
+// Fetch scores based on the training session ID or selected session
 function fetchScores() {
-    const inputField = document.getElementById('tournament-id-input').value.trim();
-    const dropdownValue = document.getElementById('tournament-select').value;
-    const tournamentId = inputField || dropdownValue;
+    const inputField = document.getElementById('training-id-input').value.trim();
+    const dropdownValue = document.getElementById('training-select').value;
+    const trainingId = inputField || dropdownValue;
 
-    if (tournamentId) {
-        fetch(`<?php echo COMP_SCORE_URL; ?>?tournament_code=${tournamentId}`)
+    if (trainingId) {
+        fetch(`<?php echo TRAIN_SCORE_URL; ?>?tournament_code=${trainingId}`)
             .then(response => response.json())
             .then(data => {
-                const tableBody = document.querySelector('#ianseo-scores tbody');
+                const tableBody = document.querySelector('#training-scores tbody');
                 const noAthleteFoundMessage = document.getElementById('noAthleteFoundMessage');
-                const scoresTableContainer = document.getElementById('scoresTableContainer');
+                const scoresTableContainer = document.getElementById('trainingScoresTableContainer');
 
                 tableBody.innerHTML = ''; 
                 let position = 1;
                 let athleteFound = false;
-
-                fetchSavedScores(tournamentId).then(savedScores => {
+                
+                fetchSavedScores(trainingId).then(savedScores => {
                     data.forEach(row => {
                         if (row.athlete_id === currentMareosId) {
                             athleteFound = true;
@@ -256,7 +256,7 @@ function fetchScores() {
                             const tableRow = `
                                 <tr>
                                     <td class="align-middle">${position}</td>
-                                    <td class="align-middle">${tournamentId}</td>
+                                    <td class="align-middle">${trainingId}</td>
                                     <td class="align-middle">${row.event_name}</td>
                                     <td class="align-middle">${row.event_distance}m</td>
                                     <td class="align-middle table-primary">${row.m1_score}</td>
@@ -280,7 +280,7 @@ function fetchScores() {
                     if (!athleteFound) {
                         scoresTableContainer.classList.add('d-none');
                         noAthleteFoundMessage.classList.remove('d-none');
-                        document.getElementById('noAthleteTournamentId').textContent = tournamentId;
+                        document.getElementById('noAthleteTrainingId').textContent = trainingId;
                     } else {
                         scoresTableContainer.classList.remove('d-none');
                         noAthleteFoundMessage.classList.add('d-none');
@@ -289,25 +289,25 @@ function fetchScores() {
                     document.querySelectorAll('.save-btn').forEach(button => {
                         button.addEventListener('click', function () {
                             const scoreData = JSON.parse(this.getAttribute('data-score'));
-                            const message = `Do you want to save the score for event: ${tournamentId}, total score: ${scoreData.total_score}?`;
+                            const message = `Do you want to save the score for training session: ${trainingId}, total score: ${scoreData.total_score}?`;
 
                             openConfirmModal(message, function () {
-                                saveScore(scoreData); 
+                                saveTrainingScore(scoreData); 
                             });
                         });
                     });
                 });
             })
-            .catch(error => console.error('Error fetching scores:', error));
+            .catch(error => console.error('Error fetching training scores:', error));
     }
 }
 
-// Fetch saved scores for the logged-in athlete
-function fetchSavedScores(tournamentId) {
-    return fetch(`<?php echo BASE_URL; ?>app/handlers/LocalSavedScoreHandler.php?competition_id=${tournamentId}`)
+// Fetch saved training scores for the logged-in athlete
+function fetchSavedScores(trainingId) {
+    return fetch(`<?php echo BASE_URL; ?>app/handlers/TrainTeamSavedScoreHandler.php?training_id=${trainingId}`)
         .then(response => response.json())
         .catch(error => {
-            console.error('Error fetching saved scores:', error);
+            console.error('Error fetching saved training scores:', error);
             return [];
         });
 }
@@ -324,38 +324,38 @@ function debounce(func, delay) {
 }
 
 // Convert input to uppercase
-document.getElementById('tournament-id-input').addEventListener('input', function() {
+document.getElementById('training-id-input').addEventListener('input', function() {
     this.value = this.value.toUpperCase();  
 });
 
-// Tournament dropdown
-document.getElementById('tournament-select').addEventListener('change', function () {
-    const tournamentId = this.value;
-    document.getElementById('tournament-id-input').value = '';
+// Training session dropdown
+document.getElementById('training-select').addEventListener('change', function () {
+    const trainingId = this.value;
+    document.getElementById('training-id-input').value = '';
     fetchScores();  
 });
 
-// Tournament ID 
-document.getElementById('tournament-id-input').addEventListener('keyup', debounce(function () {
-    const tournamentId = this.value.trim();
-    if (tournamentId) {
-        document.getElementById('tournament-select').value = ''; 
+// Training session ID 
+document.getElementById('training-id-input').addEventListener('keyup', debounce(function () {
+    const trainingId = this.value.trim();
+    if (trainingId) {
+        document.getElementById('training-select').value = ''; 
     }
     fetchScores();  
 }, 500));  
 
-// Save score to the server
-function saveScore(scoreData) {
-    let tournamentId = document.getElementById('tournament-id-input').value.trim() || document.getElementById('tournament-select').value;
+// Save training score to the server
+function saveTrainingScore(scoreData) {
+    let trainingId = document.getElementById('training-id-input').value.trim() || document.getElementById('training-select').value;
     
-    if (!tournamentId) {
-        alert('No tournament selected or entered.');
+    if (!trainingId) {
+        alert('No training session selected or entered.');
         return;
     }
-    tournamentId = tournamentId.toUpperCase();
-    scoreData.competition_id = tournamentId;
+    trainingId = trainingId.toUpperCase();
+    scoreData.training_id = trainingId;
 
-    fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php', {
+    fetch('<?php echo BASE_URL; ?>app/handlers/TrainTeamScoringHandler.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -368,7 +368,7 @@ function saveScore(scoreData) {
             updateSavedScoreUI(scoreData.athlete_id);  
             const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
             modal.hide();
-        } else if (data.status === 'error' && data.message === 'You have already saved a score for this competition.') {
+        } else if (data.status === 'error' && data.message === 'You have already saved a score for this training session.') {
             updateSavedScoreUI(scoreData.athlete_id);
             showMessage('Information', 'The score has already been saved.');
             const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
@@ -378,14 +378,14 @@ function saveScore(scoreData) {
         }
     })
     .catch(error => {
-        showMessage('Error', 'An error occurred while saving the score.');
-        console.error('Error saving score:', error);
+        showMessage('Error', 'An error occurred while saving the training score.');
+        console.error('Error saving training score:', error);
     });
 }
 
-// Function to delete a score
-function deleteScore(scoreId) {
-    fetch(`<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php?score_id=${scoreId}`, {
+// Function to delete a training score
+function deleteTrainingScore(scoreId) {
+    fetch(`<?php echo BASE_URL; ?>app/handlers/TrainTeamScoringHandler.php?score_id=${scoreId}`, {
         method: 'DELETE',
     })
     .then(response => response.json())
@@ -394,17 +394,17 @@ function deleteScore(scoreId) {
             document.querySelector(`button[data-score-id="${scoreId}"]`).closest('tr').remove();
             const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
             modal.hide();  
-            showMessage('Success', 'Score deleted successfully'); 
+            showMessage('Success', 'Training score deleted successfully'); 
         } else {
-            throw new Error(data.message || 'Failed to delete the score');
+            throw new Error(data.message || 'Failed to delete the training score');
         }
     })
     .catch(error => showMessage('Error', error.message));
 }
 
-// Update UI for saved scores (for athletes)
+// Update UI for saved training scores (for athletes)
 function updateSavedScoreUI(athleteId) {
-    const rows = document.querySelectorAll('#ianseo-scores tbody tr');
+    const rows = document.querySelectorAll('#training-scores tbody tr');
     rows.forEach(row => {
         const saveButton = row.querySelector('.save-btn');
         if (saveButton && saveButton.dataset.score) {
@@ -451,8 +451,8 @@ function showMessage(title, message) {
 document.querySelectorAll('.delete-btn').forEach(button => {
     button.addEventListener('click', function () {
         const scoreId = this.getAttribute('data-score-id');
-        openConfirmModal('Are you sure you want to delete this score?', function () {
-            deleteScore(scoreId);
+        openConfirmModal('Are you sure you want to delete this training score?', function () {
+            deleteTrainingScore(scoreId);
         });
     });
 });

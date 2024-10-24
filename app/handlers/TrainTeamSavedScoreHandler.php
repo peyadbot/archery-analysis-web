@@ -2,13 +2,13 @@
 require_once __DIR__ . '/../../config/config.php';  
 
 // Use to fetch saved score
-if (isset($_GET['competition_id'])) {
-    $competition_id = $_GET['competition_id'];
+if (isset($_GET['training_id'])) {
+    $training_id = $_GET['training_id'];
 
     try {
-        // Fetch saved scores for the given competition_id
-        $stmt = $pdo->prepare('SELECT mareos_id FROM local_comp_scores WHERE competition_id = ?');
-        $stmt->execute([$competition_id]);
+        // Fetch saved scores for the given training_id
+        $stmt = $pdo->prepare('SELECT mareos_id FROM team_training_scores WHERE training_id = ?');
+        $stmt->execute([$training_id]);
         $savedScores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         // Set header and output JSON without any other content before it
@@ -20,7 +20,7 @@ if (isset($_GET['competition_id'])) {
         echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
     }
 } else {
-    // Handle missing competition_id error
+    // Handle missing training_id error
     header('Content-Type: application/json');
-    echo json_encode(['error' => 'Invalid competition_id']);
+    echo json_encode(['error' => 'Invalid training_id']);
 }
