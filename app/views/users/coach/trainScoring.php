@@ -1,5 +1,5 @@
 <?php
-$title = 'Athletes Local Scoring';
+$title = 'Athletes Training Scoring';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 require_once __DIR__ . '/../../../handlers/CoachAthleteHandler.php';
 
@@ -36,7 +36,7 @@ try {
     <!-- Header -->
     <div class="row bg-dark text-white py-4 mb-5" style="border-radius: 10px;">
         <div class="col">
-            <h3 class="m-0">Coach Scoring Dashboard</h3>
+            <h3 class="m-0">Athletes Training Scoring Dashboard</h3>
         </div>
     </div>
 
@@ -48,16 +48,16 @@ try {
         <div class="col-12">
             <!-- Dropdown -->
             <div class="mb-4">
-                <label for="tournament-select" class="form-label">Choose a tournament:</label>
-                <select id="tournament-select" class="form-select">
-                    <option value="">Select a tournament</option>
+                <label for="training-select" class="form-label">Choose a training session:</label>
+                <select id="training-select" class="form-select">
+                    <option value="">Select a training session</option>
                 </select>
             </div>
 
             <!-- ID search -->
             <div class="mb-4">
-                <label for="tournament-id-input" class="form-label">Or enter tournament ID:</label>
-                <input type="text" id="tournament-id-input" class="form-control" placeholder="Enter tournament ID">
+                <label for="training-id-input" class="form-label">Or enter training ID:</label>
+                <input type="text" id="training-id-input" class="form-control" placeholder="Enter training ID">
             </div>
 
             <!-- Scores Table -->
@@ -69,14 +69,18 @@ try {
                             <th>No</th>
                             <th>Mareos ID</th>
                             <th>Athlete Name</th>
-                            <th>Competition ID</th>
+                            <th>Training ID</th>
                             <th>Event Name</th>
                             <th>Distance</th>
-                            <th>M 1 Score</th>
-                            <th>M 2 Score</th>
+                            <th>M1 Score</th>
+                            <th>M1 10+X</th>
+                            <th>M1 10/9</th>
+                            <th>M2 Score</th>
+                            <th>M2 10+X</th>
+                            <th>M2 10/9</th>
                             <th>Total Score</th>
-                            <th>10</th>
-                            <th>9</th>
+                            <th>Total 10+X</th>
+                            <th>Total 10/9</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -134,37 +138,37 @@ document.getElementById('refreshPage').addEventListener('click', function() {
     location.reload();
 });
 
-// Fetch the list of competitions and populate the dropdown
-function fetchTournaments() {
-    fetch('https://ianseo.sukanfc.com/fetch_tournaments.php')
+// Fetch the list of training sessions and populate the dropdown
+function fetchTrainings() {
+    fetch('<?php echo TRAIN_LIST_URL; ?>')
         .then(response => response.json())
         .then(data => {
-            const tournamentSelect = document.getElementById('tournament-select');
-            data.forEach(tournament => {
+            const trainingSelect = document.getElementById('training-select');
+            data.forEach(training => {
                 const option = document.createElement('option');
-                option.value = tournament.ToCode;
-                option.text = `[${tournament.ToCode}] ${tournament.ToName}`;
-                tournamentSelect.appendChild(option);
+                option.value = training.ToCode;
+                option.text = `[${training.ToCode}] ${training.ToName}`;
+                trainingSelect.appendChild(option);
             });
         })
-        .catch(error => displayError('Error fetching tournaments', error.message));
+        .catch(error => displayError('Error fetching training sessions', error.message));
 }
 
-// Fetch scores based on the selected tournament
-function fetchTournamentScores(tournamentId) {
-    return fetch(`https://ianseo.sukanfc.com/fetch_ianseo.php?tournament_code=${tournamentId}`)
+// Fetch scores based on the selected training session
+function fetchTrainingScores(trainingId) {
+    return fetch(`<?php echo TRAIN_SCORE_URL; ?>?tournament_code=${trainingId}`)
         .then(response => response.json())
         .then(data => {
-            fetchSavedScores(tournamentId).then(savedScores => {
-                populateTable(tournamentId, data, savedScores);
+            fetchSavedScores(trainingId).then(savedScores => {
+                populateTable(trainingId, data, savedScores);
             });
         })
         .catch(error => displayError('Error fetching scores', error.message));
 }
 
 // Fetch saved scores from the backend
-function fetchSavedScores(tournamentId) {
-    return fetch(`<?php echo BASE_URL; ?>app/handlers/LocalSavedScoreHandler.php?competition_id=${tournamentId}`)
+function fetchSavedScores(trainingId) {
+    return fetch(`<?php echo BASE_URL; ?>app/handlers/TrainTeamSavedScoreHandler.php?training_id=${trainingId}`)
         .then(response => response.json())
         .catch(error => {
             console.error('Error fetching saved scores:', error);
@@ -173,7 +177,7 @@ function fetchSavedScores(tournamentId) {
 }
 
 // Populate the table with athlete data
-function populateTable(tournamentId, data, savedScores) {
+function populateTable(trainingId, data, savedScores) {
     const tableBody = document.querySelector('#ianseo-scores tbody');
     tableBody.innerHTML = ''; 
 
@@ -191,14 +195,18 @@ function populateTable(tournamentId, data, savedScores) {
                     <td class="align-middle">${position}</td>
                     <td class="align-middle">${row.athlete_id}</td>
                     <td class="align-middle">${matchingAthlete.name}</td>
-                    <td class="align-middle">${tournamentId}</td>
+                    <td class="align-middle">${trainingId}</td>
                     <td class="align-middle">${row.event_name}</td>
                     <td class="align-middle">${row.event_distance}m</td>
-                    <td class="align-middle">${row.m_1_score}</td>
-                    <td class="align-middle">${row.m_2_score}</td>
+                    <td class="table-primary align-middle">${row.m1_score}</td>
+                    <td class="table-primary align-middle">${row.m1_10X}</td>
+                    <td class="table-primary align-middle">${row.m1_109}</td>
+                    <td class="table-info align-middle">${row.m2_score}</td>
+                    <td class="table-info align-middle">${row.m2_10X}</td>
+                    <td class="table-info align-middle">${row.m2_109}</td>
                     <td class="align-middle">${row.total_score}</td>
-                    <td class="align-middle">${row.total_10}</td>
-                    <td class="align-middle">${row.total_9}</td>
+                    <td class="align-middle">${row.total_10X}</td>
+                    <td class="align-middle">${row.total_109}</td>
                     <td class="d-flex justify-content-center align-items-center">
                         <button class="btn btn-primary save-btn" data-score='${JSON.stringify({...row, athlete_name: matchingAthlete.name})}' ${isSaved ? 'disabled' : ''}>${isSaved ? 'Saved' : 'Save Score'}</button>
                     </td>
@@ -212,7 +220,7 @@ function populateTable(tournamentId, data, savedScores) {
     if (!athletesFound) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="13" class="text-center">No athletes found for this tournament.</td>
+                <td colspan="13" class="text-center">No athletes found for this training session.</td>
             </tr>`;
     }
     addEventListeners();  
@@ -241,13 +249,13 @@ function addEventListeners() {
     selectAllCheckbox.addEventListener('change', selectAllHandler);
 }
 
-// Event listener for tournament ID input
-document.getElementById('tournament-id-input').addEventListener('input', function() {
+// Event listener for training ID input
+document.getElementById('training-id-input').addEventListener('input', function() {
     this.value = this.value.toUpperCase();  
-    const tournamentId = this.value.trim();
-    if (tournamentId) {
-        document.getElementById('tournament-select').value = '';
-        fetchTournamentScores(tournamentId);
+    const trainingId = this.value.trim();
+    if (trainingId) {
+        document.getElementById('training-select').value = '';
+        fetchTrainingScores(trainingId);
     }
 });
 
@@ -282,17 +290,17 @@ function checkboxChangeHandler() {
 }
 
 // Uncheck checkbox
-document.getElementById('tournament-select').addEventListener('change', function () {
-    const tournamentId = this.value;
+document.getElementById('training-select').addEventListener('change', function () {
+    const trainingId = this.value;
     const selectAllCheckbox = document.getElementById('select-all');
 
     if (selectAllCheckbox) {
         selectAllCheckbox.checked = false;
     }
 
-    if (tournamentId) {
-        document.getElementById('tournament-id-input').value = '';  
-        fetchTournamentScores(tournamentId);
+    if (trainingId) {
+        document.getElementById('training-id-input').value = '';  
+        fetchTrainingScores(trainingId);
     }
 });
 
@@ -320,9 +328,9 @@ function saveScores(scores) {
 
 // Save score to the server
 function saveScore(scoreData) {
-    scoreData.competition_id = document.getElementById('tournament-select').value || document.getElementById('tournament-id-input').value;
+    scoreData.training_id = document.getElementById('training-select').value || document.getElementById('training-id-input').value;
 
-    return fetch('<?php echo BASE_URL; ?>app/handlers/LocalScoringHandler.php', {
+    return fetch('<?php echo BASE_URL; ?>app/handlers/TrainTeamScoringHandler.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -333,7 +341,7 @@ function saveScore(scoreData) {
     .then(data => {
         if (data.status === 'success') {
             updateSavedScoreUI(scoreData.athlete_id);
-        } else if (data.status === 'error' && data.message === 'You have already saved a score for this competition.') {
+        } else if (data.status === 'error' && data.message === 'You have already saved a score for this training session.') {
             updateSavedScoreUI(scoreData.athlete_id);
             displayError('Information', 'The score has already been saved for this athlete.');
         } else {
@@ -380,7 +388,7 @@ function displayError(title, message) {
     errorModal.show();
 }
 
-fetchTournaments();
+fetchTrainings();
 </script>
 
 <?php include '../../layouts/dashboard/footer.php'; ?>

@@ -50,7 +50,7 @@ function getDashboardData($user_id, $role) {
 
                 // Fetch the latest competition
                 try {
-                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $json = file_get_contents(COMP_LIST_URL);
                     $competitions = json_decode($json, true);
 
                     if (!empty($competitions)) {
@@ -65,7 +65,7 @@ function getDashboardData($user_id, $role) {
                 // Fetch all competition
                 try {
                     // Replace with the correct API endpoint
-                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $json = file_get_contents(COMP_LIST_URL);
                     $competitions = json_decode($json, true);
                 
                     $data['allCompetitions'] = $competitions; 
@@ -83,7 +83,7 @@ function getDashboardData($user_id, $role) {
 
                 // Fetch the list of tournaments from the Ianseo API
                 try {
-                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $json = file_get_contents(COMP_LIST_URL);
                     $competitions = json_decode($json, true);
 
                     if (!empty($competitions)) {
@@ -99,7 +99,7 @@ function getDashboardData($user_id, $role) {
                 // Fetch all competition
                 try {
                     // Replace with the correct API endpoint
-                    $json = file_get_contents('https://ianseo.sukanfc.com/fetch_tournaments.php');
+                    $json = file_get_contents(COMP_LIST_URL);
                     $competitions = json_decode($json, true);
                 
                     $data['allCompetitions'] = $competitions; 

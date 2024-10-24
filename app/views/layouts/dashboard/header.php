@@ -196,27 +196,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="competition.php" class="nav-link text-white">
-                        <i class="bi bi-trophy-fill"></i>
-                        <span>Competition</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="training.php" class="nav-link text-white">
-                        <i class="bi bi-bullseye"></i>
-                        <span>Training</span>
-                    </a>
-                </li>
-                <li>
                     <a href="manageAthletes.php" class="nav-link text-white">
                         <i class="bi bi-people-fill"></i>
                         <span>Athlete Management</span>
                     </a>
                 </li>
                 <li>
-                    <a href="localScoring.php" class="nav-link text-white">
-                        <i class="bi bi-clipboard-data-fill"></i>
-                        <span>Local Scoring</span>
+                    <a href="compScoring.php" class="nav-link text-white">
+                        <i class="bi bi-trophy-fill"></i>
+                        <span>Competition Scoring</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="trainScoring.php" class="nav-link text-white">
+                        <i class="bi bi-bullseye"></i>
+                        <span>Training Scoring</span>
                     </a>
                 </li>
             <?php endif ?>
