@@ -31,6 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $home_address = htmlspecialchars(trim($_POST['home_address']));
     $mareos_id = htmlspecialchars(trim($_POST['mareos_id']));
     $wareos_id = htmlspecialchars(trim($_POST['wareos_id']));
+    $fathers_name = htmlspecialchars(trim($_POST['fathers_name']));
+    $fathers_phone_number = htmlspecialchars(trim($_POST['fathers_phone_number']));
+    $mothers_name = htmlspecialchars(trim($_POST['mothers_name']));
+    $mothers_phone_number = htmlspecialchars(trim($_POST['mothers_phone_number']));
 
     // File uploads directories
     $profile_pic_dir = __DIR__ . '/../../public/images/profile_picture/';
@@ -89,7 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ic_file = ?, 
                     passport_file = ?,
                     mareos_id = ?,
-                    wareos_id = ?
+                    wareos_id = ?,
+                    fathers_name = ?,
+                    fathers_phone_number = ?,
+                    mothers_name = ?,
+                    mothers_phone_number = ?
                 WHERE user_id = ?
             ");
             $stmt->execute([
@@ -107,6 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $passport_file,
                 $mareos_id,
                 $wareos_id,
+                $fathers_name,
+                $fathers_phone_number,
+                $mothers_name,
+                $mothers_phone_number,
                 $user_id
             ]);
             $_SESSION['success'] = 'Profile updated successfully!';
@@ -117,8 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert new profile (only if needed)
         try {
             $stmt = $pdo->prepare("
-                INSERT INTO profiles (name, date_of_birth, phone_number, email, ic_number, passport_number, passport_expiry_date, passport_issue_place, home_address, profile_picture, ic_file, passport_file, mareos_id, wareos_id, user_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO profiles (name, date_of_birth, phone_number, email, ic_number, passport_number, passport_expiry_date, passport_issue_place, home_address, profile_picture, ic_file, passport_file, mareos_id, wareos_id, fathers_name, fathers_phone_number, mothers_name, mothers_phone_number, user_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
                 $name, 
@@ -135,6 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $passport_file,
                 $mareos_id,
                 $wareos_id,
+                $fathers_name,
+                $fathers_phone_number,
+                $mothers_name,
+                $mothers_phone_number,
                 $user_id
             ]);
             $_SESSION['success'] = 'Profile created successfully!';

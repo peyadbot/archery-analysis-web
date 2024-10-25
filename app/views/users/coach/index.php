@@ -2,23 +2,20 @@
 $title = 'Coach Dashboard';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 
-// Check if the user is logged in and has the coach role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'coach') {
     header('Location: ' . BASE_URL . 'app/views/auth/login.php');
     exit();
 }
 
-// Fetch dashboard data based on user role
 $userId = $_SESSION['user_id'];
 $role = $_SESSION['role'];
 
 $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
 $stmt->execute([$user_id]);
-$profile = $stmt->fetch(PDO::FETCH_ASSOC);
+$userprofile = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);
+$profile_incomplete = empty($userprofile['name']) || empty($userprofile['ic_number']) || empty($userprofile['email']) || empty($userprofile['phone_number']);
 
-// Get data
 try {
     $dashboardData = getDashboardData($userId, $role);
 } catch (Exception $e) {
@@ -112,22 +109,25 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
                             <div class="profile-info">
                                 <div class="row">
                                     <div class="col-6">
-                                        <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
+                                        <p><strong>Name:</strong> <?php echo htmlspecialchars($userprofile['name']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
+                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($userprofile['email']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
+                                        <p><strong>Mareos ID:</strong> <?php echo htmlspecialchars($userprofile['mareos_id']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
+                                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($userprofile['phone_number']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
+                                        <p><strong>IC Number:</strong> <?php echo htmlspecialchars($userprofile['ic_number']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                                        <p><strong>Passport:</strong> <?php echo htmlspecialchars($userprofile['passport_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($userprofile['home_address']); ?></p>
                                     </div>
                                 </div>
                             </div>

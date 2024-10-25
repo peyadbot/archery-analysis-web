@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add') {
         // Handle adding a new athlete
         try {
-            $stmt = $pdo->prepare('SELECT user_id FROM athlete_details WHERE mareos_id = :mareos_id');
+            $stmt = $pdo->prepare('SELECT user_id FROM profiles WHERE mareos_id = :mareos_id');
             $stmt->bindParam(':mareos_id', $mareos_id);
             $stmt->execute();
             $athlete = $stmt->fetch();

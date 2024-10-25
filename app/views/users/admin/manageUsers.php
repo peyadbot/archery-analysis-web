@@ -15,29 +15,34 @@ $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 try {
     if ($filterRole === 'coach') {
         $stmt = $pdo->prepare('
-            SELECT u.user_id, u.username, p.name, u.role, u.created_at, u.updated_at 
+            SELECT u.user_id, u.username, p.mareos_id, p.name, u.role, u.created_at, u.updated_at 
             FROM users u 
             LEFT JOIN profiles p ON p.user_id = u.user_id 
             WHERE u.role = "coach"
+            ORDER BY u.user_id ASC
         ');
     } elseif ($filterRole === 'athlete') {
         $stmt = $pdo->prepare('
-            SELECT u.user_id, u.username, p.name, ad.mareos_id, u.role, u.created_at, u.updated_at 
+            SELECT u.user_id, u.username, p.name, p.mareos_id, u.role, u.created_at, u.updated_at 
             FROM users u 
             LEFT JOIN profiles p ON p.user_id = u.user_id 
-            LEFT JOIN athlete_details ad ON ad.user_id = u.user_id 
             WHERE u.role = "athlete"
+            ORDER BY u.user_id ASC
         ');
     } elseif ($filterRole === 'admin') {
         $stmt = $pdo->prepare('
-            SELECT user_id, username, role, created_at, updated_at 
-            FROM users 
-            WHERE role = "admin"
+            SELECT u.user_id, u.username, u.role, p.mareos_id, u.created_at, u.updated_at 
+            FROM users u
+            LEFT JOIN profiles p ON p.user_id = u.user_id
+            WHERE u.role = "admin"
+            ORDER BY u.user_id ASC
         ');
     } else {
         $stmt = $pdo->prepare('
-            SELECT user_id, username, role, created_at, updated_at 
-            FROM users 
+            SELECT u.user_id, u.username, u.role, p.mareos_id, u.created_at, u.updated_at 
+            FROM users u
+            LEFT JOIN profiles p ON p.user_id = u.user_id
+            ORDER BY u.user_id ASC
         ');
     }
     $stmt->execute();
@@ -142,7 +147,7 @@ try {
                                 </div>
                             <?php else: ?>
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Password e</label>
+                                    <label for="password" class="form-label">Password</label>
                                     <input type="password" name="password" class="form-control" id="password" required>
                                     <small id="passwordInfo" class="password-info">Password must be at least 8 characters long.</small>
                                 </div>
@@ -165,13 +170,14 @@ try {
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
-                <th>ID</th>
+                <th>No</th>
+                <th>Mareos ID</th>
                 <th>Username</th>
                 <?php if ($filterRole === 'athlete' || $filterRole === 'coach'): ?>
                     <th>Name</th>
                 <?php endif; ?>
                 <?php if ($filterRole === 'athlete'): ?>
-                    <th>Mareos ID</th> <!-- Only for athletes -->
+                    <th>Mareos ID</th>
                 <?php endif; ?>
                 <th>Role</th>
                 <th>Created At</th>
@@ -184,6 +190,7 @@ try {
                 <?php foreach ($users as $user): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($user['user_id']); ?></td>
+                        <td><?php echo htmlspecialchars($user['mareos_id']); ?></td>
                         <td><?php echo htmlspecialchars($user['username']); ?></td>
                         <?php if ($filterRole === 'athlete' || $filterRole === 'coach'): ?>
                             <td><?php echo !empty($user['name']) ? htmlspecialchars($user['name']) : '-'; ?></td>

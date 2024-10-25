@@ -114,19 +114,31 @@ function getDashboardData($user_id, $role) {
                 $stmt = $pdo->prepare('
                     SELECT COUNT(DISTINCT competition_id) AS total_competitions
                     FROM (
-                        SELECT competition_id FROM local_comp_scores WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        SELECT competition_id FROM local_comp_scores WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                         UNION ALL
-                        SELECT competition_id FROM international_comp_scores WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        SELECT competition_id FROM international_comp_scores WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                     ) AS combined_competitions
                 ');
                 $stmt->execute([$user_id, $user_id]);
                 $data['competitionCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['total_competitions'];
 
+                // Fetch the total number of trainings the athlete has participated in
+                $stmt = $pdo->prepare('
+                    SELECT COUNT(DISTINCT training_id) AS total_trainings
+                    FROM (
+                        SELECT training_id FROM team_training_scores WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
+                        UNION ALL
+                        SELECT training_id FROM personal_training_scores WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
+                    ) AS combined_trainings
+                ');
+                $stmt->execute([$user_id, $user_id]);
+                $data['trainingCount'] = $stmt->fetch(PDO::FETCH_ASSOC)['total_trainings'];
+
                 // Fetch the best score for Local Competitions
                 $stmt = $pdo->prepare('
                     SELECT MAX(total_score) AS best_local_score
                     FROM local_comp_scores
-                    WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                    WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                 ');
                 $stmt->execute([$user_id]);
                 $data['bestLocalScore'] = $stmt->fetch(PDO::FETCH_ASSOC)['best_local_score'];
@@ -135,7 +147,7 @@ function getDashboardData($user_id, $role) {
                 $stmt = $pdo->prepare('
                     SELECT MAX(total_score) AS best_international_score
                     FROM international_comp_scores
-                    WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                    WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                 ');
                 $stmt->execute([$user_id]);
                 $data['bestInternationalScore'] = $stmt->fetch(PDO::FETCH_ASSOC)['best_international_score'];
@@ -145,13 +157,13 @@ function getDashboardData($user_id, $role) {
                     SELECT competition_id, total_score, created_at FROM (
                         SELECT competition_id, total_score, created_at 
                         FROM local_comp_scores 
-                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                         
                         UNION ALL
                         
                         SELECT competition_id, total_score, created_at 
                         FROM international_comp_scores 
-                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                     ) AS combined_competitions
                     ORDER BY created_at DESC LIMIT 4
                 ');
@@ -163,12 +175,12 @@ function getDashboardData($user_id, $role) {
                     SELECT month, SUM(local_total) AS local_total, SUM(international_total) AS international_total FROM (
                         SELECT DATE_FORMAT(created_at, "%Y-%m") AS month, SUM(total_score) AS local_total, 0 AS international_total
                         FROM local_comp_scores
-                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                         GROUP BY month
                         UNION ALL
                         SELECT DATE_FORMAT(created_at, "%Y-%m") AS month, 0 AS local_total, SUM(total_score) AS international_total
                         FROM international_comp_scores
-                        WHERE mareos_id = (SELECT mareos_id FROM athlete_details WHERE user_id = ?)
+                        WHERE mareos_id = (SELECT mareos_id FROM profiles WHERE user_id = ?)
                         GROUP BY month
                     ) AS combined_scores
                     GROUP BY month

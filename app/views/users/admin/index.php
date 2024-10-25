@@ -38,7 +38,7 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
 
     <!-- Dashboard Overview -->
     <div class="row gy-4 mb-5">
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-4 col-md-6">
             <div class="card border-0 shadow-lg text-center">
                 <div class="card-body">
                     <i class="bi bi-graph-up-arrow text-primary mb-3" style="font-size: 2.5rem;"></i>
@@ -51,20 +51,7 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card border-0 shadow-lg text-center">
-                <div class="card-body">
-                    <i class="bi bi-person-check text-success mb-3" style="font-size: 2.5rem;"></i>
-                    <h5 class="card-title">Trainings</h5>
-                    <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['trainingCount']); ?></h2>
-                </div>
-                <div class="card-footer bg-transparent border-top-0">
-                    <a href="#" class="btn btn-outline-success">View Trainings</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-4 col-md-6">
             <div class="card border-0 shadow-lg text-center">
                 <div class="card-body">
                     <i class="bi bi-people text-info mb-3" style="font-size: 2.5rem;"></i>
@@ -72,12 +59,12 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
                     <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['athleteCount']); ?></h2>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="#" class="btn btn-outline-info">Manage Athletes</a>
+                    <a href="manageUsers.php?filterRole=athlete" class="btn btn-outline-info">Manage Athletes</a>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-4 col-md-6">
             <div class="card border-0 shadow-lg text-center">
                 <div class="card-body">
                     <i class="bi bi-people text-info mb-3" style="font-size: 2.5rem;"></i>
@@ -85,7 +72,7 @@ $latestCompetitions = $dashboardData['latestCompetitions'];
                     <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['coachCount']); ?></h2>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="#" class="btn btn-outline-info">Manage Coaches</a>
+                    <a href="manageUsers.php?filterRole=coach" class="btn btn-outline-info">Manage Coaches</a>
                 </div>
             </div>
         </div>

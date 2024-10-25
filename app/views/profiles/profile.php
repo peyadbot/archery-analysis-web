@@ -65,13 +65,12 @@ $user = $stmt->fetch();
                             <?php endif; ?>
 
                             <p class="card-text"><strong>Name:</strong> <?php echo !empty($profile['name']) ? htmlspecialchars($profile['name']) : 'No name provided'; ?></p>
-                            <p class="card-text"><strong>Email:</strong> <?php echo !empty($profile['email']) ? htmlspecialchars($profile['email']) : 'No email provided'; ?></p>
+                            <p class="card-text"><strong>MAREOS ID:</strong> <?php echo !empty($profile['mareos_id']) ? htmlspecialchars($profile['mareos_id']) : 'No MAREOS ID provided'; ?></p>
+                            <p class="card-text"><strong>WAREOS ID:</strong> <?php echo !empty($profile['wareos_id']) ? htmlspecialchars($profile['wareos_id']) : 'No WAREOS ID provided'; ?></p>
                             <p class="card-text"><strong>Phone Number:</strong> <?php echo !empty($profile['phone_number']) ? htmlspecialchars($profile['phone_number']) : 'No phone number provided'; ?></p>
                             <p class="card-text"><strong>Date of Birth:</strong> <?php echo !empty($profile['date_of_birth']) ? htmlspecialchars($profile['date_of_birth']) : 'No date of birth provided'; ?></p>
                             <p class="card-text"><strong>IC Number:</strong> <?php echo !empty($profile['ic_number']) ? htmlspecialchars($profile['ic_number']) : 'No IC number provided'; ?></p>
                             <p class="card-text"><strong>Passport Number:</strong> <?php echo !empty($profile['passport_number']) ? htmlspecialchars($profile['passport_number']) : 'No passport number provided'; ?></p>
-                            <p class="card-text"><strong>Passport Expiry Date:</strong> <?php echo !empty($profile['passport_expiry_date']) ? htmlspecialchars($profile['passport_expiry_date']) : 'No expiry date provided'; ?></p>
-                            <p class="card-text"><strong>Passport Issue Place:</strong> <?php echo !empty($profile['passport_issue_place']) ? htmlspecialchars($profile['passport_issue_place']) : 'No passport issue place provided'; ?></p>
                             <p class="card-text"><strong>Home Address:</strong> <?php echo !empty($profile['home_address']) ? htmlspecialchars($profile['home_address']) : 'No address provided'; ?></p>
 
                             <a href="profile-form.php" class="btn btn-primary mt-3">Update Profile</a>
@@ -90,8 +89,6 @@ $user = $stmt->fetch();
                             <h2>Archery Details</h2>
                         </div>
                         <div class="card-body">
-                            <p class="card-text"><strong>MAREOS ID:</strong> <?php echo !empty($athlete['mareos_id']) ? htmlspecialchars($athlete['mareos_id']) : 'Not provided'; ?></p>
-                            <p class="card-text"><strong>WAREOS ID:</strong> <?php echo !empty($athlete['wareos_id']) ? htmlspecialchars($athlete['wareos_id']) : 'Not provided'; ?></p>
                             <p class="card-text"><strong>Program:</strong> <?php echo !empty($athlete['program']) ? htmlspecialchars($athlete['program']) : 'Not provided'; ?></p>
                             <p class="card-text"><strong>Coach Name:</strong> <?php echo !empty($athlete['coach_name']) ? htmlspecialchars($athlete['coach_name']) : 'Not provided'; ?></p>
                             <p class="card-text"><strong>School:</strong> <?php echo !empty($athlete['school']) ? htmlspecialchars($athlete['school']) : 'Not provided'; ?></p>
@@ -102,11 +99,11 @@ $user = $stmt->fetch();
                             <p class="card-text"><strong>Arrow Length:</strong> <?php echo !empty($athlete['arrow_length']) ? htmlspecialchars($athlete['arrow_length']) : 'Not provided'; ?> cm</p>
                             <p class="card-text"><strong>Limbs Weight:</strong> <?php echo !empty($athlete['limbs_weight']) ? htmlspecialchars($athlete['limbs_weight']) : 'Not provided'; ?> kg</p>
 
-                            <h4 class="mt-4">Performance Metrics</h4>
-                            <p class="card-text"><strong>Personal Best Before:</strong> <?php echo !empty($athlete['personal_best_before']) ? htmlspecialchars($athlete['personal_best_before']) : 'Not provided'; ?></p>
-                            <p class="card-text"><strong>Current Personal Best:</strong> <?php echo !empty($athlete['current_personal_best']) ? htmlspecialchars($athlete['current_personal_best']) : 'Not provided'; ?></p>
-                            <p class="card-text"><strong>KPI (72 Arrows):</strong> <?php echo !empty($athlete['kpi_72_arrows']) ? htmlspecialchars($athlete['kpi_72_arrows']) : 'Not provided'; ?></p>
-                            <p class="card-text"><strong>KPI Average Per Arrow:</strong> <?php echo !empty($athlete['kpi_avg_per_arrow']) ? htmlspecialchars($athlete['kpi_avg_per_arrow']) : 'Not provided'; ?></p>
+                            <h4 class="mt-4">Fitness Test Results</h4>
+                            <p class="card-text"><strong>Height:</strong> <?php echo !empty($athlete['height']) ? htmlspecialchars($athlete['height']) : 'Not provided'; ?> cm</p>
+                            <p class="card-text"><strong>Weight:</strong> <?php echo !empty($athlete['weight']) ? htmlspecialchars($athlete['weight']) : 'Not provided'; ?> kg</p>
+                            <p class="card-text"><strong>BMI:</strong> <?php echo !empty($athlete['bmi']) ? htmlspecialchars($athlete['bmi']) : 'Not provided'; ?></p>
+                            <p class="card-text"><strong>Bleep Test:</strong> <?php echo !empty($athlete['bleep_test']) ? htmlspecialchars($athlete['bleep_test']) : 'Not provided'; ?></p>
 
                             <a href="athlete-form.php" class="btn btn-primary mt-3">Update Details</a>
                         </div>

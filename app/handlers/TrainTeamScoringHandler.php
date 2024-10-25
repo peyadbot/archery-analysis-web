@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['score_id'])) {
         }
 
         // Now check if the user (athlete or coach) has permission to delete the score
-        $stmt = $pdo->prepare('SELECT user_id FROM athlete_details WHERE mareos_id = ?');
+        $stmt = $pdo->prepare('SELECT user_id FROM profiles WHERE mareos_id = ?');
         $stmt->execute([$score['mareos_id']]);
         $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['status' => 'error', 'message' => 'You have already saved a score for this training.']);
         } else {
             // Fetch athlete's user_id from mareos_id
-            $stmt = $pdo->prepare('SELECT user_id FROM athlete_details WHERE mareos_id = ?');
+            $stmt = $pdo->prepare('SELECT user_id FROM profiles WHERE mareos_id = ?');
             $stmt->execute([$data['athlete_id']]);
             $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
 

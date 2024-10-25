@@ -12,14 +12,14 @@ $role = $_SESSION['role'];
 
 $stmt = $pdo->prepare('SELECT * FROM profiles WHERE user_id = ?');
 $stmt->execute([$userId]);
-$profile = $stmt->fetch(PDO::FETCH_ASSOC);
+$userprofile = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmt = $pdo->prepare('SELECT * FROM athlete_details WHERE user_id = ?');
 $stmt->execute([$userId]);
 $athlete_details = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$profile_incomplete = empty($profile['name']) || empty($profile['ic_number']) || empty($profile['email']) || empty($profile['phone_number']);
-$detail_incomplete = empty($athlete_details['mareos_id']) || empty($athlete_details['wareos_id']) || empty($athlete_details['bow_type']) || empty($athlete_details['bmi']);
+$profile_incomplete = empty($userprofile['name']) || empty($userprofile['ic_number']) || empty($userprofile['email']) || empty($userprofile['phone_number']); 
+$detail_incomplete = empty($athlete_details['started_archery']) || empty($athlete_details['bow_type']) || empty($athlete_details['bmi']);
 
 try {
     if (!$profile_incomplete) {
@@ -68,11 +68,11 @@ try {
                 <div class="card border-0 shadow-lg text-center">
                     <div class="card-body">
                         <i class="bi bi-trophy-fill text-primary mb-3" style="font-size: 2.5rem;"></i>
-                        <h5 class="card-title">Matches</h5>
+                        <h5 class="card-title">Competition Matches</h5>
                         <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['competitionCount']); ?></h2>
                     </div>
                     <div class="card-footer bg-transparent border-top-0">
-                        <a href="<?php echo BASE_URL . 'app/views/users/athlete/compHome.php'; ?>" class="btn btn-outline-primary">View Stats</a>
+                        <a href="<?php echo BASE_URL . 'app/views/users/athlete/statisticHome.php?type=competition'; ?>" class="btn btn-outline-primary">View Stats</a>
                     </div>
                 </div>
             </div>
@@ -104,11 +104,11 @@ try {
                 <div class="card border-0 shadow-lg text-center">
                     <div class="card-body">
                         <i class="bi bi-bar-chart-fill text-warning mb-3" style="font-size: 2.5rem;"></i>
-                        <h5 class="card-title">Training Progress</h5>
-                        <h2 class="display-4">80%</h2>
+                        <h5 class="card-title">Training Matches</h5>
+                        <h2 class="display-4"><?php echo htmlspecialchars($dashboardData['trainingCount']); ?></h2>
                     </div>
                     <div class="card-footer bg-transparent border-top-0">
-                        <a href="#" class="btn btn-outline-warning">View Progress</a>
+                        <a href="<?php echo BASE_URL . 'app/views/users/athlete/statisticHome.php?type=training'; ?>" class="btn btn-outline-warning">View Stats</a>
                     </div>
                 </div>
             </div>
@@ -166,22 +166,25 @@ try {
                             <div class="profile-info">
                                 <div class="row">
                                     <div class="col-6">
-                                        <p><strong>Name:</strong> <?php echo htmlspecialchars($profile['name']); ?></p>
+                                        <p><strong>Name:</strong> <?php echo htmlspecialchars($userprofile['name']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($profile['email']); ?></p>
+                                        <p><strong>Email:</strong> <?php echo htmlspecialchars($userprofile['email']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($profile['phone_number']); ?></p>
+                                        <p><strong>Mareos ID:</strong> <?php echo htmlspecialchars($userprofile['mareos_id']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>IC Number:</strong> <?php echo htmlspecialchars($profile['ic_number']); ?></p>
+                                        <p><strong>Phone:</strong> <?php echo htmlspecialchars($userprofile['phone_number']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Passport:</strong> <?php echo htmlspecialchars($profile['passport_number']); ?></p>
+                                        <p><strong>IC Number:</strong> <?php echo htmlspecialchars($userprofile['ic_number']); ?></p>
                                     </div>
                                     <div class="col-6">
-                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($profile['home_address']); ?></p>
+                                        <p><strong>Passport:</strong> <?php echo htmlspecialchars($userprofile['passport_number']); ?></p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><strong>Address:</strong> <?php echo htmlspecialchars($userprofile['home_address']); ?></p>
                                     </div>
                                 </div>
                             </div>

@@ -34,6 +34,8 @@ if (!$user) {
             <p><?php echo !empty($user['profile_picture']) ? '<img src="' . BASE_URL . 'public/images/profile_picture/' . htmlspecialchars($user['profile_picture']) . '" alt="Profile Picture" class="img-thumbnail" style="max-width: 150px;">' : 'Profile picture not uploaded'; ?></p>
             <p><strong>Username:</strong> <?php echo !empty($user['username']) ? htmlspecialchars($user['username']) : 'Not filled in'; ?></p>
             <p><strong>Email:</strong> <?php echo !empty($user['email']) ? htmlspecialchars($user['email']) : 'Not filled in'; ?></p>
+            <p><strong>MAREOS ID:</strong> <?php echo !empty($user['mareos_id']) ? htmlspecialchars($user['mareos_id']) : 'Not filled in'; ?></p>
+            <p><strong>WAREOS ID:</strong> <?php echo !empty($user['wareos_id']) ? htmlspecialchars($user['wareos_id']) : 'Not filled in'; ?></p>
             <p><strong>Date of Birth:</strong> <?php echo !empty($user['date_of_birth']) ? htmlspecialchars($user['date_of_birth']) : 'Not filled in'; ?></p>
             <p><strong>Phone Number:</strong> <?php echo !empty($user['phone_number']) ? htmlspecialchars($user['phone_number']) : 'Not filled in'; ?></p>
             <p><strong>IC Number:</strong> <?php echo !empty($user['ic_number']) ? htmlspecialchars($user['ic_number']) : 'Not filled in'; ?></p>
@@ -45,16 +47,15 @@ if (!$user) {
             <p><strong>Home Address:</strong> <?php echo !empty($user['home_address']) ? htmlspecialchars($user['home_address']) : 'Not filled in'; ?></p>
             <p><strong>Gender:</strong> <?php echo !empty($user['gender']) ? htmlspecialchars($user['gender']) : 'Not filled in'; ?></p>
 
-            <?php if (!empty($user['athlete_id'])): ?>
-                <h4 class="mt-4 mb-2"><strong>Family Information</strong></h4>
-                <p><strong>Father's Name:</strong> <?php echo !empty($user['fathers_name']) ? htmlspecialchars($user['fathers_name']) : 'Not filled in'; ?></p>
-                <p><strong>Father's Phone Number:</strong> <?php echo !empty($user['fathers_phone_number']) ? htmlspecialchars($user['fathers_phone_number']) : 'Not filled in'; ?></p>
-                <p><strong>Mother's Name:</strong> <?php echo !empty($user['mothers_name']) ? htmlspecialchars($user['mothers_name']) : 'Not filled in'; ?></p>
-                <p><strong>Mother's Phone Number:</strong> <?php echo !empty($user['mothers_phone_number']) ? htmlspecialchars($user['mothers_phone_number']) : 'Not filled in'; ?></p>
+            <h4 class="mt-4 mb-2"><strong>Family Information</strong></h4>
+            <p><strong>Father's Name:</strong> <?php echo !empty($user['fathers_name']) ? htmlspecialchars($user['fathers_name']) : 'Not filled in'; ?></p>
+            <p><strong>Father's Phone Number:</strong> <?php echo !empty($user['fathers_phone_number']) ? htmlspecialchars($user['fathers_phone_number']) : 'Not filled in'; ?></p>
+            <p><strong>Mother's Name:</strong> <?php echo !empty($user['mothers_name']) ? htmlspecialchars($user['mothers_name']) : 'Not filled in'; ?></p>
+            <p><strong>Mother's Phone Number:</strong> <?php echo !empty($user['mothers_phone_number']) ? htmlspecialchars($user['mothers_phone_number']) : 'Not filled in'; ?></p>
 
+
+            <?php if (!empty($user['athlete_id'])): ?>
                 <h4 class="mt-4 mb-2"><strong>Archery Details</strong></h4>
-                <p><strong>MAREOS ID:</strong> <?php echo !empty($user['mareos_id']) ? htmlspecialchars($user['mareos_id']) : 'Not filled in'; ?></p>
-                <p><strong>WAREOS ID:</strong> <?php echo !empty($user['wareos_id']) ? htmlspecialchars($user['wareos_id']) : 'Not filled in'; ?></p>
                 <p><strong>Program:</strong> <?php echo !empty($user['program']) ? htmlspecialchars($user['program']) : 'Not filled in'; ?></p>
                 <p><strong>Coach Name:</strong> <?php echo !empty($user['coach_name']) ? htmlspecialchars($user['coach_name']) : 'Not filled in'; ?></p>
                 <p><strong>School:</strong> <?php echo !empty($user['school']) ? htmlspecialchars($user['school']) : 'Not filled in'; ?></p>

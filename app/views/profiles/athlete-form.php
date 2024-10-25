@@ -32,19 +32,13 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
             <h4 class="mb-3">Athlete Details</h4>
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="mareos_id" class="form-label">MAREOS ID</label>
-                        <input type="text" name="mareos_id" class="form-control" id="mareos_id" value="<?php echo isset($athlete['mareos_id']) ? htmlspecialchars($athlete['mareos_id']) : ''; ?>">
+                        <label for="started_archery" class="form-label">Started Archery</label>
+                        <input type="date" name="started_archery" class="form-control" id="started_archery" value="<?php echo isset($athlete['started_archery']) ? htmlspecialchars($athlete['started_archery']) : ''; ?>">
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="wareos_id" class="form-label">WAREOS ID</label>
-                        <input type="text" name="wareos_id" class="form-control" id="wareos_id" value="<?php echo isset($athlete['wareos_id']) ? htmlspecialchars($athlete['wareos_id']) : ''; ?>">
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-3">
                         <label for="program" class="form-label">Program</label>
                         <select name="program" class="form-select" id="program" >
@@ -61,19 +55,13 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
             </div>
 
             <div class="row">
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="started_archery" class="form-label">Started Archery</label>
-                        <input type="date" name="started_archery" class="form-control" id="started_archery" value="<?php echo isset($athlete['started_archery']) ? htmlspecialchars($athlete['started_archery']) : ''; ?>">
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-3">
                         <label for="joined_national_backup_squad" class="form-label">Joined National Backup Squad</label>
                         <input type="date" name="joined_national_backup_squad" class="form-control" id="joined_national_backup_squad" value="<?php echo isset($athlete['joined_national_backup_squad']) ? htmlspecialchars($athlete['joined_national_backup_squad']) : ''; ?>">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="mb-3">
                         <label for="joined_podium_program" class="form-label">Joined Podium Program</label>
                         <input type="date" name="joined_podium_program" class="form-control" id="joined_podium_program" value="<?php echo isset($athlete['joined_podium_program']) ? htmlspecialchars($athlete['joined_podium_program']) : ''; ?>">
@@ -92,36 +80,6 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
                     <div class="mb-3">
                         <label for="school" class="form-label">School</label>
                         <input type="text" name="school" class="form-control" id="school" value="<?php echo isset($athlete['school']) ? htmlspecialchars($athlete['school']) : ''; ?>">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="fathers_name" class="form-label">Father's Name</label>
-                        <input type="text" class="form-control" id="fathers_name" name="fathers_name" value="<?php echo htmlspecialchars($athlete['fathers_name'] ?? ''); ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="fathers_phone_number" class="form-label">Father's Phone Number</label>
-                        <input type="tel" class="form-control" id="fathers_phone_number" name="fathers_phone_number" value="<?php echo htmlspecialchars($athlete['fathers_phone_number'] ?? ''); ?>">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="mothers_name" class="form-label">Mother's Name</label>
-                        <input type="text" class="form-control" id="mothers_name" name="mothers_name" value="<?php echo htmlspecialchars($athlete['mothers_name'] ?? ''); ?>">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="mothers_phone_number" class="form-label">Mother's Phone Number</label>
-                        <input type="tel" class="form-control" id="mothers_phone_number" name="mothers_phone_number" value="<?php echo htmlspecialchars($athlete['mothers_phone_number'] ?? ''); ?>">
                     </div>
                 </div>
             </div>
@@ -157,8 +115,8 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
             </div>
             <hr class="solid mt-5 mb-5">
 
-            <!-- Archery Background -->
-            <h4 class="mt-4 mb-3">Archery Detail</h4>
+            <!-- Archery Details -->
+            <h4 class="mt-4 mb-3">Archery Details</h4>
 
             <div class="row">
                 <div class="col-md-3">
@@ -249,7 +207,7 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
             </div>
 
             <hr class="solid mt-5 mb-5">
-            <!-- Fitness Test Fields -->
+            <!-- Fitness Details -->
             <h4 class="mt-4 mb-3">Fitness Test</h4>
             
             <div class="row">
@@ -363,7 +321,7 @@ require_once __DIR__ . '/../../handlers/AthleteDetailHandler.php';
 
         <div class="form-group mt-4 mb-5">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
+            <a href="<?php echo BASE_URL . 'app/views/profiles/profile.php'; ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

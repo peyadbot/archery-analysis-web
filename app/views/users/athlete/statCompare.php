@@ -1,8 +1,8 @@
 <?php
 ob_start();
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
-require_once __DIR__ . '/../../../handlers/CompStatisticHandler.php';
-require_once __DIR__ . '/../../../handlers/CompCompareHandler.php';
+require_once __DIR__ . '/../../../handlers/StatisticHandler.php';
+require_once __DIR__ . '/../../../handlers/StatisticCompareHandler.php';
 
 if ($_SESSION['role'] !== 'athlete') {
     header('Location: ' . BASE_URL . 'public/home.php');

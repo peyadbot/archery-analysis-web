@@ -52,7 +52,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid m-3">
         <a class="navbar-brand" href="<?php echo BASE_URL . 'index.php'; ?>">
-            <img src="https://github.com/mdo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
             Archery Stats
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">

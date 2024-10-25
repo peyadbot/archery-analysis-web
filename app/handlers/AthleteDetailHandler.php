@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__ . '/../../config/config.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ' . BASE_URL . 'public/login.php');
+    header('Location: ' . BASE_URL . 'index.php');
     exit;
 }
 
@@ -18,12 +18,6 @@ $athlete = $stmt->fetch();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle Create and Update
-    $fathers_name = !empty($_POST['fathers_name']) ? htmlspecialchars(trim($_POST['fathers_name'])) : null;
-    $fathers_phone_number = !empty($_POST['fathers_phone_number']) ? htmlspecialchars(trim($_POST['fathers_phone_number'])) : null;
-    $mothers_name = !empty($_POST['mothers_name']) ? htmlspecialchars(trim($_POST['mothers_name'])) : null;
-    $mothers_phone_number = !empty($_POST['mothers_phone_number']) ? htmlspecialchars(trim($_POST['mothers_phone_number'])) : null;
-    $mareos_id = !empty($_POST['mareos_id']) ? htmlspecialchars(trim($_POST['mareos_id'])) : null;
-    $wareos_id = !empty($_POST['wareos_id']) ? htmlspecialchars(trim($_POST['wareos_id'])) : null;
     $program = !empty($_POST['program']) ? htmlspecialchars(trim($_POST['program'])) : null;
     $coach_name = !empty($_POST['coach_name']) ? htmlspecialchars(trim($_POST['coach_name'])) : null;
     $school = !empty($_POST['school']) ? htmlspecialchars(trim($_POST['school'])) : null;
@@ -74,13 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update existing athlete details
         try {
             $stmt = $pdo->prepare("
-                UPDATE athlete_details SET 
-                    fathers_name = ?, 
-                    fathers_phone_number = ?, 
-                    mothers_name = ?, 
-                    mothers_phone_number = ?, 
-                    mareos_id = ?, 
-                    wareos_id = ?, 
+                UPDATE athlete_details SET  
                     program = ?, 
                     coach_name = ?, 
                     school = ?, 
@@ -122,8 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 WHERE user_id = ?
             ");
             $stmt->execute([
-                $fathers_name, $fathers_phone_number, $mothers_name, $mothers_phone_number, $mareos_id, 
-                $wareos_id, $program, $coach_name, $school, $t_shirt_size, $pant_size, $shoe_size, 
+                $program, $coach_name, $school, $t_shirt_size, $pant_size, $shoe_size, 
                 $medical_conditions, $bow_type, $started_archery, $joined_national_backup_squad, $joined_podium_program, 
                 $arrow_type, $arrow_size, $arrow_length, $limbs_type, $limbs_length, $limbs_weight, $clicking_poundage, 
                 $personal_best_before, $current_personal_best, $kpi_72_arrows, $kpi_avg_per_arrow, $height, 
@@ -140,8 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare("
             INSERT INTO athlete_details (
-                user_id, fathers_name, fathers_phone_number, mothers_name, mothers_phone_number, 
-                mareos_id, wareos_id, program, coach_name, school, t_shirt_size, pant_size, shoe_size, 
+                user_id, program, coach_name, school, t_shirt_size, pant_size, shoe_size, 
                 medical_conditions, bow_type, started_archery, joined_national_backup_squad, joined_podium_program, 
                 arrow_type, arrow_size, arrow_length, limbs_type, limbs_length, limbs_weight, clicking_poundage, 
                 personal_best_before, current_personal_best, kpi_72_arrows, kpi_avg_per_arrow, height, weight, 
@@ -149,12 +135,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 broad_jump_cm, counter_movement_jump_cm, sprint_test_10_30m_sec, ktk_jumping_sideway_sec, 
                 kt_moving_sideway, ktk_walking_backward, bleep_test, bmi
             ) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
     
         $stmt->execute([
-            $user_id, $fathers_name, $fathers_phone_number, $mothers_name, $mothers_phone_number, $mareos_id, 
-            $wareos_id, $program, $coach_name, $school, $t_shirt_size, $pant_size, $shoe_size, 
+            $user_id, $program, $coach_name, $school, $t_shirt_size, $pant_size, $shoe_size, 
             $medical_conditions, $bow_type, $started_archery, $joined_national_backup_squad, $joined_podium_program, 
             $arrow_type, $arrow_size, $arrow_length, $limbs_type, $limbs_length, $limbs_weight, $clicking_poundage, 
             $personal_best_before, $current_personal_best, $kpi_72_arrows, $kpi_avg_per_arrow, $height, 

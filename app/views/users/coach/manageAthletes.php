@@ -3,7 +3,6 @@ $title = 'Manage Athletes';
 require_once __DIR__ . '/../../../handlers/DashboardViewHandler.php';
 require_once __DIR__ . '/../../../handlers/CoachAthleteHandler.php';
 
-// Ensure the user is logged in and is a coach
 if ($_SESSION['role'] !== 'coach') {
     header('Location: ' . BASE_URL . 'index.php');
     exit();
@@ -11,14 +10,12 @@ if ($_SESSION['role'] !== 'coach') {
 
 $coach_id = $_SESSION['user_id'];
 
-// Fetch athletes under the coach from the database
 try {
     $stmt = $pdo->prepare('
-        SELECT u.user_id, u.username, p.name, ad.mareos_id, ca.start_date, ca.end_date, ca.updated_at
+        SELECT u.user_id, u.username, p.name, p.mareos_id, ca.start_date, ca.end_date, ca.updated_at
         FROM coach_athlete ca
         JOIN users u ON ca.athlete_user_id = u.user_id
         JOIN profiles p ON p.user_id = u.user_id
-        JOIN athlete_details ad ON ad.user_id = u.user_id
         WHERE ca.coach_user_id = :coach_id
     ');
     $stmt->bindParam(':coach_id', $coach_id);
@@ -26,8 +23,7 @@ try {
     $athletes = $stmt->fetchAll();
 } catch (PDOException $e) {
     $_SESSION['error'] = 'Failed to retrieve athletes: ' . $e->getMessage();
-    header('Location: ' . BASE_URL . 'public/home.php');
-    exit();
+    
 }
 ?>
 

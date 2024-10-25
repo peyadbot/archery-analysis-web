@@ -8,7 +8,7 @@ $user_id = $_SESSION['user_id'];
 
 // Fetch mareos_id of the logged-in athlete
 try {
-    $stmt = $pdo->prepare('SELECT mareos_id FROM athlete_details WHERE user_id = ?');
+    $stmt = $pdo->prepare('SELECT mareos_id FROM profiles WHERE user_id = ?');
     $stmt->execute([$user_id]);
     $athlete = $stmt->fetch(PDO::FETCH_ASSOC);
 
