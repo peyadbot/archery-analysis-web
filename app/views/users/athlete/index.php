@@ -50,15 +50,26 @@ try {
 
     <!-- Profile Incomplete Warning -->
     <?php if ($profile_incomplete || $detail_incomplete): ?>
-        <div class="alert alert-warning">
-            <h4 class="text-danger">Profile Incomplete</h4>
+        <div class="alert alert-warning shadow-sm border-start border-danger border-4">
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-exclamation-triangle-fill text-danger me-2" style="font-size: 1.5rem;"></i>
+                <h4 class="text-danger m-0">Profile Incomplete</h4>
+            </div>
             <?php if ($profile_incomplete): ?>
-                <p>Please complete your <strong>My Profile</strong> to access all dashboard features.</p>
-                <a href="<?php echo BASE_URL . 'app/views/profiles/profile-form.php'; ?>" class="btn btn-primary">Complete Profile</a>
+                <div class="mb-3">
+                    <p class="mb-2">Please complete your <strong>My Profile</strong> to access all dashboard features.</p>
+                    <a href="<?php echo BASE_URL . 'app/views/profiles/profile-form.php'; ?>" class="btn btn-primary">
+                        <i class="bi bi-person-fill me-1"></i> Complete Profile
+                    </a>
+                </div>
             <?php endif; ?>
             <?php if ($detail_incomplete): ?>
-                <p>Please complete your <strong>Archery Details</strong> to access the dashboard.</p>
-                <a href="<?php echo BASE_URL . 'app/views/profiles/athlete-form.php'; ?>" class="btn btn-primary">Complete Details</a>
+                <div>
+                    <p class="mb-2">Please complete your <strong>Archery Details</strong> to access the dashboard.</p>
+                    <a href="<?php echo BASE_URL . 'app/views/profiles/athlete-form.php'; ?>" class="btn btn-primary">
+                        <i class="bi bi-clipboard2-data-fill me-1"></i> Complete Details
+                    </a>
+                </div>
             <?php endif; ?>
         </div>
     <?php else: ?>
