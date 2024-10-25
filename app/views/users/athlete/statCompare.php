@@ -30,45 +30,58 @@ $colors = [
 ];
 ?>
 
+<?php include '../../layouts/dashboard/header.php'; ?>
+
 <!-- Chart.js, jspdf, and html2canvas -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-<!-- Competition and Metrics Selection Accordion -->
-<div class="accordion shadow-sm mb-4" id="competitionAccordion">
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Competition and Metrics Selection
-            </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#competitionAccordion">
-            <div class="accordion-body">
-                <form id="competitionForm" action="" method="POST">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">Select Metrics to Display</label>
-                            <?php foreach ($all_metrics as $metric_key => $metric_name): ?>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="metrics[]"
-                                        value="<?php echo $metric_key; ?>" id="metric_<?php echo $metric_key; ?>"
-                                        <?php echo in_array($metric_key, $selected_metrics) ? 'checked' : ''; ?>>
-                                    <label class="form-check-label" for="metric_<?php echo $metric_key; ?>">
-                                        <?php echo $metric_name; ?>
-                                    </label>
+<div class="main-content" id="mainContent">
+    <div class="row bg-dark text-white py-4 mb-4" style="border-radius: 10px;">
+        <div class="col">
+            <h3 class="m-0">Compare Statistics</h3>
+        </div>
+    </div>
+
+    <form id="comparisonForm" action="" method="POST" class="shadow-sm">
+        <div class="accordion" id="comparisonAccordion">
+            <!-- Comparison Type Section -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="comparisonTypeHeading">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#comparisonTypeCollapse" aria-expanded="true" aria-controls="comparisonTypeCollapse">
+                        Select Comparison Type
+                    </button>
+                </h2>
+                <div id="comparisonTypeCollapse" class="accordion-collapse collapse show" aria-labelledby="comparisonTypeHeading" data-bs-parent="#comparisonAccordion">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <!-- Metrics Selection -->
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Metrics to Display</label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <?php foreach ($all_metrics as $metric_key => $metric_name): ?>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="metrics[]" value="<?php echo $metric_key; ?>" id="metric_<?php echo $metric_key; ?>" <?php echo in_array($metric_key, $selected_metrics) ? 'checked' : ''; ?>>
+                                            <label class="form-check-label" for="metric_<?php echo $metric_key; ?>"><?php echo $metric_name; ?></label>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
-                            <?php endforeach; ?>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <div id="competitionSelectionGroup">
-                                <?php
-                                $num_competitions = min(6, max(2, count($selected_competitions)));
-                                for ($i = 0; $i < $num_competitions; $i++):
-                                ?>
-                                    <div class="row mb-3">
-                                        <div class="col-md-10">
-                                            <label for="competition<?php echo $i; ?>" class="form-label">Select Competition <?php echo $i + 1; ?></label>
+
+                        <hr class="hr my-5" />
+
+                        <div class="row">
+                            <!-- Competitions Selection -->
+                            <div class="col-md-6">
+                                <div id="competitionSelectionGroup">
+                                    <?php
+                                    $num_competitions = min(6, max(2, count($selected_competitions)));
+                                    for ($i = 0; $i < $num_competitions; $i++):
+                                    ?>
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text" for="competition<?php echo $i; ?>">Comp. <?php echo $i + 1; ?></label>
                                             <select id="competition<?php echo $i; ?>" name="competitions[]" class="form-control competition-select" required>
                                                 <option value="">Select a competition</option>
                                                 <?php foreach ($competitions as $competition): ?>
@@ -78,112 +91,101 @@ $colors = [
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
+                                            <?php if ($i > 1): ?>
+                                                <button class="btn btn-outline-danger remove-btn" type="button">Remove</button>
+                                            <?php endif; ?>
                                         </div>
-                                        <?php if ($i > 1): ?>
-                                            <div class="col-md-2 d-flex align-items-end">
-                                                <button type="button" class="btn btn-danger remove-btn">
-                                                    <i class="bi bi-dash-lg"></i> Remove
-                                                </button>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                <?php endfor; ?>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-10">
-                                    <button type="button" class="btn btn-success add-more-btn">
-                                        <i class="bi bi-plus-lg"></i> Add Competition
-                                    </button>
+                                    <?php endfor; ?>
                                 </div>
+                                <button type="button" class="btn btn-sm btn-outline-primary add-more-btn mt-2">Add Competition</button>
+                            </div>
+                            <div class="d-flex mt-4 justify-content-end">
+                                <button type="submit" class="btn btn-primary me-2">Compare</button>
+                                <a href="?view=compare" class="btn btn-secondary">Reset</a>
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary">Compare</button>
-                            <a href="?view=compare" class="btn btn-secondary">Reset</a>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </form>
 
-<!-- Comparison Results Table -->
-<?php if (!empty($comparison_data)): ?>
-    <div class="card shadow-sm mb-4" id="resultsContainer">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="text-primary">Comparison Results</h4>
-
-                <!-- Download PDF Report Button -->
-                <button id="download-report-pdf" class="btn btn-primary">Download Report</button>
+    <!-- Comparison Results Section -->
+    <?php if (!empty($comparison_data)): ?>
+        <div class="card shadow-sm mb-4 mt-4" id="resultsContainer">
+            <div class="card-header bg-dark text-white d-flex justify-content-between">
+                <h5 class="card-title mb-0">Comparison Results</h5>
+                <button id="download-report-pdf" class="btn btn-light btn-sm float-end">Download Report</button>
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Competition Name</th>
-                            <th>Event Distance</th>
-                            <?php foreach ($selected_metrics as $metric): ?>
-                                <th><?php echo $all_metrics[$metric]; ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($comparison_data as $index => $data):
-                            $color = $colors[$index % count($colors)];
-                        ?>
-                            <tr style="background-color: <?php echo str_replace('1)', '0.2)', $color); ?>">
-                                <td style="font-weight: bold; color: <?php echo $color; ?>">
-                                    <?php echo htmlspecialchars($data['competition_id']); ?>
-                                </td>
-                                <td><?php echo htmlspecialchars($data['event_distance']); ?></td>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Competition Name</th>
+                                <th>Event Distance</th>
                                 <?php foreach ($selected_metrics as $metric): ?>
-                                    <td>
-                                        <?php
-                                        echo htmlspecialchars($data[$metric]);
-                                        if ($metric === 'total_score' || $metric === 'total_10X' || $metric === 'total_109') {
-                                            $avgPerArrow = number_format($data[$metric] / 72, 2);
-                                            echo " ({$avgPerArrow})";
-                                        } elseif ($metric === 'm1_score' || $metric === 'm2_score' || $metric === 'm1_10X' || $metric === 'm2_10X' || $metric === 'm1_109' || $metric === 'm2_109') {
-                                            $avgPerArrow = number_format($data[$metric] / 36, 2);
-                                            echo " ({$avgPerArrow})";
-                                        }
-                                        ?>
-                                    </td>
+                                    <th><?php echo $all_metrics[$metric]; ?></th>
                                 <?php endforeach; ?>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $ordered_data = [];
+                            foreach ($selected_competitions as $selected_id) {
+                                foreach ($comparison_data as $data) {
+                                    if ($data['competition_id'] == $selected_id) {
+                                        $ordered_data[] = $data;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            foreach ($ordered_data as $index => $data):
+                                $color = $colors[$index % count($colors)];
+                            ?>
+                                <tr style="background-color: <?php echo str_replace('1)', '0.2)', $color); ?>">
+                                    <td style="font-weight: bold; color: <?php echo $color; ?>"><?php echo htmlspecialchars($data['competition_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($data['event_distance']); ?></td>
+                                    <?php foreach ($selected_metrics as $metric): ?>
+                                        <td>
+                                            <?php
+                                            echo htmlspecialchars($data[$metric]);
+                                            $divisor = ($metric === 'total_score' || $metric === 'total_10X' || $metric === 'total_109') ? 72 : 36;
+                                            $avgPerArrow = number_format($data[$metric] / $divisor, 2);
+                                            echo " ({$avgPerArrow})";
+                                            ?>
+                                        </td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Average Per Arrow Chart -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4 class="text-primary">Average Per Arrow Comparison</h4>
+                        <div style="position: relative; height: 60vh; width: 100%;">
+                            <canvas id="avgPerArrowChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scoring Trends Chart -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4 class="text-primary">Scoring Trends</h4>
+                        <div style="position: relative; height: 60vh; width: 100%;">
+                            <canvas id="scoreTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Average Per Arrow Chart -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <h4 class="text-primary">Average Per Arrow Comparison</h4>
-            <div style="position: relative; height: 60vh; width: 100%;">
-                <canvas id="avgPerArrowChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scoring Trends Chart -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <h4 class="text-primary">Scoring Trends</h4>
-            <div style="position: relative; height: 60vh; width: 100%;">
-                <canvas id="scoreTrendChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-
-<?php endif; ?>
+    <?php endif; ?>
+</div>
 
 <script>
     // Function to update disabled options
@@ -200,7 +202,7 @@ $colors = [
         });
     }
 
-    // Add event listeners to all select elements
+    // Event listeners to all select elements
     document.querySelectorAll('.competition-select').forEach(select => {
         select.addEventListener('change', updateDisabledOptions);
     });
@@ -210,53 +212,49 @@ $colors = [
     // Add more competitions
     document.querySelector('.add-more-btn').addEventListener('click', function() {
         const competitionGroup = document.getElementById('competitionSelectionGroup');
+        const currentCount = competitionGroup.children.length;
 
-        if (competitionGroup.children.length >= 6) {
+        if (currentCount >= 6) {
             alert('You can compare a maximum of 6 competitions.');
             return;
         }
 
         const newSelection = document.createElement('div');
-        newSelection.classList.add('row', 'mb-3');
+        newSelection.className = 'input-group mb-3';
         newSelection.innerHTML = `
-            <div class="col-md-10">
-                <label for="competition${competitionGroup.children.length}" class="form-label">Select Competition ${competitionGroup.children.length + 1}</label>
-                <select id="competition${competitionGroup.children.length}" name="competitions[]" class="form-control competition-select" required>
-                    <option value="">Select a competition</option>
-                    <?php foreach ($competitions as $competition): ?>
-                        <option value="<?php echo htmlspecialchars($competition['competition_id']); ?>">
-                            <?php echo htmlspecialchars($competition['competition_id']) . ' - ' . htmlspecialchars($competition['event_name']) . ' (' . date('d/m/Y', strtotime($competition['created_at'])) . ')'; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="col-md-2 mt-3 d-flex align-items-end">
-                <button type="button" class="btn btn-danger remove-btn">
-                    <i class="bi bi-dash-lg"></i> Remove
-                </button>
-            </div>
-        `;
+        <label class="input-group-text" for="competition${currentCount}">Comp. ${currentCount + 1}</label>
+        <select id="competition${currentCount}" name="competitions[]" class="form-control competition-select" required>
+            <option value="">Select a competition</option>
+            <?php foreach ($competitions as $competition): ?>
+                <option value="<?php echo htmlspecialchars($competition['competition_id']); ?>">
+                    <?php echo htmlspecialchars($competition['competition_id']) . ' - ' . htmlspecialchars($competition['event_name']) . ' (' . date('d/m/Y', strtotime($competition['created_at'])) . ')'; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <button class="btn btn-outline-danger remove-btn" type="button">Remove</button>
+    `;
         competitionGroup.appendChild(newSelection);
 
         const newSelect = newSelection.querySelector('.competition-select');
         newSelect.addEventListener('change', updateDisabledOptions);
-
         updateDisabledOptions();
-
-        newSelection.querySelector('.remove-btn').addEventListener('click', function() {
-            newSelection.remove();
-            updateDisabledOptions();
-        });
     });
 
-    // Listener to remove dynamically added competitions
+    // Update the remove button event listener
     document.getElementById('competitionSelectionGroup').addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('remove-btn')) {
-            e.target.closest('.row').remove();
+            e.target.closest('.input-group').remove();
+
+            // Update the labels for remaining competitions
+            const competitions = this.querySelectorAll('.input-group');
+            competitions.forEach((comp, index) => {
+                comp.querySelector('.input-group-text').textContent = `Comp. ${index + 1}`;
+                comp.querySelector('select').id = `competition${index}`;
+            });
+
             updateDisabledOptions();
         }
     });
-
 
     // Charts Setup
     const ctx = document.getElementById('scoreTrendChart');
@@ -405,7 +403,7 @@ $colors = [
         });
     }
 
-
+    // Download Report PDF
     document.addEventListener('DOMContentLoaded', function() {
         const downloadButton = document.getElementById('download-report-pdf');
 
@@ -429,7 +427,6 @@ $colors = [
                     align: 'center'
                 });
 
-                // Capture Comparison Results Table
                 html2canvas(document.querySelector('#resultsContainer .table-responsive'), {
                     scale: 2,
                     useCORS: true
@@ -439,9 +436,6 @@ $colors = [
                     const imgHeight = canvas.height * imgWidth / canvas.width;
 
                     pdf.addImage(imgData, 'PNG', padding, 30, imgWidth, imgHeight);
-
-                    // Add a new page for the charts
-                    pdf.addPage();
 
                     // Capture Average Per Arrow Chart
                     html2canvas(document.getElementById('avgPerArrowChart'), {
@@ -453,10 +447,10 @@ $colors = [
                         const avgPerArrowImgHeight = avgPerArrowCanvas.height * avgPerArrowImgWidth / avgPerArrowCanvas.width;
 
                         pdf.setFontSize(14);
-                        pdf.text("Average Per Arrow Comparison", pageWidth / 2, 20, {
+                        pdf.text("Average Per Arrow Comparison", pageWidth / 2, imgHeight + 45, {
                             align: "center"
                         });
-                        pdf.addImage(avgPerArrowImgData, 'PNG', padding, 30, avgPerArrowImgWidth, avgPerArrowImgHeight);
+                        pdf.addImage(avgPerArrowImgData, 'PNG', padding, imgHeight + 55, avgPerArrowImgWidth, avgPerArrowImgHeight);
 
                         // Capture Scoring Trends Chart
                         html2canvas(document.getElementById('scoreTrendChart'), {
@@ -467,7 +461,7 @@ $colors = [
                             const scoreTrendImgWidth = pageWidth - (2 * padding);
                             const scoreTrendImgHeight = scoreTrendCanvas.height * scoreTrendImgWidth / scoreTrendCanvas.width;
 
-                            const yPosition = 30 + avgPerArrowImgHeight + 20; // 20 is for spacing
+                            const yPosition = imgHeight + avgPerArrowImgHeight + 70;
                             pdf.text("Scoring Trends", pageWidth / 2, yPosition, {
                                 align: "center"
                             });
@@ -486,3 +480,5 @@ $colors = [
         }
     });
 </script>
+
+<?php include '../../layouts/dashboard/footer.php'; ?>

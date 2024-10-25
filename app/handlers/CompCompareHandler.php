@@ -28,9 +28,9 @@ function handleCompCompare($pdo, $user_id)
     }
 
     $all_metrics = [
-        'total_score' => 'Total Score',
         'm1_score' => 'M1 Score',
         'm2_score' => 'M2 Score',
+        'total_score' => 'Total Score',
         'm1_10X' => 'M1 10+X',
         'm1_109' => 'M1 10/9',
         'm2_10X' => 'M2 10+X',

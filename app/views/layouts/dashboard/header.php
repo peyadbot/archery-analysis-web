@@ -146,15 +146,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="compHome.php" class="nav-link text-white">
+                    <a href="statisticHome.php?type=competition" class="nav-link text-white">
                         <i class="bi bi-trophy-fill"></i>
                         <span>C.Statistics</span>
                     </a>
                 </li>
                 <li>
-                    <a href="inputScoreTrain.php" class="nav-link text-white">
+                    <a href="statisticHome.php?type=training" class="nav-link text-white">
                         <i class="bi bi-bullseye"></i>
                         <span>T.Statistics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="statCompare.php" class="nav-link text-white">
+                        <i class="bi bi-clipboard2-data-fill"></i>
+                        <span>Compare Statistics</span>
                     </a>
                 </li>
             <?php elseif ($isAdmin): ?>
